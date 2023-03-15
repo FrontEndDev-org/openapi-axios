@@ -8,6 +8,10 @@
     "build": "echo 'build success'"
   },
   "type": "module",
+  "files": ["dist"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [
     "cloudcome",
     "ydr.me",
