@@ -3,6 +3,8 @@ name: code review
 on:
   push:
   pull_request:
+    branches-ignore:
+      - release-please-*
   schedule:
     # 每天凌晨 3 点
     - cron: '0 3 * * *'

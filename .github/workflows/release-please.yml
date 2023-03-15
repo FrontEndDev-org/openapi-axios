@@ -17,4 +17,4 @@ jobs:
         id: release
         with:
           release-type: node
-          bump-patch-for-minor-pre-major: true
+          bump-minor-pre-major: true
