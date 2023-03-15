@@ -2,10 +2,10 @@ name: publish package
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 jobs:
-  build:
+  publish-package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
