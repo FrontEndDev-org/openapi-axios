@@ -1,6 +1,6 @@
 {
   "name": "oas_ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
     "lint": "echo 'lint success'",
@@ -8,7 +8,9 @@
     "build": "echo 'build success'"
   },
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
