@@ -13,6 +13,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - uses: szenius/set-timezone@v1
+        with:
+          timezoneLinux: Asia/Shanghai
+          timezoneMacos: Asia/Shanghai
+          timezoneWindows: Asia/Shanghai
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
