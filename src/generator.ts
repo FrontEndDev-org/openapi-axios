@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { cosmiconfig } from 'cosmiconfig';
 import { CosmiconfigResult } from 'cosmiconfig/dist/types';
 import fs from 'fs/promises';
@@ -34,8 +35,14 @@ export async function generateItem(oas: Oas, config: Config) {
 
 export async function generate(config: Config) {
   const { list } = config;
+  let step = 0;
+  const length = list.length;
+  const width = String(length).length;
 
   for (const oas of list) {
+    step++;
+    const stepText = String(step).padStart(width, '0');
+    console.log(chalk.cyanBright(`[${stepText}/${length}]`), 'generating', chalk.yellow(oas.name));
     await generateItem(oas, config);
   }
 }
