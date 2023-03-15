@@ -1,0 +1,67 @@
+<%
+const { apiConfig, routes, utils, config } = it;
+const { info, servers, externalDocs, baseUrl = '' } = apiConfig;
+const { _, require, formatDescription } = utils;
+
+const descriptionLines = _.compact([
+  `@title ${info.title || "No title"}`,
+  info.version && `@version ${info.version}`,
+  info.license && `@license ${_.compact([
+    info.license.name,
+    info.license.url && `(${info.license.url})`,
+  ]).join(" ")}`,
+  info.termsOfService && `@termsOfService ${info.termsOfService}`,
+  `@baseUrl ${baseUrl}`,
+  externalDocs.url && `@externalDocs ${externalDocs.url}`,
+  info.contact && `@contact ${_.compact([
+    info.contact.name,
+    info.contact.email && `<${info.contact.email}>`,
+    info.contact.url && `(${info.contact.url})`,
+  ]).join(" ")}`,
+  info.description && " ",
+  info.description && _.replace(formatDescription(info.description), /\n/g, "\n * "),
+]).map(str => ' * ' + str.trimEnd()).join("\n");
+%>
+
+/**
+<%~ descriptionLines %>
+
+ */
+
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+
+type AxiosReturn<T> = <%~ config.unwrapResponseData ? 'Promise<T>' : 'Promise<AxiosResponse<T>>' %>;
+
+const BASE_URL = "<%~ baseUrl %>";
+
+enum MethodType {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+}
+
+enum ContentKind {
+  JSON = 'JSON',
+  URL_ENCODED = 'URL_ENCODED',
+  FORM_DATA = 'FORM_DATA',
+  TEXT = 'TEXT',
+  OTHER = 'OTHER',
+}
+
+enum ResponseType {
+  Json = "json",
+  Blob = "blob",
+  Document = "document",
+}
+
+<% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+  <%~ includeFile('./api-item.ejs', { ...it, route }) %>
+  <% }) %>
+
+  <% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+    <% routes.forEach((route) => { %>
+        <%~ includeFile('./api-item.ejs', { ...it, route }) %>
+    <% }) %>
+<% }) %>

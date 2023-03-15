@@ -8,9 +8,17 @@
     "test": "echo 'test success'",
     "build": "echo 'build success'"
   },
+  "engines": {
+    "node": ">=16"
+  },
+  "engineStrict": true,
   "type": "module",
+  "bin": {
+    "oas-gen-ts": "bin/index.js"
+  },
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "keywords": [
     "cloudcome",
@@ -25,6 +33,7 @@
   "repository": "https://github.com/cloudcome/oas_ts",
   "license": "MIT",
   "dependencies": {
+    "cosmiconfig": "^8.1.0",
     "swagger-typescript-api": "^12.0.3"
   },
   "devDependencies": {
