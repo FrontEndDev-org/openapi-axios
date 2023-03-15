@@ -19,7 +19,7 @@
   "homepage": "https://github.com/cloudcome/oas_ts",
   "repository": "https://github.com/cloudcome/oas_ts",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {},
-  "peerDependencies": {}
+  "dependencies": {
+    "swagger-typescript-api": "^12.0.3"
+  }
 }
