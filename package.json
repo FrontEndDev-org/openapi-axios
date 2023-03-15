@@ -5,16 +5,28 @@
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint src/**/*.ts",
-    "test": "echo 'test success'",
-    "build": "echo 'build success'"
+    "test": "echo 'no test'",
+    "build": "tsc -p tsconfig.build.json"
   },
   "engines": {
     "node": ">=16"
   },
   "engineStrict": true,
   "type": "module",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./helper": {
+      "import": "./dist/helper.js",
+      "types": "./dist/helper.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
-    "oas-gen-ts": "bin/index.js"
+    "oas-gen-ts": "bin/index.mjs"
   },
   "files": [
     "dist",

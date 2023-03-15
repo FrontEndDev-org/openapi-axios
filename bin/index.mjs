@@ -2,4 +2,4 @@
 
 import { start } from '../dist';
 
-start();
+await start();
