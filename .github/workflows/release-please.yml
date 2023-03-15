@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   code-review:
-    uses: ./.github/workflows/code-review.yml@${{CI_COMMIT_BRANCH}}
+    uses: ./.github/workflows/code-review.yml
 
   release-please:
     runs-on: ubuntu-latest
