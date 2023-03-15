@@ -10,6 +10,9 @@ permissions:
   pull-requests: write
 
 jobs:
+  code-review:
+    uses: ./code-review.yml@${{CI_COMMIT_BRANCH}}
+
   release-please:
     runs-on: ubuntu-latest
     steps:
