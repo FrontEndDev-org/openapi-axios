@@ -10,9 +10,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  code-review:
-    uses: ./.github/workflows/code-review.yml
-
   release-please:
     runs-on: ubuntu-latest
     steps:
