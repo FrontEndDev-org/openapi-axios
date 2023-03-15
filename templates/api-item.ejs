@@ -1,0 +1,91 @@
+<%
+const { utils, route, config, apiConfig } = it;
+const { raw, request, requestBodyInfo, responseBodyInfo, specificArgNameResolver, routeName, namespace } = route;
+const { _, getInlineParseContent, getParseContent, parseSchema, getComponentByRef, require, formatDescription } = utils;
+const { parameters, path, method, payload, query, formData, security, requestParams } = route.request;
+const { type: responseType, errorType, contentTypes } = route.response;
+const { HTTP_CLIENT, RESERVED_REQ_PARAMS_ARG_NAMES } = config.constants;
+const queryName = (query && query.name) || "query";
+const pathParams = _.values(parameters);
+const pathParamsNames = _.map(pathParams, "name");
+const operationName = raw.operationId || routeName.usage;
+const isFetchTemplate = config.httpClientType === HTTP_CLIENT.FETCH;
+
+const argToTmpl = ({ name, optional, type, defaultValue }) => `${name}${!defaultValue && optional ? '?' : ''}: ${type}${defaultValue ? ` = ${defaultValue}` : ''}`;
+const axiosRequestConfig = {name: 'axiosRequestConfig', optional: true, type: 'AxiosRequestConfig'};
+const rawWrapperArgs = config.extractRequestParams ?
+    _.compact([
+        requestParams && {
+          name: pathParams.length ? `{ ${_.join(pathParamsNames, ", ")}, ...${queryName} }` : queryName,
+          optional: false,
+          type: getInlineParseContent(requestParams),
+        },
+        ...(!requestParams ? pathParams : []),
+        payload,
+        axiosRequestConfig
+    ]) :
+    _.compact([
+        ...pathParams,
+        query,
+        payload,
+        axiosRequestConfig
+    ])
+
+const wrapperArgs = _
+    // Sort by optionality
+    .sortBy(rawWrapperArgs, [o => o.optional])
+    .map(argToTmpl)
+    .join(', ')
+
+const requestContentKind = {
+    "JSON": "ContentType.Json",
+    "URL_ENCODED": "ContentType.UrlEncoded",
+    "FORM_DATA": "ContentType.FormData",
+    "TEXT": "ContentType.Text",
+    "OTHER": ""
+}
+const responseContentKind = {
+    "JSON": 'Json',
+    "IMAGE": 'Blob',
+    "FORM_DATA": isFetchTemplate ? 'FormData' : 'Document'
+}
+
+const queryTmpl = (query != null && queryName) || null;
+const bodyTmpl = _.get(payload, "name") || null;
+const bodyContentKindTmpl = requestBodyInfo.contentKind || 'OTHER';
+const responseFormatTmpl = responseContentKind[responseBodyInfo.success && responseBodyInfo.success.schema && responseBodyInfo.success.schema.contentKind] || null;
+
+const jsDocLines = _.compact([
+    raw.summary && ` * @summary ${raw.summary}`,
+    raw.description &&
+    ` * @description ${formatDescription(raw.description, true)}`,
+    _.size(raw.tags) && ` * @tags ${raw.tags.join(", ")}`,
+    ` * @request ${_.upperCase(request.method)}:${raw.route}`,
+    raw.deprecated && ` * @deprecated`,
+    routeName.duplicate && ` * @originalName ${routeName.original}`,
+    routeName.duplicate && ` * @duplicate`,
+    request.security && ` * @secure`,
+    ...(config.generateResponses && raw.responsesTypes.length
+    ? raw.responsesTypes.map(
+        ({ type, status, description, isSuccess }) =>
+            ` * @response \`${status}\` \`${_.replace(_.replace(type, /\/\*/g, "\\*"), /\*\//g, "*\\")}\` ${description}`,
+        )
+    : []),
+]).map(str => str.trimEnd()).join("\n");
+%>
+
+/**
+<%~ jsDocLines %>
+
+ */
+export async function <%~ operationName %>(<%~ wrapperArgs %>): AxiosReturn<<%~ responseType %>> {
+    return axios.request({
+        url: `${BASE_URL}<%~ path %>`,
+        method: MethodType.<%~ _.upperCase(method) %>,
+        <%~ queryTmpl ? `params: ${queryTmpl},` : '' %>
+        headers: formatHeaders(ContentKind.<%~ bodyContentKindTmpl %>),
+        <%~ bodyTmpl ? `data: formatBody(ContentKind.${bodyContentKindTmpl}, ${bodyTmpl}),` : '' %>
+        <%~ responseFormatTmpl ? `responseType: ResponseType.${responseFormatTmpl},` : '' %>
+        ...axiosRequestConfig,
+    });
+}

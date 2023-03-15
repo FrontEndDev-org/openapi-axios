@@ -3,13 +3,34 @@
   "version": "0.2.0",
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
-    "lint": "echo 'lint success'",
-    "test": "echo 'test success'",
-    "build": "echo 'build success'"
+    "prepare": "husky install",
+    "lint": "eslint src/**/*.ts",
+    "test": "echo 'no test'",
+    "build": "tsc -p tsconfig.build.json"
   },
+  "engines": {
+    "node": ">=16"
+  },
+  "engineStrict": true,
   "type": "module",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./helper": {
+      "import": "./dist/helper.js",
+      "types": "./dist/helper.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "oas-gen-ts": "bin/index.mjs"
+  },
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "keywords": [
     "cloudcome",
@@ -24,6 +45,23 @@
   "repository": "https://github.com/cloudcome/oas_ts",
   "license": "MIT",
   "dependencies": {
+    "cosmiconfig": "^8.1.0",
     "swagger-typescript-api": "^12.0.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@types/node": "^18.15.3",
+    "@types/prettier": "^2.7.2",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-define-config": "^1.16.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
   }
 }
