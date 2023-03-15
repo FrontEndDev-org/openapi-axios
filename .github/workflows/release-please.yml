@@ -10,6 +10,9 @@ permissions:
   pull-requests: write
 
 jobs:
+  code-review:
+    uses: ./code-review.yml
+
   release-please:
     runs-on: ubuntu-latest
     steps:
