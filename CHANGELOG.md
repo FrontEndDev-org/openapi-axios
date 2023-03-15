@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.1.4...v0.2.0) (2023-03-15)
+
+
+### Features
+
+* rename oas_ts -&gt; oas-gen-ts ([b00efb0](https://github.com/cloudcome/oas-gen-ts/commit/b00efb0277110da57dffa52c0960dad4d54f68c5))
+
 ## [0.1.4](https://github.com/cloudcome/oas_ts/compare/v0.1.3...v0.1.4) (2023-03-15)
 
 
