@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
-    "lint": "echo 'lint success'",
+    "prepare": "husky install",
+    "lint": "eslint src/**/*.ts",
     "test": "echo 'test success'",
     "build": "echo 'build success'"
   },
@@ -25,5 +26,21 @@
   "license": "MIT",
   "dependencies": {
     "swagger-typescript-api": "^12.0.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@types/node": "^18.15.3",
+    "@types/prettier": "^2.7.2",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-define-config": "^1.16.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
   }
 }
