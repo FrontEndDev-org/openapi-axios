@@ -1,4 +1,4 @@
-name: code-review
+name: review
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
-  code-review:
+  review:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
