@@ -3,7 +3,7 @@ import { ContentKind } from './types';
 /**
  * 格式化请求头
  * @param {ContentKind} contentKind
- * @returns {{"content-type": string} | {}}
+ * @returns {{"content-type": string} | undefined}
  */
 export function formatHeaders(contentKind: ContentKind) {
   const contentType = {
@@ -13,7 +13,7 @@ export function formatHeaders(contentKind: ContentKind) {
     [ContentKind.TEXT]: 'text/plain',
     [ContentKind.OTHER]: '',
   }[contentKind];
-  return contentType ? { 'content-type': contentType } : {};
+  return contentType ? { 'content-type': contentType } : undefined;
 }
 
 /**

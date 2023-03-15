@@ -6,30 +6,38 @@
     "prepare": "husky install",
     "lint": "eslint src/**/*.ts",
     "test": "echo 'no test'",
-    "build": "tsc -p tsconfig.build.json"
+    "build:types": "rm -rf dist-dts && tsc --project tsconfig.types.json",
+    "build:files": "rm -rf dist-cjs dist-mjs && rollup --config",
+    "build": "npm run build:types && npm run build:files"
   },
   "engines": {
     "node": ">=16"
   },
   "engineStrict": true,
   "type": "module",
-  "module": "./dist/index.js",
+  "module": "dist-mjs/index.mjs",
+  "main": "dist-cjs/index.cjs",
+  "types": "dist-dts/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist-mjs/index.mjs",
+      "require": "./dist-cjs/index.cjs",
+      "types": "./dist-dts/index.d.ts"
     },
-    "./helper": {
-      "import": "./dist/helper.js",
-      "types": "./dist/helper.d.ts"
+    "./helpers": {
+      "import": "./dist-mjs/helpers.mjs",
+      "require": "./dist-cjs/helpers.cjs",
+      "types": "./dist-dts/helpers.d.ts"
     },
     "./package.json": "./package.json"
   },
   "bin": {
-    "oas-gen-ts": "bin/index.mjs"
+    "oas-gen-ts": "bin/index.cjs"
   },
   "files": [
-    "dist",
+    "dist-cjs",
+    "dist-dts",
+    "dist-mjs",
     "templates"
   ],
   "keywords": [
@@ -41,16 +49,18 @@
     "axios"
   ],
   "author": "云淡然 <hi@ydr.me>",
-  "homepage": "https://github.com/cloudcome/oas_ts",
-  "repository": "https://github.com/cloudcome/oas_ts",
+  "homepage": "https://github.com/cloudcome/oas-gen-ts",
+  "repository": "https://github.com/cloudcome/oas-gen-ts",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^5.2.0",
     "cosmiconfig": "^8.1.0",
     "swagger-typescript-api": "^12.0.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^18.15.3",
     "@types/prettier": "^2.7.2",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
@@ -62,6 +72,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "prettier": "^2.8.4",
+    "rollup": "^3.19.1",
     "typescript": "^4.9.5"
   }
 }
