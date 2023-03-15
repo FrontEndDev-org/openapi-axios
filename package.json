@@ -1,6 +1,6 @@
 {
   "name": "oas-gen-ts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
     "prepare": "husky install",

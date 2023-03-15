@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.2.0...v0.3.0) (2023-03-15)
+
+
+### Features
+
+* init project ([a5b8ed4](https://github.com/cloudcome/oas-gen-ts/commit/a5b8ed4db3fcad45b859364fe4aaf62a2b8cd768))
+* 增加编译命令 ([34c49a1](https://github.com/cloudcome/oas-gen-ts/commit/34c49a125c7f3d3d81150db03202ecf78ded256f))
+* 实现基本功能 ([6b932f8](https://github.com/cloudcome/oas-gen-ts/commit/6b932f89976625047e228558e05f2bb18d6e23ac))
+
 ## [0.2.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.1.4...v0.2.0) (2023-03-15)
 
 
