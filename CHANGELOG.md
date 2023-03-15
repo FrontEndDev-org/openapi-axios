@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.3.0...v0.4.0) (2023-03-15)
+
+
+### Features
+
+* 优化构建命令 ([b4e3584](https://github.com/cloudcome/oas-gen-ts/commit/b4e358400e0b50fd4f97c9fcf021fbd0620ae002))
+* 新增配置项 unwrapResponseData ([c2441b3](https://github.com/cloudcome/oas-gen-ts/commit/c2441b3ba87c82fd82d006126cb4228e163b2acb))
+
+
+### Bug Fixes
+
+* 生成文件目录可能为空的问题 ([ab33280](https://github.com/cloudcome/oas-gen-ts/commit/ab33280a800a9231e91cd8bd733b5b48e236f90f))
+
 ## [0.3.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.2.0...v0.3.0) (2023-03-15)
 
 
