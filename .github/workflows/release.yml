@@ -26,7 +26,8 @@ jobs:
         with:
           node-version: 18
           cache: npm
-      - run: npm ci && npm run build && npm publish
+          registry-url: https://registry.npmjs.org
+      - run: npm ci && npm run build && npm publish --registry=https://registry.npmjs.org
         if: ${{ steps.release.outputs.release_created }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
