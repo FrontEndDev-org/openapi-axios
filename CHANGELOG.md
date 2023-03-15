@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/cloudcome/oas_ts/compare/v0.1.2...v0.1.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* publish 条件 5 ([61bc4ab](https://github.com/cloudcome/oas_ts/commit/61bc4abbc8bf25fcb9703ed37b19d88da933b2fb))
+
 ## [0.1.2](https://github.com/cloudcome/oas_ts/compare/v0.1.1...v0.1.2) (2023-03-15)
 
 
