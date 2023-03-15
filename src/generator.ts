@@ -23,8 +23,8 @@ export async function generateItem(oas: Oas, config: Config) {
 
   for (const { content, name: filename } of files) {
     const contentFinal = [axiosImport, helpersImport, content].join('\n');
-    const dir = path.join(cwd, dest);
-    const file = path.join(dir, filename);
+    const file = path.join(cwd, dest, filename);
+    const dir = path.dirname(file);
 
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(file, contentFinal);
