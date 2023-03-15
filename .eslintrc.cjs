@@ -9,16 +9,19 @@ module.exports = defineConfig({
     es2022: true,
   },
 
-  parser: '@typescript-eslint/parser',
-
-  extends: [
-    //
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+  overrides: [
+    {
+      files: ['*.ts'],
+      parser: '@typescript-eslint/parser',
+      extends: [
+        //
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended',
+      ],
+      rules: {
+        'prettier/prettier': 'error',
+      },
+    },
   ],
-
-  rules: {
-    'prettier/prettier': 'error',
-  },
 });
