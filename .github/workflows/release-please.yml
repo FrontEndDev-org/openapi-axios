@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   code-review:
-    uses: ./code-review.yml
+    uses: ./code-review.yml@${{CI_COMMIT_BRANCH}}
 
   release-please:
     runs-on: ubuntu-latest
