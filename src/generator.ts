@@ -9,7 +9,7 @@ import { exitError, normalizeError, tryCatch } from './utils';
 
 export async function generateItem(oas: Oas, config: Config) {
   const { name, url, spec, axiosImport: axiosImportScope } = oas;
-  const { cwd, dest, axiosImport: axiosImportGlobal } = config;
+  const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
   const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
   const { files } = await generateApi({
     name,
@@ -19,6 +19,7 @@ export async function generateItem(oas: Oas, config: Config) {
     httpClientType: 'axios',
     templates: templatesDir,
     silent: true,
+    unwrapResponseData,
   });
 
   for (const { content, name: filename } of files) {

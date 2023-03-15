@@ -40,6 +40,14 @@ export interface UserConfig {
   axiosImport?: string;
 
   /**
+   * 是否取消包装 data，默认 false
+   * false = 返回值就是响应（response），response.data 才是实际值
+   * true = 返回值就是数据
+   * @default false
+   */
+  unwrapResponseData?: boolean;
+
+  /**
    * oas 列表
    */
   list: Oas[];

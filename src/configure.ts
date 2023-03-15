@@ -5,6 +5,7 @@ export const defaults: Config = {
   cwd: process.cwd(),
   dest: 'src/apis',
   axiosImport: axiosImportDefault,
+  unwrapResponseData: false,
   list: [],
 };
 
