@@ -19,4 +19,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           bump-minor-pre-major: true
-          release-as: 0.0.0
