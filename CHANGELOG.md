@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/cloudcome/oas_ts/compare/v0.0.0...v0.1.0) (2023-03-15)
+
+
+### Features
+
+* 排除指定版本 ([53bba08](https://github.com/cloudcome/oas_ts/commit/53bba08e52df8c056248569ec2bbc980f4751a49))
+
 ## 0.0.0 (2023-03-15)
 
 
