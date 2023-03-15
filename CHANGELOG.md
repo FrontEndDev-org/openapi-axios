@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.4.0...v0.5.0) (2023-03-15)
+
+
+### Features
+
+* chalk 降级为 4，因为需要兼容 cjs/esm 两种格式 ([d19dc80](https://github.com/cloudcome/oas-gen-ts/commit/d19dc801bbc8744223e5dd740380d2f934caa462))
+* 增加生成步骤提示 ([b0aad3a](https://github.com/cloudcome/oas-gen-ts/commit/b0aad3ae202c125caacdb3629556fd8122e2c2e1))
+
 ## [0.4.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.3.0...v0.4.0) (2023-03-15)
 
 
