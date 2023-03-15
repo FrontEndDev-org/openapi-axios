@@ -4,7 +4,8 @@
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
     "lint": "echo 'lint success'",
-    "test": "echo 'test success'"
+    "test": "echo 'test success'",
+    "build": "echo 'build success'"
   },
   "type": "module",
   "keywords": [
