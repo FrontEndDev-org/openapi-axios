@@ -1,0 +1,25 @@
+{
+  "name": "oas_ts",
+  "version": "0.0.0",
+  "description": "OpenAPI Specification ➡️ TypeScript",
+  "scripts": {
+    "lint": "echo 'lint success'",
+    "test": "echo 'test success'"
+  },
+  "type": "module",
+  "keywords": [
+    "cloudcome",
+    "ydr.me",
+    "OpenAPI Specification",
+    "TypeScript",
+    "OAS",
+    "axios"
+  ],
+  "author": "云淡然 <hi@ydr.me>",
+  "homepage": "https://github.com/cloudcome/oas_ts",
+  "repository": "https://github.com/cloudcome/oas_ts",
+  "license": "MIT",
+  "dependencies": {
+    "swagger-typescript-api": "^12.0.3"
+  }
+}
