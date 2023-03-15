@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/cloudcome/oas_ts/compare/v0.1.0...v0.1.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* npm publish 指定仓库 ([b438e99](https://github.com/cloudcome/oas_ts/commit/b438e994ed1c694def97209c4078c4021346b140))
+* publish 条件 ([51a0f08](https://github.com/cloudcome/oas_ts/commit/51a0f080b8d65c5470daab1b5035f52c28f59972))
+* publish 条件 ([c3f615a](https://github.com/cloudcome/oas_ts/commit/c3f615a79c9b4234f95b1c41a35ef459f3e5932f))
+* publish 条件 2 ([480611d](https://github.com/cloudcome/oas_ts/commit/480611d0fc38ad320578620f6d18491778524850))
+* publish 条件 3 ([5e1e75f](https://github.com/cloudcome/oas_ts/commit/5e1e75f75343799fc5a2273fa6ef60bba8ac7535))
+* update README.md ([d7f5856](https://github.com/cloudcome/oas_ts/commit/d7f5856d868001fe3f099b8ee0aa564a49ca2c70))
+
 ## [0.1.0](https://github.com/cloudcome/oas_ts/compare/v0.0.0...v0.1.0) (2023-03-15)
 
 
