@@ -2,7 +2,7 @@
 
 ---
 
-[![code-review][code-review-badge]][code-review-link] [![code-quality][code-quality-badge]][code-quality-link] ![version][version-badge] ![license][license-badge]
+[![][code-review-badge]][code-review-link] [![][code-quality-badge]][code-quality-link] [![][code-coverage-badge]][code-coverage-link] ![][version-badge] ![][license-badge]
 
 OpenAPI Specification ➡️ TypeScript
 
@@ -28,9 +28,7 @@ yarn add --dev oas-gen-ts
 
 ## CLI
 
-Create oas.config.js or oas.json in the root directory of the project, and refer to [cosmiconfig](https://www.npmjs.com/package/cosmiconfig) for the file name specification.
-
-The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
+Create oas.config.js or oas.json in the root directory of the project. The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
 
 ```js
 // oas.config.cjs
@@ -145,5 +143,7 @@ generate({
 [code-review-link]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml
 [code-quality-badge]: https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7
 [code-quality-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Grade
+[code-coverage-badge]: https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7
+[code-coverage-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Coverage
 [version-badge]: https://img.shields.io/npm/v/oas-gen-ts
 [license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
