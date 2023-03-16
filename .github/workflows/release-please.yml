@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Release PR or Release Publish:
+  ReleasePR_ReleasePublish:
     runs-on: ubuntu-latest
     steps:
       - run: |
