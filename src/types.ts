@@ -10,15 +10,15 @@ interface OasBase {
   axiosImport?: string;
 }
 
-interface OasAsUrl extends OasBase {
+export interface OasAsUrl extends OasBase {
   url: string;
 }
 
-interface OasAsSpec extends OasBase {
+export interface OasAsSpec extends OasBase {
   spec: import('swagger-schema-official').Spec;
 }
 
-export interface Oas extends OasAsUrl, OasAsSpec {}
+export type Oas = OasAsUrl | OasAsSpec;
 
 export interface UserConfig {
   /**

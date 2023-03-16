@@ -5,17 +5,17 @@ import path from 'path';
 import { generateApi } from 'swagger-typescript-api';
 import { defineConfig } from './configure';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import { StrictConfig, Oas, UserConfig } from './types';
+import { StrictConfig, Oas, UserConfig, OasAsUrl, OasAsSpec } from './types';
 import { exitError, normalizeError, tryCatch } from './utils';
 
 export async function generateItem(oas: Oas, config: StrictConfig) {
-  const { name, url, spec, axiosImport: axiosImportScope } = oas;
+  const { name, axiosImport: axiosImportScope } = oas;
   const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
   const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
   const { files } = await generateApi({
     name,
-    url,
-    spec,
+    url: (oas as OasAsUrl).url,
+    spec: (oas as OasAsSpec).spec,
     output: false,
     httpClientType: 'axios',
     templates: templatesDir,
