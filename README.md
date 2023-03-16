@@ -35,7 +35,6 @@ Create oas.config.js or oas.json in the root directory of the project. The searc
 const { defineConfig } = require('oas-gen-ts');
 
 module.exports = defineConfig({
-  axiosImport: `import { axios } from '@/util/axios';`,
   list: [
     {
       name: 'swagger/pet',
@@ -56,8 +55,6 @@ The generated file will be exported as one function and one operation, like this
 
 ```ts
 // src/apis/swagger/pet.ts
-
-import { axios } from '@/util/axios';
 
 // ...
 
@@ -114,21 +111,21 @@ export async function findPetsByStatus(
 import { generate } from 'oas-gen-ts';
 
 generate({
-  // ...
+  // ...config
 });
 ```
 
 # Config
 
-| Name                 | Type      | Required | Description                                | Default                                         |
-| -------------------- | --------- | -------- | ------------------------------------------ | ----------------------------------------------- |
-| `cwd`                | `string`  | `false`  | current working directory                  | `process.cwd()`                                 |
-| `dest`               | `string`  | `false`  | Destination directory for generated files  | `src/apis`                                      |
-| `axiosImport`        | `string`  | `false`  | axios import string                        | Import from the official and create an instance |
-| `unwrapResponseData` | `boolean` | `false`  | unwrap the data item from the response     | `false`                                         |
-| `list`               | `OAS[]`   | `false`  | List of OpenAPI Specification declarations | `[]`                                            |
+| Name                 | Type        | Required | Description                                | Default                                         |
+| -------------------- | ----------- | -------- | ------------------------------------------ | ----------------------------------------------- |
+| `cwd`                | `string`    | `false`  | current working directory                  | `process.cwd()`                                 |
+| `dest`               | `string`    | `false`  | Destination directory for generated files  | `src/apis`                                      |
+| `axiosImport`        | `string`    | `false`  | axios import string                        | Import from the official and create an instance |
+| `unwrapResponseData` | `boolean`   | `false`  | unwrap the data item from the response     | `false`                                         |
+| `list`               | `OasItem[]` | `false`  | List of OpenAPI Specification declarations | `[]`                                            |
 
-`Oas`:
+`OasItem`:
 
 | Name          | Type     | Required | Description                                     | Default                                         |
 | ------------- | -------- | -------- | ----------------------------------------------- | ----------------------------------------------- |

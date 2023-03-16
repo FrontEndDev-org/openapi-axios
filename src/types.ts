@@ -14,10 +14,10 @@ export interface OasItemAsUrl extends OasItemBase {
   url: string;
 }
 
-export type Oas = import('swagger-schema-official').Spec;
+export type Spec = import('swagger-schema-official').Spec;
 
 export interface OasItemAsSpec extends OasItemBase {
-  spec: Oas;
+  spec: Spec;
 }
 
 export type OasItem = OasItemAsUrl | OasItemAsSpec;
