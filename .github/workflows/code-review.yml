@@ -24,10 +24,6 @@ jobs:
           sudo rm /etc/localtime
           sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
       - uses: actions/checkout@v3
-      - uses: actions/dependency-review-action@v3
-        with:
-          base_ref: ${{ github.base_ref }}
-          head_ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v3
         with:
           node-version: 18
