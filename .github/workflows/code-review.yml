@@ -7,7 +7,7 @@ on:
       - v*.x
   pull_request:
   schedule:
-    # 每天凌晨 3 点（UTC）
+    # 03:00(UTC) every day
     - cron: '0 3 * * *'
 
 permissions:

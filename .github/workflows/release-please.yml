@@ -27,7 +27,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: release
-    if: always() && needs.release.outputs.release_created
+    if: needs.release.outputs.release_created
     steps:
       - run: sudo timedatectl set-timezone Asia/Shanghai
       - run: timedatectl
@@ -36,6 +36,9 @@ jobs:
         with:
           node-version: 18
           cache: npm
+          registry-url: https://registry.npmjs.org
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm ci
       - run: npm run test
       - uses: codacy/codacy-coverage-reporter-action@v1
@@ -45,5 +48,6 @@ jobs:
           coverage-reports: coverage/lcov.info
       - run: npm run build
       - run: npm publish --registry=https://registry.npmjs.org
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: jaywcjlove/github-action-package@main
+        id: pkg
+      - run: curl https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
