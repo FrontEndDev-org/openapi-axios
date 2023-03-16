@@ -2,10 +2,19 @@ name: code review
 
 on:
   push:
+    branches:
+      - master
+      - v*.x
   pull_request:
+    branches:
+      - master
+      - v*.x
   schedule:
     # 每天凌晨 3 点（UTC）
     - cron: '0 3 * * *'
+
+permissions:
+  contents: read
 
 jobs:
   code-review:
@@ -15,6 +24,7 @@ jobs:
           sudo rm /etc/localtime
           sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
       - uses: actions/checkout@v3
+      - uses: actions/dependency-review-action@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
