@@ -11,6 +11,10 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
+      - name: 修改为中国时区
+        run: |
+          sudo rm /etc/localtime
+          sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
