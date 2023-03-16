@@ -8,6 +8,12 @@ OpenAPI Specification ➡️ TypeScript
 npm i -D oas-gen-ts
 ```
 
+or
+
+```shell
+yarn add --dev oas-gen-ts
+```
+
 # Usage
 
 ## CLI
@@ -16,9 +22,10 @@ Create oas.config.js or oas.json in the root directory of the project, and refer
 
 The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
 
-```ts
+```javascript
 // oas.config.cjs
-export default defineConfig({
+const { defineConfig } = require('oas-gen-ts');
+module.exports = defineConfig({
   axiosImport: `import { axios } from '@/util/axios';`,
   list: [
     {
