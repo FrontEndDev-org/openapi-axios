@@ -1,3 +1,4 @@
+import { isBoolean, isDate, isNull, isNumber, isObject, isPlainObject, isString } from 'lodash-es';
 import { ContentKind } from './types';
 
 /**
@@ -13,7 +14,27 @@ export function formatHeaders(contentKind: ContentKind) {
     [ContentKind.TEXT]: 'text/plain',
     [ContentKind.OTHER]: '',
   }[contentKind];
-  return contentType ? { 'content-type': contentType } : undefined;
+  return contentType ? { 'Content-Type': contentType } : undefined;
+}
+
+/**
+ * 判断是否为二进制
+ * @param value
+ * @returns {boolean}
+ */
+export function isBlob(value: unknown): value is Blob {
+  if (typeof Blob !== 'undefined' && value instanceof Blob) return true;
+  if (typeof File !== 'undefined' && value instanceof File) return true;
+
+  return false;
+}
+
+export function toFormDataValue(value: unknown): string | Blob {
+  if (isString(value) || isNumber(value) || isBoolean(value)) return String(value);
+  if (isPlainObject(value)) return JSON.stringify(value);
+  if (isDate(value)) return value.toISOString();
+  if (isBlob(value)) return value;
+  return '';
 }
 
 /**
@@ -22,19 +43,20 @@ export function formatHeaders(contentKind: ContentKind) {
  * @param body
  * @returns {FormData | string}
  */
-export function formatBody(contentKind: ContentKind, body: any) {
+export function formatBody<D>(contentKind: ContentKind, body: D) {
   switch (contentKind) {
     case ContentKind.URL_ENCODED:
-      return new URLSearchParams(body).toString();
+      return isPlainObject(body) ? new URLSearchParams(body as Record<string, string>).toString() : '';
 
     case ContentKind.FORM_DATA: {
+      const fd = new FormData();
+      if (!isObject(body)) return fd;
+
       return Object.keys(body).reduce((fd, key) => {
-        const val = body[key];
-        const isFileType = val instanceof Blob || val instanceof File;
-        const isString = typeof val === 'string' || typeof val === 'number';
-        fd.append(key, isFileType ? val : isString ? String(val) : JSON.stringify(val));
+        const val = body[key as keyof D];
+        fd.append(key, toFormDataValue(val));
         return fd;
-      }, new FormData());
+      }, fd);
     }
 
     default:
