@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  Lint and Test:
+  LintTest:
     runs-on: ubuntu-latest
     steps:
       - run: |
