@@ -51,3 +51,4 @@ jobs:
       - uses: jaywcjlove/github-action-package@main
         id: pkg
       - run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
+        name: Sync the new version to npmmirror.com
