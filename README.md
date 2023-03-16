@@ -25,7 +25,7 @@ The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `
 ```javascript
 const { defineConfig } = require('oas-gen-ts');
 // oas.config.cjs
-export default defineConfig({
+module.exports = defineConfig({
   axiosImport: `import { axios } from '@/util/axios';`,
   list: [
     {
