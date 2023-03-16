@@ -2,7 +2,7 @@ import { random } from 'lodash-es';
 import path from 'path';
 import { cleanDir, isFile } from 'src/utils';
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
-import { generate, Generated, GenerateInfo, generateItem, Oas } from '../src';
+import { generate, Generated, GenerateInfo, generateItem, Spec } from '../src';
 import petstore3 from './petstore3.json';
 
 describe('generate-item', () => {
@@ -42,7 +42,7 @@ describe('generate-item', () => {
     const generated = await generateItem(
       {
         name,
-        spec: petstore3 as unknown as Oas,
+        spec: petstore3 as unknown as Spec,
       },
       config
     );
@@ -63,11 +63,11 @@ test('generate', async () => {
     list: [
       {
         name: random(1, 1000).toString(),
-        spec: petstore3 as unknown as Oas,
+        spec: petstore3 as unknown as Spec,
       },
       {
         name: random(1, 1000).toString(),
-        spec: petstore3 as unknown as Oas,
+        spec: petstore3 as unknown as Spec,
       },
     ],
     unwrapResponseData: false,

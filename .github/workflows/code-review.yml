@@ -1,4 +1,4 @@
-name: code-review
+name: code review
 
 on:
   push:

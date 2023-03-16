@@ -2,7 +2,7 @@
 
 ---
 
-[![code-review][code-review-badge]][code-review-link] [![code-quality][code-quality-badge]][code-quality-link] ![version][version-badge] ![license][license-badge]
+[![][code-review-badge]][code-review-link] [![][code-quality-badge]][code-quality-link] [![][code-coverage-badge]][code-coverage-link] ![][version-badge] ![][license-badge]
 
 OpenAPI Specification ➡️ TypeScript
 
@@ -28,16 +28,13 @@ yarn add --dev oas-gen-ts
 
 ## CLI
 
-Create oas.config.js or oas.json in the root directory of the project, and refer to [cosmiconfig](https://www.npmjs.com/package/cosmiconfig) for the file name specification.
-
-The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
+Create oas.config.js or oas.json in the root directory of the project. The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
 
 ```js
 // oas.config.cjs
 const { defineConfig } = require('oas-gen-ts');
 
 module.exports = defineConfig({
-  axiosImport: `import { axios } from '@/util/axios';`,
   list: [
     {
       name: 'swagger/pet',
@@ -58,8 +55,6 @@ The generated file will be exported as one function and one operation, like this
 
 ```ts
 // src/apis/swagger/pet.ts
-
-import { axios } from '@/util/axios';
 
 // ...
 
@@ -116,21 +111,21 @@ export async function findPetsByStatus(
 import { generate } from 'oas-gen-ts';
 
 generate({
-  // ...
+  // ...config
 });
 ```
 
 # Config
 
-| Name                 | Type      | Required | Description                                | Default                                         |
-| -------------------- | --------- | -------- | ------------------------------------------ | ----------------------------------------------- |
-| `cwd`                | `string`  | `false`  | current working directory                  | `process.cwd()`                                 |
-| `dest`               | `string`  | `false`  | Destination directory for generated files  | `src/apis`                                      |
-| `axiosImport`        | `string`  | `false`  | axios import string                        | Import from the official and create an instance |
-| `unwrapResponseData` | `boolean` | `false`  | unwrap the data item from the response     | `false`                                         |
-| `list`               | `OAS[]`   | `false`  | List of OpenAPI Specification declarations | `[]`                                            |
+| Name                 | Type        | Required | Description                                | Default                                         |
+| -------------------- | ----------- | -------- | ------------------------------------------ | ----------------------------------------------- |
+| `cwd`                | `string`    | `false`  | current working directory                  | `process.cwd()`                                 |
+| `dest`               | `string`    | `false`  | Destination directory for generated files  | `src/apis`                                      |
+| `axiosImport`        | `string`    | `false`  | axios import string                        | Import from the official and create an instance |
+| `unwrapResponseData` | `boolean`   | `false`  | unwrap the data item from the response     | `false`                                         |
+| `list`               | `OasItem[]` | `false`  | List of OpenAPI Specification declarations | `[]`                                            |
 
-`Oas`:
+`OasItem`:
 
 | Name          | Type     | Required | Description                                     | Default                                         |
 | ------------- | -------- | -------- | ----------------------------------------------- | ----------------------------------------------- |
@@ -145,5 +140,7 @@ generate({
 [code-review-link]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml
 [code-quality-badge]: https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7
 [code-quality-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Grade
+[code-coverage-badge]: https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7
+[code-coverage-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Coverage
 [version-badge]: https://img.shields.io/npm/v/oas-gen-ts
 [license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
