@@ -1,5 +1,7 @@
 # oas-gen-ts
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2425790ab28a4b1f84af6750189ac66f)](https://app.codacy.com/gh/cloudcome/oas-gen-ts?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Grade_Settings)
+
 ---
 
 [![review][review-badge]][review-link] ![version][version-badge] ![license][license-badge]
