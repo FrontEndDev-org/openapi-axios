@@ -16,7 +16,6 @@ jobs:
       - run: sudo timedatectl set-timezone Asia/Shanghai
       - run: timedatectl
       - uses: google-github-actions/release-please-action@v3
-        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
@@ -27,6 +26,8 @@ jobs:
     needs: release
     if: needs.release.outputs.release_created
     steps:
+      - run: sudo timedatectl set-timezone Asia/Shanghai
+      - run: timedatectl
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
