@@ -12,10 +12,13 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
     steps:
       - run: sudo timedatectl set-timezone Asia/Shanghai
       - run: timedatectl
       - uses: google-github-actions/release-please-action@v3
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
