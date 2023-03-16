@@ -1,6 +1,16 @@
 # oas-gen-ts
 
+---
+
+[![review][review-badge]][review-link] ![version][version-badge] ![license][license-badge]
+
 OpenAPI Specification ➡️ TypeScript
+
+Convert OpenAPI Specification declaration files into type declarations and executable functions. Compared with other similar tools, it has the following characteristics
+
+- Each API is a function for easy tree shaking at build time
+- Easily integrate with local request clients, such as Axios instances created in local projects
+- Easy to use, easy to learn, type safe
 
 # Install
 
@@ -22,9 +32,10 @@ Create oas.config.js or oas.json in the root directory of the project, and refer
 
 The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
 
-```javascript
+```js
 // oas.config.cjs
 const { defineConfig } = require('oas-gen-ts');
+
 module.exports = defineConfig({
   axiosImport: `import { axios } from '@/util/axios';`,
   list: [
@@ -129,3 +140,8 @@ generate({
 | `spec`        | `Spec`   | `false`  | The local Objects of the OpenAPI Specification  | `undefined`                                     |
 
 **At least one of `url` and `spec` exists**
+
+[review-badge]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/review.yml/badge.svg
+[review-link]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/review.yml
+[version-badge]: https://img.shields.io/npm/v/oas-gen-ts
+[license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
