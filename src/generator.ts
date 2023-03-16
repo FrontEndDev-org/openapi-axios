@@ -1,14 +1,14 @@
 import chalk from 'chalk';
 import { cosmiconfig } from 'cosmiconfig';
-import { CosmiconfigResult } from 'cosmiconfig/dist/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateApi } from 'swagger-typescript-api';
+import { defineConfig } from './configure';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import { Config, Oas } from './types';
+import { StrictConfig, Oas, UserConfig } from './types';
 import { exitError, normalizeError, tryCatch } from './utils';
 
-export async function generateItem(oas: Oas, config: Config) {
+export async function generateItem(oas: Oas, config: StrictConfig) {
   const { name, url, spec, axiosImport: axiosImportScope } = oas;
   const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
   const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
@@ -33,7 +33,7 @@ export async function generateItem(oas: Oas, config: Config) {
   }
 }
 
-export async function generate(config: Config) {
+export async function generate(config: StrictConfig) {
   const { list } = config;
   let step = 0;
   const length = list.length;
@@ -61,7 +61,11 @@ export async function start() {
     return exitError('配置文件未找到');
   }
 
-  const config = result.config as Config;
+  const config = result.filepath.endsWith('js')
+    ? // js 文件使用 defineConfig，返回的是 StrictConfig
+      (result.config as StrictConfig)
+    : // json 文件是纯文本，返回的 UserConfig
+      defineConfig(result.config as UserConfig);
 
   try {
     await generate(config);

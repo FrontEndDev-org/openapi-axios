@@ -4,7 +4,7 @@
   "description": "OpenAPI Specification ➡️ TypeScript",
   "scripts": {
     "prepare": "husky install",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint src/**/*.ts && tsc --project tsconfig.json --noEmit",
     "test": "echo 'no test'",
     "build:types": "rm -rf dist-dts && tsc --project tsconfig.types.json",
     "build:files": "rm -rf dist-cjs dist-mjs && rollup --config",

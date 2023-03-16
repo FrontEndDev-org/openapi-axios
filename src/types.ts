@@ -53,7 +53,7 @@ export interface UserConfig {
   list: Oas[];
 }
 
-export type Config = Required<UserConfig>;
+export type StrictConfig = Required<UserConfig>;
 
 export enum ContentKind {
   JSON = 'JSON',
