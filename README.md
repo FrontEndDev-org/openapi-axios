@@ -23,8 +23,8 @@ Create oas.config.js or oas.json in the root directory of the project, and refer
 The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
 
 ```javascript
-const { defineConfig } = require('oas-gen-ts');
 // oas.config.cjs
+const { defineConfig } = require('oas-gen-ts');
 module.exports = defineConfig({
   axiosImport: `import { axios } from '@/util/axios';`,
   list: [
