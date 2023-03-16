@@ -19,17 +19,17 @@ export function formatHeaders(contentKind: ContentKind) {
 /**
  * 格式化请求体
  * @param {string} contentKind
- * @param data
+ * @param body
  * @returns {FormData | string}
  */
-export function formatBody(contentKind: ContentKind, data: any) {
+export function formatBody(contentKind: ContentKind, body: any) {
   switch (contentKind) {
     case ContentKind.URL_ENCODED:
-      return new URLSearchParams(data).toString();
+      return new URLSearchParams(body).toString();
 
     case ContentKind.FORM_DATA: {
-      return Object.keys(data).reduce((fd, key) => {
-        const val = data[key];
+      return Object.keys(body).reduce((fd, key) => {
+        const val = body[key];
         const isFileType = val instanceof Blob || val instanceof File;
         const isString = typeof val === 'string' || typeof val === 'number';
         fd.append(key, isFileType ? val : isString ? String(val) : JSON.stringify(val));
@@ -38,6 +38,6 @@ export function formatBody(contentKind: ContentKind, data: any) {
     }
 
     default:
-      return JSON.stringify(data);
+      return JSON.stringify(body);
   }
 }

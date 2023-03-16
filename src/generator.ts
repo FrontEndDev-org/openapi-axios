@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import { cosmiconfig } from 'cosmiconfig';
-import { CosmiconfigResult } from 'cosmiconfig/dist/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateApi } from 'swagger-typescript-api';
