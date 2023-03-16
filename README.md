@@ -2,7 +2,7 @@
 
 ---
 
-[![review][review-badge]][review-link] ![version][version-badge] ![license][license-badge]
+[![review][review-badge]][review-link] [![Codacy Badge][coverage-badge]][coverage-link] ![version][version-badge] ![license][license-badge]
 
 OpenAPI Specification ➡️ TypeScript
 
@@ -143,5 +143,7 @@ generate({
 
 [review-badge]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/review.yml/badge.svg
 [review-link]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/review.yml
+[coverage-badge]: https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7
+[coverage-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Grade
 [version-badge]: https://img.shields.io/npm/v/oas-gen-ts
 [license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
