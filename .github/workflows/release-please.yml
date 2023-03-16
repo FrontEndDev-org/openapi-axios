@@ -22,14 +22,21 @@ jobs:
           release-type: node
           bump-minor-pre-major: true
       - uses: actions/checkout@v3
-        if: ${{ steps.release.outputs.release_created }}
+        if: steps.release.outputs.release_created
       - uses: actions/setup-node@v3
-        if: ${{ steps.release.outputs.release_created }}
+        if: steps.release.outputs.release_created
         with:
           node-version: 18
           cache: npm
           registry-url: https://registry.npmjs.org
-      - run: npm ci && npm run build && npm publish --registry=https://registry.npmjs.org
-        if: ${{ steps.release.outputs.release_created }}
+      - run: npm ci && npm run test
+        if: steps.release.outputs.release_created
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        if: steps.release.outputs.release_created
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: coverage/lcov.info
+      - run: npm run build && npm publish --registry=https://registry.npmjs.org
+        if: steps.release.outputs.release_created
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
