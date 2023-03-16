@@ -5,11 +5,8 @@ on:
     branches:
       - master
       - v*.x
-    branches-ignore:
-      - release-please-*
   pull_request:
-    branches-ignore:
-      - release-please-*
+    types: [opened, reopened]
   schedule:
     # 每天凌晨 3 点（UTC）
     - cron: '0 3 * * *'
