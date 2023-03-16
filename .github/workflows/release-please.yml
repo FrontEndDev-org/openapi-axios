@@ -10,12 +10,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  ReleasePR_ReleasePublish:
+  ReleasePR_or_ReleasePublish:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          sudo rm /etc/localtime
-          sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+      - run: sudo timedatectl set-timezone Asia/Shanghai
+      - run: timedatectl
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
