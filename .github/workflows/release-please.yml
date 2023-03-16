@@ -50,4 +50,5 @@ jobs:
       - run: npm publish --registry=https://registry.npmjs.org
       - uses: jaywcjlove/github-action-package@main
         id: pkg
-      - run: curl https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
+      - run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
+        name: Sync the new version to npmmirror.com
