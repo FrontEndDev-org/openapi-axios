@@ -1,27 +1,29 @@
-import chalk from 'chalk';
-import { cosmiconfig } from 'cosmiconfig';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateApi } from 'swagger-typescript-api';
-import { defineConfig } from './configure';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import { StrictConfig, Oas, UserConfig } from './types';
-import { exitError, normalizeError, tryCatch } from './utils';
+import { Generated, GeneratedCallback, OasItem, OasItemAsSpec, OasItemAsUrl, StrictConfig } from './types';
 
-export async function generateItem(oas: Oas, config: StrictConfig) {
-  const { name, url, spec, axiosImport: axiosImportScope } = oas;
+export async function generateItem(oasItem: OasItem, config: StrictConfig): Promise<Generated> {
+  const { name, axiosImport: axiosImportScope } = oasItem;
   const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
   const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
   const { files } = await generateApi({
     name,
-    url,
-    spec,
+    url: (oasItem as OasItemAsUrl).url,
+    spec: (oasItem as OasItemAsSpec).spec,
     output: false,
     httpClientType: 'axios',
     templates: templatesDir,
     silent: true,
     unwrapResponseData,
   });
+
+  const generated: Generated = {
+    files: [],
+    oasItem,
+    config,
+  };
 
   for (const { content, name: filename } of files) {
     const contentFinal = [axiosImport, helpersImport, content].join('\n');
@@ -30,46 +32,35 @@ export async function generateItem(oas: Oas, config: StrictConfig) {
 
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(file, contentFinal);
+
+    generated.files.push(file);
   }
+
+  return generated;
 }
 
-export async function generate(config: StrictConfig) {
-  const { list } = config;
-  let step = 0;
+export async function generate(config: StrictConfig, callback?: GeneratedCallback): Promise<Generated[]> {
+  const { list, onGenerated } = config;
+  let index = 0;
   const length = list.length;
-  const width = String(length).length;
+  const generatedList: Generated[] = [];
 
-  for (const oas of list) {
-    step++;
-    const stepText = String(step).padStart(width, '0');
-    console.log(chalk.cyanBright(`[${stepText}/${length}]`), 'generating', chalk.yellow(oas.name));
-    await generateItem(oas, config);
-  }
-}
-
-export async function start() {
-  const explorer = cosmiconfig('oas', {
-    searchPlaces: ['oas.config.cjs', 'oas.config.js', 'oas.json'],
-  });
-  const [err1, result] = await tryCatch(explorer.search());
-
-  if (err1) {
-    return exitError('配置文件查找失败');
-  }
-
-  if (!result) {
-    return exitError('配置文件未找到');
+  for (const oasItem of list) {
+    const start = Date.now();
+    callback?.(
+      {
+        files: [],
+        oasItem,
+        config,
+      },
+      { index, length, done: false, start, end: start }
+    );
+    const generated = await generateItem(oasItem, config);
+    generatedList.push(generated);
+    onGenerated(generated);
+    callback?.(generated, { index, length, done: true, start, end: Date.now() });
+    index++;
   }
 
-  const config = result.filepath.endsWith('js')
-    ? // js 文件使用 defineConfig，返回的是 StrictConfig
-      (result.config as StrictConfig)
-    : // json 文件是纯文本，返回的 UserConfig
-      defineConfig(result.config as UserConfig);
-
-  try {
-    await generate(config);
-  } catch (err) {
-    exitError(normalizeError(err).message);
-  }
+  return generatedList;
 }

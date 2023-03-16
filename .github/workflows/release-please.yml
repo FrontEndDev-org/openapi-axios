@@ -1,4 +1,4 @@
-name: release
+name: release-please
 
 on:
   push:
@@ -10,13 +10,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  release:
+  release-please:
     runs-on: ubuntu-latest
     steps:
-      - name: 修改为中国时区
-        run: |
-          sudo rm /etc/localtime
-          sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:

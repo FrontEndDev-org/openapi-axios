@@ -1,18 +1,17 @@
-name: review
+name: code-review
 
 on:
   push:
   pull_request:
   schedule:
-    # 每天凌晨 3 点
+    # 每天凌晨 3 点（UTC）
     - cron: '0 3 * * *'
 
 jobs:
-  review:
+  code-review:
     runs-on: ubuntu-latest
     steps:
-      - name: 修改为中国时区
-        run: |
+      - run: |
           sudo rm /etc/localtime
           sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
       - uses: actions/checkout@v3
@@ -23,3 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: coverage/lcov.info
