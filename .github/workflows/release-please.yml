@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  ReleasePR_or_ReleasePublish:
+  release:
     runs-on: ubuntu-latest
     steps:
       - run: sudo timedatectl set-timezone Asia/Shanghai
@@ -21,22 +21,24 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           bump-minor-pre-major: true
+
+  publish:
+    needs: release
+    if: needs.release.outputs.release_created
+    steps:
       - uses: actions/checkout@v3
-        if: steps.release.outputs.release_created
       - uses: actions/setup-node@v3
-        if: steps.release.outputs.release_created
         with:
           node-version: 18
           cache: npm
-          registry-url: https://registry.npmjs.org
-      - run: npm ci && npm run test
-        if: steps.release.outputs.release_created
+      - run: npm ci
+      - run: npm run test
       - uses: codacy/codacy-coverage-reporter-action@v1
         if: steps.release.outputs.release_created
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage/lcov.info
-      - run: npm run build && npm publish --registry=https://registry.npmjs.org
-        if: steps.release.outputs.release_created
+      - run: npm run build
+      - run: npm publish --registry=https://registry.npmjs.org
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
