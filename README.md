@@ -1,7 +1,5 @@
 # oas-gen-ts
 
----
-
 [![][code-review-badge]][code-review-link] [![][code-quality-badge]][code-quality-link] [![][code-coverage-badge]][code-coverage-link] ![][version-badge] ![][license-badge]
 
 OpenAPI Specification ➡️ TypeScript
