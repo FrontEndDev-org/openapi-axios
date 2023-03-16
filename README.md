@@ -103,6 +103,17 @@ export async function findPetsByStatus(
 // ...
 ```
 
+Then you can directly import a function and use it. Calling an interface is as simple as calling a local function, is it similar to RPC (remote procedure call).
+
+```ts
+import { findPetsByStatus } from '@/apis/pet';
+
+// There are type hints when calling functions and writing parameters, thanks to TypeScript.
+const pets = await findPetsByStatus({
+  status: ['avaliable'],
+});
+```
+
 ## API
 
 ```ts
