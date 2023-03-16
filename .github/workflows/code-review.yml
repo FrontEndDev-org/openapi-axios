@@ -6,9 +6,6 @@ on:
       - master
       - v*.x
   pull_request:
-    branches:
-      - master
-      - v*.x
   schedule:
     # 每天凌晨 3 点（UTC）
     - cron: '0 3 * * *'
