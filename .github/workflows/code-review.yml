@@ -6,7 +6,9 @@ on:
       - master
       - v*.x
   pull_request:
-    types: [opened, reopened]
+    branches:
+      - master
+      - v*.x
   schedule:
     # 每天凌晨 3 点（UTC）
     - cron: '0 3 * * *'
