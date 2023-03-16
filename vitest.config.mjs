@@ -2,9 +2,11 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ['src/**/*.ts'],
+    include: ['test/**/*.test.ts'],
     coverage: {
+      include: ['src/**/*.ts'],
       reporter: ['lcov', 'text'],
+      all: true,
     },
   },
 });

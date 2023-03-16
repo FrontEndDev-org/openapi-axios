@@ -7,6 +7,7 @@ export const defaults: StrictConfig = {
   axiosImport: axiosImportDefault,
   unwrapResponseData: false,
   list: [],
+  onGenerated: () => 0,
 };
 
 export function defineConfig(config: UserConfig) {

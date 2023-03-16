@@ -1,4 +1,4 @@
-interface OasBase {
+interface OasItemBase {
   name: string;
 
   /**
@@ -10,15 +10,17 @@ interface OasBase {
   axiosImport?: string;
 }
 
-export interface OasAsUrl extends OasBase {
+export interface OasItemAsUrl extends OasItemBase {
   url: string;
 }
 
-export interface OasAsSpec extends OasBase {
-  spec: import('swagger-schema-official').Spec;
+export type Oas = import('swagger-schema-official').Spec;
+
+export interface OasItemAsSpec extends OasItemBase {
+  spec: Oas;
 }
 
-export type Oas = OasAsUrl | OasAsSpec;
+export type OasItem = OasItemAsUrl | OasItemAsSpec;
 
 export interface UserConfig {
   /**
@@ -48,9 +50,15 @@ export interface UserConfig {
   unwrapResponseData?: boolean;
 
   /**
+   * 单个 oas 生成后回调
+   * @param {Generated} generated
+   */
+  onGenerated?: (generated: Generated) => any;
+
+  /**
    * oas 列表
    */
-  list: Oas[];
+  list: OasItem[];
 }
 
 export type StrictConfig = Required<UserConfig>;
@@ -62,3 +70,18 @@ export enum ContentKind {
   TEXT = 'TEXT',
   OTHER = 'OTHER',
 }
+
+export interface Generated {
+  files: string[];
+  oasItem: OasItem;
+  config: StrictConfig;
+}
+
+export type GenerateInfo = {
+  index: number;
+  length: number;
+  done: boolean;
+  start: number;
+  end: number;
+};
+export type GeneratedCallback = (generated: Generated, info: GenerateInfo) => any;
