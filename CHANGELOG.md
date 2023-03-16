@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.6.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.5.0...v0.6.0) (2023-03-16)
+
+
+### Features
+
+* 增强 helpers 实现，增加其单元测试 ([f060a77](https://github.com/cloudcome/oas-gen-ts/commit/f060a7748bb2db620ca2b82f863a4e781f7a2326))
+* 增强 helpers 实现，增加其单元测试 ([7e410e1](https://github.com/cloudcome/oas-gen-ts/commit/7e410e1a55a9041c997eac09bd4494181ac38ff9))
+* 完善大部分源代码的单元测试 ([5dc6106](https://github.com/cloudcome/oas-gen-ts/commit/5dc61060f1cfb312ba526d349b24f930dd688414))
+* 支持 dist sourceMap ([110768d](https://github.com/cloudcome/oas-gen-ts/commit/110768d3e4917ae52eee1feaa8e0d0290405d116))
+
+
+### Bug Fixes
+
+* 修复 Oas 类型联合错误 ([7bac37c](https://github.com/cloudcome/oas-gen-ts/commit/7bac37ccde5901dcdbdb322d05d9628b363998bb))
+* 兼容 JSON 配置文件 ([1a380fa](https://github.com/cloudcome/oas-gen-ts/commit/1a380faebb5ee323cb0bd0b2db419a560a5a9b0a)), closes [#48](https://github.com/cloudcome/oas-gen-ts/issues/48)
+
 ## [0.5.0](https://github.com/cloudcome/oas-gen-ts/compare/v0.4.0...v0.5.0) (2023-03-15)
 
 
