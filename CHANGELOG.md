@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.18](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.17...v0.6.18) (2023-03-17)
+
+
+### Bug Fixes
+
+* 优化 actions 29 ([b0b7de2](https://github.com/cloudcome/oas-gen-ts/commit/b0b7de282de76aead3d8b48f0b8ff837cff97e50))
+* 优化 actions 30 ([dd04a6a](https://github.com/cloudcome/oas-gen-ts/commit/dd04a6a087c132b836623f724a09bf0b6a8facc0))
+
 ## [0.6.17](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.16...v0.6.17) (2023-03-17)
 
 
