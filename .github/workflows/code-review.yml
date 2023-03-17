@@ -1,4 +1,5 @@
 name: code review
+description: 代码格式检查
 
 on:
   push:
@@ -21,6 +22,7 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run lint
+
   test:
     runs-on: ubuntu-latest
     steps:

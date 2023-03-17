@@ -1,0 +1,47 @@
+name: npm publish
+description: |
+  按仓库类型执行 npm publish，可以将包发布到 npm、github 等仓库
+  如果是发布到 github 则会将 package.name 替换为 @${{ github.repository }}
+
+inputs:
+  type:
+    description: 仓库类型，可选 npm/github
+    required: true
+  token:
+    description: 仓库授权令牌，如果是非 github 仓库则需要指定
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: 仓库类型是 github
+      if: inputs.type == "github"
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" > .npmrc
+        echo "registry=https://npm.pkg.github.com/" >> .npmrc
+        echo "always-auth=true" >> .npmrc
+      shell: bash
+    - name: 修改 package.json name 为 @${{ github.repository }}
+      if: inputs.type == "github"
+      uses: jaywcjlove/github-action-package@main
+      with:
+        data: |
+          {
+            "name": "@${{ github.repository }}"
+          }
+    - name: 仓库类型是 npm
+      if: inputs.type == "npm"
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ inputs.token }}" > .npmrc
+        echo "registry=https://registry.npmjs.org/" >> .npmrc
+        echo "always-auth=true" >> .npmrc
+      shell: bash
+    - run: npm publish
+      shell: bash
+    - id: pkg
+      if: inputs.type == "npm"
+      uses: jaywcjlove/github-action-package@main
+    - name: 同步新版本到 npmmirror.com
+      if: inputs.type == "npm"
+      run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
+      shell: bash
