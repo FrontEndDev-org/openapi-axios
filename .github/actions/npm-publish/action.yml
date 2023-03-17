@@ -12,21 +12,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: pkg
-      name: 获取 package.json 信息
-      uses: jaywcjlove/github-action-package@main
-
-    # originName        ->  underscoreName
-    # my-pkg            ->  my-pkg
-    # @my-scope/my-pkg  ->  my-scope__my-pkg
-    - id: naming
-      name: 命名规则变更
-      uses: frabert/replace-string-action@v2
-      with:
-        string: ${{ steps.pkg.outputs.name }}
-        pattern: '@(.*)\/(.*)'
-        replace-with: '$1__$2'
-
     - name: 仓库类型是 npm
       if: inputs.type == 'npm'
       shell: bash
@@ -44,18 +29,20 @@ runs:
         echo "always-auth=true" >> .npmrc
     - name: 将 package.json name 修改为符合 GitHub 的命名要求
       if: inputs.type == 'github'
-      uses: jaywcjlove/github-action-package@main
+      uses: actions/github-script@v6
       with:
-        data: |
-          {
-            "name": "@${{ github.repository_owner }}/${{ steps.naming.outputs.replaced }}"
-          }
+        result-encoding: string
+        script: |
+          const pkg = require('./package.json');
+          const safeName = pkg.name.replace(/@(.*)\/(.*)/, '$1__$2');
+          pkg.name = github.repository_owner + '/' + steps.naming.outputs.replaced;
+          const fs = require('fs');
+          fs.writeFileSync('package.json', JSON.stringify(pkg));
 
-    # 发布
-    - shell: bash
+    - name: 发布
+      shell: bash
       run: npm publish
 
-    # npm 发布时同步新版本
     - name: 同步新版本到 npmmirror.com
       if: inputs.type == 'npm'
       shell: bash
