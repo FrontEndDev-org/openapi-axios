@@ -6,9 +6,11 @@ on:
 
 jobs:
   node-env:
+    runs-on: ubuntu-latest
     steps:
       - run: sudo timedatectl set-timezone Asia/Shanghai
       - run: timedatectl
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
