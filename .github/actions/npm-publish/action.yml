@@ -39,7 +39,8 @@ runs:
           // @my-scope/my-pkg  ->  my-scope__my-pkg
           const underlineName = pkg.name.replace(/@(.*)\/(.*)/, '$1__$2');
           // @ref https://github.com/actions/toolkit/blob/457303960f03375db6f033e214b9f90d79c3fe5c/packages/github/src/context.ts
-          pkg.name = context.payload.repository.owner.login + '/' + underlineName;
+          const owner = context.payload.repository.owner.login;
+          pkg.name = '@' + owner + '/' + underlineName;
           const fs = require('fs');
           fs.writeFileSync('package.json', JSON.stringify(pkg), 'utf8');
 
