@@ -63,7 +63,7 @@ jobs:
       - run: echo "registry=https://npm.pkg.github.com/" >> .npmrc
       - run: echo "always-auth=true" >> .npmrc
       - uses: jaywcjlove/github-action-package@main
-        width:
+        with:
           data: |
             {
               "name": "@${{ github.repository }}"
