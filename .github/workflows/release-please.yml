@@ -15,36 +15,31 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
-      - run: sudo timedatectl set-timezone Asia/Shanghai
-      - run: timedatectl
+      - uses: ./.github/common-workflows/node-env.yml
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           bump-minor-pre-major: true
-
-  publish:
+  test:
     runs-on: ubuntu-latest
     needs: release
     if: needs.release.outputs.release_created
     steps:
-      - run: sudo timedatectl set-timezone Asia/Shanghai
-      - run: timedatectl
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: '**/package-lock.json'
-          registry-url: https://registry.npmjs.org
+      - uses: ./.github/common-workflows/node-env.yml
       - run: npm ci
       - run: npm run test
       - uses: codacy/codacy-coverage-reporter-action@v1
-        if: steps.release.outputs.release_created
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage/lcov.info
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: ./.github/common-workflows/node-env.yml
+      - run: npm ci
       - run: npm run build
       - run: npm publish --registry=https://registry.npmjs.org
         env:
