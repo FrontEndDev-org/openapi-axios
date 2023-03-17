@@ -20,13 +20,14 @@ runs:
       # my-pkg            ->  my-pkg
       # @my-scope/my-pkg  ->  my-scope__my-pkg
       run: |
-        _n1="${{ steps.pkg.outputs.name }}"
+        # 原始名称
+        echo "N1=${{ steps.pkg.outputs.name }}" >> $GITHUB_ENV
         # 删除 @ 开头
-        _n2="${_n1/@/}"
+        echo "N2=${$N1/@/}" >> $GITHUB_ENV
         # 将 / 替换为 __
-        _n3="${_n2/\//__}"
-        echo "origin=${{ _n1 }}" >> "$GITHUB_OUTPUT"
-        echo "underscore=${{ _n3 }}" >> "$GITHUB_OUTPUT"
+        echo "N3=${N2/\//__}" >> $GITHUB_ENV
+        echo "origin=$N1" >> "$GITHUB_OUTPUT"
+        echo "underscore=$N3" >> "$GITHUB_OUTPUT"
 
     - name: 仓库类型是 npm
       if: inputs.type == 'npm'
@@ -55,5 +56,5 @@ runs:
       with:
         data: |
           {
-            "name": "@${{ steps.name.outputs.underscore }}"
+            "name": "@${{ github.repository_owner }}/${{ steps.name.outputs.underscore }}"
           }
