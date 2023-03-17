@@ -13,21 +13,21 @@ runs:
   using: composite
   steps:
     - id: pkg
+      name: 获取 package.json 信息
       uses: jaywcjlove/github-action-package@main
+
     - id: naming
+      name: 命名规则变更
       shell: bash
       # originName        ->  underscoreName
       # my-pkg            ->  my-pkg
       # @my-scope/my-pkg  ->  my-scope__my-pkg
+      env:
+        UNDERSCORE_NAME: ${${n1/@/}/\//__}
       run: |
-        # 原始名称
         echo "N1=${{ steps.pkg.outputs.name }}" >> $GITHUB_ENV
-        # 删除 @ 开头
-        echo "N2=${N1/@/}" >> $GITHUB_ENV
-        # 将 / 替换为 __
-        echo "N3=${N2/\//__}" >> $GITHUB_ENV
         echo "origin=$N1" >> "$GITHUB_OUTPUT"
-        echo "underscore=$N3" >> "$GITHUB_OUTPUT"
+        echo "underscore=${${N1/@/}/\//__}" >> "$GITHUB_OUTPUT"
 
     - name: 仓库类型是 npm
       if: inputs.type == 'npm'
@@ -36,12 +36,6 @@ runs:
         echo "//registry.npmjs.org/:_authToken=${{ inputs.token }}" > .npmrc
         echo "registry=https://registry.npmjs.org/" >> .npmrc
         echo "always-auth=true" >> .npmrc
-    - shell: bash
-      run: npm publish
-    - name: 同步新版本到 npmmirror.com
-      if: inputs.type == 'npm'
-      shell: bash
-      run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
 
     - name: 仓库类型是 github
       if: inputs.type == 'github'
@@ -50,7 +44,7 @@ runs:
         echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" > .npmrc
         echo "registry=https://npm.pkg.github.com/" >> .npmrc
         echo "always-auth=true" >> .npmrc
-    - name: 将 package.json name 修改为符合 GitHub 要求
+    - name: 将 package.json name 修改为符合 GitHub 的命名要求
       if: inputs.type == 'github'
       uses: jaywcjlove/github-action-package@main
       with:
@@ -58,3 +52,13 @@ runs:
           {
             "name": "@${{ github.repository_owner }}/${{ steps.naming.outputs.underscore }}"
           }
+
+    # 发布
+    - shell: bash
+      run: npm publish
+
+    # npm 发布时同步新版本
+    - name: 同步新版本到 npmmirror.com
+      if: inputs.type == 'npm'
+      shell: bash
+      run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
