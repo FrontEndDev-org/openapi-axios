@@ -1,7 +1,7 @@
 # 如果是开发合并请求到主干，则会根据约定式提交创建一个 releasePR，是一个新版本合并请求。
 # 如果是新版本合并请求合并到主干，则会触发版本发布到 npm/github 等仓库。
 
-name: release please
+name: release-please
 
 on:
   push:
@@ -35,6 +35,9 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run test-coverage
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - uses: codacy/codacy-coverage-reporter-action@v1
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
