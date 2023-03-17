@@ -1,6 +1,6 @@
 # 代码格式检查
 
-name: code-review
+name: code review
 
 on:
   push:
