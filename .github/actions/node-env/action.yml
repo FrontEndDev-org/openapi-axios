@@ -1,0 +1,15 @@
+name: node env
+description: 依照 nvmrc 创建 node 环境
+
+runs:
+  using: composite
+  steps:
+    - run: sudo timedatectl set-timezone Asia/Shanghai
+      shell: bash
+    - run: timedatectl
+      shell: bash
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+        cache-dependency-path: '**/package-lock.json'

@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: write
 
 jobs:
   release:
@@ -15,47 +16,56 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
-      - run: sudo timedatectl set-timezone Asia/Shanghai
-      - run: timedatectl
+      - uses: actions/checkout@v3
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           bump-minor-pre-major: true
-
-  publish:
+  test-coverage:
     runs-on: ubuntu-latest
     needs: release
     if: needs.release.outputs.release_created
     steps:
-      - run: sudo timedatectl set-timezone Asia/Shanghai
-      - run: timedatectl
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: '**/package-lock.json'
-          registry-url: https://registry.npmjs.org
+      - uses: ./.github/actions/node-env
       - run: npm ci
-      - run: npm run test
+      - run: npm run test-coverage
       - uses: codacy/codacy-coverage-reporter-action@v1
-        if: steps.release.outputs.release_created
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage/lcov.info
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: test-coverage
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/node-env
+      - run: npm ci
       - run: npm run build
-      - run: npm publish --registry=https://registry.npmjs.org
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      - run: echo "registry=https://registry.npmjs.org/" >> .npmrc
+      - run: echo "always-auth=true" >> .npmrc
+      - run: npm publish
       - uses: jaywcjlove/github-action-package@main
         id: pkg
       - run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
         name: Sync the new version to npmmirror.com
-      - uses: actions/setup-node@v3
-        with:
-          registry-url: https://npm.pkg.github.com
-      - run: npm publish --registry=https://npm.pkg.github.com
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish-github:
+    runs-on: ubuntu-latest
+    needs: test-coverage
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/node-env
+      - run: npm ci
+      - run: npm run build
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" > .npmrc
+      - run: echo "registry=https://npm.pkg.github.com/" >> .npmrc
+      - run: echo "always-auth=true" >> .npmrc
+      - uses: jaywcjlove/github-action-package@main
+        width:
+          data: |
+            {
+              "name": "@${{ github.repository }}"
+            }
+      - run: npm publish

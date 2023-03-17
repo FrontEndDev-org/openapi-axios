@@ -7,24 +7,24 @@ on:
       - v*.x
   pull_request:
   schedule:
-    # 03:00(UTC) every day
-    - cron: '0 3 * * *'
+    # 19:00(UTC) 每天，相当于 03:00(GMT+8)
+    - cron: '0 19 * * *'
 
 permissions:
   contents: read
 
 jobs:
-  lint-test:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo timedatectl set-timezone Asia/Shanghai
-      - run: timedatectl
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: '**/package-lock.json'
+      - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/node-env
+      - run: npm ci
       - run: npm run test
