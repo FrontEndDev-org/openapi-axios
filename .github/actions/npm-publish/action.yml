@@ -23,7 +23,7 @@ runs:
         # 原始名称
         echo "N1=${{ steps.pkg.outputs.name }}" >> $GITHUB_ENV
         # 删除 @ 开头
-        echo "N2=${$N1/@/}" >> $GITHUB_ENV
+        echo "N2=${N1/@/}" >> $GITHUB_ENV
         # 将 / 替换为 __
         echo "N3=${N2/\//__}" >> $GITHUB_ENV
         echo "origin=$N1" >> "$GITHUB_OUTPUT"
