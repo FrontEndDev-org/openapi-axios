@@ -16,18 +16,16 @@ runs:
       name: 获取 package.json 信息
       uses: jaywcjlove/github-action-package@main
 
+    # originName        ->  underscoreName
+    # my-pkg            ->  my-pkg
+    # @my-scope/my-pkg  ->  my-scope__my-pkg
     - id: naming
       name: 命名规则变更
-      shell: bash
-      # originName        ->  underscoreName
-      # my-pkg            ->  my-pkg
-      # @my-scope/my-pkg  ->  my-scope__my-pkg
-      env:
-        UNDERSCORE_NAME: ${${n1/@/}/\//__}
-      run: |
-        echo "N1=${{ steps.pkg.outputs.name }}" >> $GITHUB_ENV
-        echo "origin=$N1" >> "$GITHUB_OUTPUT"
-        echo "underscore=${${N1/@/}/\//__}" >> "$GITHUB_OUTPUT"
+      uses: frabert/replace-string-action@v2
+      with:
+        string: ${{ steps.pkg.outputs.name }}
+        pattern: '@(.*)\/(.*)'
+        replace-with: '$1__$2'
 
     - name: 仓库类型是 npm
       if: inputs.type == 'npm'
@@ -50,7 +48,7 @@ runs:
       with:
         data: |
           {
-            "name": "@${{ github.repository_owner }}/${{ steps.naming.outputs.underscore }}"
+            "name": "@${{ github.repository_owner }}/${{ steps.naming.outputs.replaced }}"
           }
 
     # 发布
