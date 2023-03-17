@@ -1,5 +1,6 @@
+# 代码格式检查
+
 name: code review
-description: 代码格式检查
 
 on:
   push:
