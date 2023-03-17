@@ -17,12 +17,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/_node-env.yml
+      - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run lint
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/_node-env.yml
+      - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run test
