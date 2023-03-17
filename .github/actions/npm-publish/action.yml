@@ -1,5 +1,5 @@
 name: npm publish
-description: 按仓库类型执行 npm publish，可以将包发布到 npm、github 等仓库，如果是发布到 github 则会将 package.name 替换为 @\${{ github.repository }}
+description: 按仓库类型执行 npm publish，可以将包发布到 npm、github 等仓库
 
 inputs:
   type:
