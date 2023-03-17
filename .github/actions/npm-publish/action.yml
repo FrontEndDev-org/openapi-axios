@@ -14,7 +14,7 @@ runs:
   steps:
     - id: pkg
       uses: jaywcjlove/github-action-package@main
-    - id: name
+    - id: naming
       shell: bash
       # originName        ->  underscoreName
       # my-pkg            ->  my-pkg
@@ -23,7 +23,7 @@ runs:
         # 原始名称
         echo "N1=${{ steps.pkg.outputs.name }}" >> $GITHUB_ENV
         # 删除 @ 开头
-        echo "N2=${$N1/@/}" >> $GITHUB_ENV
+        echo "N2=${N1/@/}" >> $GITHUB_ENV
         # 将 / 替换为 __
         echo "N3=${N2/\//__}" >> $GITHUB_ENV
         echo "origin=$N1" >> "$GITHUB_OUTPUT"
@@ -56,5 +56,5 @@ runs:
       with:
         data: |
           {
-            "name": "@${{ github.repository_owner }}/${{ steps.name.outputs.underscore }}"
+            "name": "@${{ github.repository_owner }}/${{ steps.naming.outputs.underscore }}"
           }
