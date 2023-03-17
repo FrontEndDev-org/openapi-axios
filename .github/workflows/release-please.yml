@@ -35,9 +35,6 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run test-coverage
-      - uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
       - uses: codacy/codacy-coverage-reporter-action@v1
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}

@@ -1,0 +1,16 @@
+# 此操作会扫描您的拉取请求以查找依赖项更改，如果引入任何漏洞或无效许可证，则会引发错误
+
+name: dependency-review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/dependency-review-action@v3
