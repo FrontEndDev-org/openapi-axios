@@ -1,6 +1,11 @@
 # oas-gen-ts
 
-[![][code-review-badge]][code-review-link] [![][code-quality-badge]][code-quality-link] [![][code-coverage-badge]][code-coverage-link] ![][version-badge] ![][license-badge]
+[![code-review](https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml/badge.svg)](https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml)
+[![dependency-review](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+![version][version-badge]
+![license][license-badge]
 
 OpenAPI Specification ➡️ TypeScript
 
@@ -145,11 +150,5 @@ generate({
 
 **At least one of `url` and `spec` exists**
 
-[code-review-badge]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml/badge.svg
-[code-review-link]: https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml
-[code-quality-badge]: https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7
-[code-quality-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Grade
-[code-coverage-badge]: https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7
-[code-coverage-link]: https://www.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cloudcome/oas-gen-ts&utm_campaign=Badge_Coverage
 [version-badge]: https://img.shields.io/npm/v/oas-gen-ts
 [license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
