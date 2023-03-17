@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.26](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.25...v0.6.26) (2023-03-17)
+
+
+### Bug Fixes
+
+* 优化 actions 39 - 新增 dependency-review ([d929414](https://github.com/cloudcome/oas-gen-ts/commit/d9294145abe9acd3317f3c11891f0dab10aff5b4))
+* 优化 actions 39 - 移除 codecov ([3976be2](https://github.com/cloudcome/oas-gen-ts/commit/3976be2f74e54989bc780538f137661ddd613c33))
+* 优化 actions 40 ([5b44175](https://github.com/cloudcome/oas-gen-ts/commit/5b441753dbc1d822890f99763480ea4138b17024))
+* 优化 actions 40 - 更新 readme ([e317301](https://github.com/cloudcome/oas-gen-ts/commit/e317301970b1bfb2e6d2d01d4524f310407469c1))
+
 ## [0.6.25](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.24...v0.6.25) (2023-03-17)
 
 
