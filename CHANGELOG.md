@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.6.10](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.9...v0.6.10) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 10 ([bef504d](https://github.com/cloudcome/oas-gen-ts/commit/bef504db38bc1103aa3a5973bc66ce001dca0da0))
+
+## [0.6.9](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.8...v0.6.9) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 8 ([445bbfb](https://github.com/cloudcome/oas-gen-ts/commit/445bbfb756aaf5c6909c9e7c54ce83525e444986))
+* 优化 actions 9 ([e19df0e](https://github.com/cloudcome/oas-gen-ts/commit/e19df0e0c4e14b64e90a06061ab7d3293262d19f))
+
+## [0.6.8](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.7...v0.6.8) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 7 ([ceef4a3](https://github.com/cloudcome/oas-gen-ts/commit/ceef4a34409d3282584798cd7fbebfa0927dfb77))
+
+## [0.6.7](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.6...v0.6.7) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 6 ([ba41765](https://github.com/cloudcome/oas-gen-ts/commit/ba4176578e04b8165b0cd8ffbd5b21d31bb8468b))
+
+## [0.6.6](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.5...v0.6.6) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 5 ([89f8dab](https://github.com/cloudcome/oas-gen-ts/commit/89f8dab3981101dc45f8fd412ef7094d6bb41e6e))
+
+## [0.6.5](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.4...v0.6.5) (2023-03-16)
+
+
+### Bug Fixes
+
+* 优化 actions 4 ([0243519](https://github.com/cloudcome/oas-gen-ts/commit/02435193e92ed67138ab55ea8e9da0b4f73ab04f))
+
 ## [0.6.4](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.3...v0.6.4) (2023-03-16)
 
 
