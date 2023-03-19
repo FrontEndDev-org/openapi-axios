@@ -46,9 +46,9 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run build
-      - uses: ./.github/actions/npm-publish
+      - uses: cloudcome/publish-node-package-action@v1
         with:
-          type: npm
+          target: npm
           token: ${{ secrets.NPM_TOKEN }}
 
   publish-github:
@@ -61,6 +61,6 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run build
-      - uses: ./.github/actions/npm-publish
+      - uses: cloudcome/publish-node-package-action@v1
         with:
-          type: github
+          target: github
