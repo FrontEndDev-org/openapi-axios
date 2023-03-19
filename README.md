@@ -4,8 +4,9 @@
 [![dependency-review](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-![version][version-badge]
-![license][license-badge]
+![npm](https://img.shields.io/npm/v/oas-gen-ts)
+![release](https://img.shields.io/github/v/release/cloudcome/oas-gen-ts)
+![license](https://img.shields.io/github/license/cloudcome/oas-gen-ts)
 
 OpenAPI Specification ➡️ TypeScript
 
@@ -111,7 +112,7 @@ export async function findPetsByStatus(
 Then you can directly import a function and use it. Calling an interface is as simple as calling a local function, is it similar to RPC (remote procedure call).
 
 ```ts
-import { findPetsByStatus } from '@/apis/pet';
+import { findPetsByStatus } from '@/apis/swagger/pet';
 
 // There are type hints when calling functions and writing parameters, thanks to TypeScript.
 const pets = await findPetsByStatus({
@@ -149,6 +150,3 @@ generate({
 | `spec`        | `Spec`   | `false`  | The local Objects of the OpenAPI Specification  | `undefined`                                     |
 
 **At least one of `url` and `spec` exists**
-
-[version-badge]: https://img.shields.io/npm/v/oas-gen-ts
-[license-badge]: https://img.shields.io/github/license/cloudcome/oas-gen-ts
