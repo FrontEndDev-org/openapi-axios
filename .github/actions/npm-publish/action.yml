@@ -8,10 +8,18 @@ inputs:
   token:
     description: 仓库授权令牌，如果是非 github 仓库则需要指定
     required: false
+  tag:
+    description: 要发布的标签，默认是 latest
+    required: false
+    default: latest
 
 runs:
   using: composite
   steps:
+    - name: 备份原始 .npmrc 文件
+      shell: bash
+      run: cp .npmrc .npmrc-bk 2> /dev/null || true
+
     - name: 仓库类型是 npm
       if: inputs.type == 'npm'
       shell: bash
@@ -46,9 +54,16 @@ runs:
 
     - name: 发布
       shell: bash
-      run: npm publish
+      run: npm publish --tag ${{ inputs.tag }}
 
     - name: 同步新版本到 npmmirror.com
       if: inputs.type == 'npm'
       shell: bash
       run: curl --silent -X PUT https://registry-direct.npmmirror.com/${{ steps.pkg.outputs.name }}/sync?sync_upstream=true
+
+    - name: 恢复原始 .npmrc 文件
+      if: always()
+      shell: bash
+      run: |
+        cp .npmrc-bk .npmrc 2> /dev/null || true
+        rm -rf .npmrc-bk

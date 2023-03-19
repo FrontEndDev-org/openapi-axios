@@ -8,14 +8,12 @@ on:
     branches:
       - master
 
-permissions:
-  contents: write
-  pull-requests: write
-  packages: write
-
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
@@ -55,6 +53,8 @@ jobs:
 
   publish-github:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     needs: test-coverage
     steps:
       - uses: actions/checkout@v3

@@ -61,6 +61,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@commitlint/types": "^17.4.4",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.15.3",
