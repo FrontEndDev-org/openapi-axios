@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.27](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.26...v0.6.27) (2023-03-19)
+
+
+### Bug Fixes
+
+* update pretterrc ([3d264f6](https://github.com/cloudcome/oas-gen-ts/commit/3d264f6ca0e3752e51e58892b0ae8fe2469451ff))
+* update README.md ([3bcefab](https://github.com/cloudcome/oas-gen-ts/commit/3bcefabbd02257d4e2f14740e421c7289f60ee97))
+* 使用 cloudcome/publish-node-package-action@v1 进行版本发布 ([296ae78](https://github.com/cloudcome/oas-gen-ts/commit/296ae78c102d9a4bfb692268e76a64ea319dc644))
+* 修改 package author ([05bb81a](https://github.com/cloudcome/oas-gen-ts/commit/05bb81acb3b78de271b338ed4ce808a8ef6e1331))
+
 ## [0.6.26](https://github.com/cloudcome/oas-gen-ts/compare/v0.6.25...v0.6.26) (2023-03-17)
 
 
