@@ -12,9 +12,6 @@ on:
     # 19:00(UTC) 每天，相当于 03:00(GMT+8)
     - cron: '0 19 * * *'
 
-permissions:
-  contents: read
-
 jobs:
   lint:
     runs-on: ubuntu-latest

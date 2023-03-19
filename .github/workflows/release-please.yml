@@ -8,14 +8,12 @@ on:
     branches:
       - master
 
-permissions:
-  contents: write
-  pull-requests: write
-  packages: write
-
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
@@ -48,19 +46,21 @@ jobs:
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run build
-      - uses: ./.github/actions/npm-publish
+      - uses: cloudcome/publish-node-package-action@v1
         with:
-          type: npm
+          target: npm
           token: ${{ secrets.NPM_TOKEN }}
 
   publish-github:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     needs: test-coverage
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/node-env
       - run: npm ci
       - run: npm run build
-      - uses: ./.github/actions/npm-publish
+      - uses: cloudcome/publish-node-package-action@v1
         with:
-          type: github
+          target: github
