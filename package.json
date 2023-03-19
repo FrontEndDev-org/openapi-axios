@@ -49,7 +49,7 @@
     "OAS",
     "axios"
   ],
-  "author": "云淡然 <hi@ydr.me>",
+  "author": "publish-node-package-action",
   "homepage": "https://github.com/cloudcome/oas-gen-ts",
   "repository": "https://github.com/cloudcome/oas-gen-ts",
   "license": "MIT",
