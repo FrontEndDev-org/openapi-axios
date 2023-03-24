@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.6.27...v0.7.0) (2023-03-24)
+
+
+### Features
+
+* oas-gen-ts -&gt; openapi-axios ([8fef68d](https://github.com/FrontEndDev-org/openapi-axios/commit/8fef68d1bfe43b056b907ec3375055c278b741dc))
+
 ## [0.6.27](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.6.26...v0.6.27) (2023-03-19)
 
 ### Bug Fixes
