@@ -1,4 +1,4 @@
-interface OasItemBase {
+interface OpenApiSpecBase {
   name: string;
 
   /**
@@ -10,17 +10,17 @@ interface OasItemBase {
   axiosImport?: string;
 }
 
-export interface OasItemAsUrl extends OasItemBase {
+export interface OpenApiSpecAsRemote extends OpenApiSpecBase {
   url: string;
 }
 
 export type Spec = import('swagger-schema-official').Spec;
 
-export interface OasItemAsSpec extends OasItemBase {
+export interface OpenApiSpecAsLocal extends OpenApiSpecBase {
   spec: Spec;
 }
 
-export type OasItem = OasItemAsUrl | OasItemAsSpec;
+export type OpenApiSpec = OpenApiSpecAsRemote | OpenApiSpecAsLocal;
 
 export interface UserConfig {
   /**
@@ -56,9 +56,9 @@ export interface UserConfig {
   onGenerated?: (generated: Generated) => any;
 
   /**
-   * oas 列表
+   * OpenApiSpec 列表
    */
-  list: OasItem[];
+  list: OpenApiSpec[];
 }
 
 export type StrictConfig = Required<UserConfig>;
@@ -73,7 +73,7 @@ export enum ContentKind {
 
 export interface Generated {
   files: string[];
-  oasItem: OasItem;
+  oasItem: OpenApiSpec;
   config: StrictConfig;
 }
 
