@@ -2,16 +2,23 @@ import fs from 'fs/promises';
 import path from 'path';
 import { generateApi } from 'swagger-typescript-api';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import { Generated, GeneratedCallback, OasItem, OasItemAsSpec, OasItemAsUrl, StrictConfig } from './types';
+import {
+  Generated,
+  GeneratedCallback,
+  OpenApiSpec,
+  OpenApiSpecAsLocal,
+  OpenApiSpecAsRemote,
+  StrictConfig,
+} from './types';
 
-export async function generateItem(oasItem: OasItem, config: StrictConfig): Promise<Generated> {
+export async function generateItem(oasItem: OpenApiSpec, config: StrictConfig): Promise<Generated> {
   const { name, axiosImport: axiosImportScope } = oasItem;
   const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
   const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
   const { files } = await generateApi({
     name,
-    url: (oasItem as OasItemAsUrl).url,
-    spec: (oasItem as OasItemAsSpec).spec,
+    url: (oasItem as OpenApiSpecAsRemote).url,
+    spec: (oasItem as OpenApiSpecAsLocal).spec,
     output: false,
     httpClientType: 'axios',
     templates: templatesDir,

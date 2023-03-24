@@ -1,7 +1,7 @@
 {
-  "name": "oas-gen-ts",
+  "name": "openapi-axios",
   "version": "0.6.27",
-  "description": "OpenAPI Specification ➡️ TypeScript",
+  "description": "OpenAPI ➡️ Axios",
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint src/**/*.ts && tsc --project tsconfig.json --noEmit",
@@ -33,7 +33,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "oas-gen-ts": "bin/index.cjs"
+    "openapi-axios": "bin/index.cjs"
   },
   "files": [
     "dist-cjs",
@@ -44,14 +44,15 @@
   "keywords": [
     "cloudcome",
     "ydr.me",
-    "OpenAPI Specification",
+    "OpenAPI",
+    "swagger",
     "TypeScript",
     "OAS",
     "axios"
   ],
   "author": "publish-node-package-action",
-  "homepage": "https://github.com/cloudcome/oas-gen-ts",
-  "repository": "https://github.com/cloudcome/oas-gen-ts",
+  "homepage": "https://github.com/FrontEndDev-org/openapi-axios",
+  "repository": "https://github.com/FrontEndDev-org/openapi-axios",
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",

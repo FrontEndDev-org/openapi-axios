@@ -1,42 +1,42 @@
-# oas-gen-ts
+# openapi-axios
 
-[![code-review](https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml/badge.svg)](https://github.com/cloudcome/oas-gen-ts/actions/workflows/code-review.yml)
-[![dependency-review](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cloudcome/oas-gen-ts/actions/workflows/dependency-review.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/cloudcome/oas-gen-ts/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-![npm](https://img.shields.io/npm/v/oas-gen-ts)
-![release](https://img.shields.io/github/v/release/cloudcome/oas-gen-ts)
-![license](https://img.shields.io/github/license/cloudcome/oas-gen-ts)
+[![code-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml)
+[![dependency-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+![npm](https://img.shields.io/npm/v/openapi-axios)
+![release](https://img.shields.io/github/v/release/FrontEndDev-org/openapi-axios)
+![license](https://img.shields.io/github/license/FrontEndDev-org/openapi-axios)
 
-OpenAPI Specification ➡️ TypeScript
+OpenAPI ➡️ Axios
 
-Convert OpenAPI Specification declaration files into type declarations and executable functions. Compared with other similar tools, it has the following characteristics
+将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点
 
-- Each API is a function for easy tree shaking at build time
-- Easily integrate with local request clients, such as Axios instances created in local projects
-- Easy to use, easy to learn, type safe
+- 每个 API 都是一个函数，用于在构建时轻松进行 tree shaking
+- 轻松与本地请求客户端集成，例如在本地项目中创建的 Axios 实例
+- 易于使用，易于学习，类型安全
 
 # Install
 
 ```shell
-npm i -D oas-gen-ts
+npm i -D openapi-axios
 ```
 
 or
 
 ```shell
-yarn add --dev oas-gen-ts
+yarn add --dev openapi-axios
 ```
 
 # Usage
 
 ## CLI
 
-Create oas.config.js or oas.json in the root directory of the project. The search order for configuration files is `oas.config.cjs`, `oas.config.js`, `oas.json`.
+在项目根目录下创建配置文件，配置文件的搜索顺序是 `openapi.config.cjs`、`openapi.config.js`、`openapi.json`。
 
 ```js
-// oas.config.cjs
-const { defineConfig } = require('oas-gen-ts');
+// openapi.config.cjs
+const { defineConfig } = require('openapi-axios');
 
 module.exports = defineConfig({
   list: [
@@ -49,13 +49,13 @@ module.exports = defineConfig({
 ```
 
 ```shell
-# Generate typescript files based on configuration files
-npx oas-gen-ts
+# 根据配置文件生成typescript文件
+npx openapi-axios
 
-# The `src/apis/swagger/pet.ts` file will be generated
+# 将生成 `src/apis/swagger/pet.ts` 文件
 ```
 
-The generated file will be exported as one function and one operation, like this:
+生成的文件将导出为一个函数和一个操作，如下所示：
 
 ```ts
 // src/apis/swagger/pet.ts
@@ -109,7 +109,7 @@ export async function findPetsByStatus(
 // ...
 ```
 
-Then you can directly import a function and use it. Calling an interface is as simple as calling a local function, is it similar to RPC (remote procedure call).
+然后你可以直接导入一个函数并使用它。 调用接口就像调用本地函数一样简单，是不是类似于 RPC（remote procedure call）。
 
 ```ts
 import { findPetsByStatus } from '@/apis/swagger/pet';
@@ -123,7 +123,7 @@ const pets = await findPetsByStatus({
 ## API
 
 ```ts
-import { generate } from 'oas-gen-ts';
+import { generate } from 'openapi-axios';
 
 generate({
   // ...config
@@ -132,21 +132,22 @@ generate({
 
 # Config
 
-| Name                 | Type        | Required | Description                                | Default                                         |
-| -------------------- | ----------- | -------- | ------------------------------------------ | ----------------------------------------------- |
-| `cwd`                | `string`    | `false`  | current working directory                  | `process.cwd()`                                 |
-| `dest`               | `string`    | `false`  | Destination directory for generated files  | `src/apis`                                      |
-| `axiosImport`        | `string`    | `false`  | axios import string                        | Import from the official and create an instance |
-| `unwrapResponseData` | `boolean`   | `false`  | unwrap the data item from the response     | `false`                                         |
-| `list`               | `OasItem[]` | `false`  | List of OpenAPI Specification declarations | `[]`                                            |
+| 参数名               | 类型            | 可选性  | 描述                                                                              | 默认值                                          |
+| -------------------- | --------------- | ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `cwd`                | `string`        | `false` | 当前工作路径                                                                      | `process.cwd()`                                 |
+| `dest`               | `string`        | `false` | 目标目录                                                                          | `src/apis`                                      |
+| `axiosImport`        | `string`        | `false` | axios 导入内容                                                                    | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
+| `unwrapResponseData` | `boolean`       | `false` | 是否取消对 axios response 的包裹（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                         |
+| `list`               | `OpenApiSpec[]` | `false` | OpenAPI 规范声明列表                                                              |                                                 |
+| `[]`                 |                 |         |                                                                                   |                                                 |
 
-`OasItem`:
+`OpenApiSpec` 签名:
 
-| Name          | Type     | Required | Description                                     | Default                                         |
-| ------------- | -------- | -------- | ----------------------------------------------- | ----------------------------------------------- |
-| `name`        | `string` | `true`   | filename, which can be a path                   | `process.cwd()`                                 |
-| `axiosImport` | `string` | `false`  | axios import string, highest priority           | Import from the official and create an instance |
-| `url`         | `string` | `false`  | The remote address of the OpenAPI Specification | `undefined`                                     |
-| `spec`        | `Spec`   | `false`  | The local Objects of the OpenAPI Specification  | `undefined`                                     |
+| 名称          | 类型     | 可选项  | 描述                                   | 默认值          |
+| ------------- | -------- | ------- | -------------------------------------- | --------------- |
+| `name`        | `string` | `true`  | 文件名，可以包含路径，相当于 dest 配置 | `process.cwd()` |
+| `axiosImport` | `string` | `false` | axios 导入内容，优先级更高             | 无              |
+| `url`         | `string` | `false` | 远程 openApi 描述地址                  | `undefined`     |
+| `spec`        | `Spec`   | `false` | 本地 OpenApi 描述文件                  | `undefined`     |
 
-**At least one of `url` and `spec` exists**
+备注：`url` 属性和 `spec` 属性，至少有一个必须。
