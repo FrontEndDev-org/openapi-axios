@@ -150,3 +150,7 @@ generate({
 | `spec`        | `Spec`   | `false` | 本地 OpenApi 描述文件                  | `undefined`     |
 
 备注：`url` 属性和 `spec` 属性，至少有一个必须。
+
+# 鸣谢
+
+- [swagger-typescript-api](https://www.npmjs.com/package/swagger-typescript-api)
