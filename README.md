@@ -2,21 +2,21 @@
 
 [![code-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml)
 [![dependency-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e788387e5e27472ba3b5003bf19aeea7)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4fa1acaeb717469caddfe21a84c50bb2)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/4fa1acaeb717469caddfe21a84c50bb2)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 ![npm](https://img.shields.io/npm/v/openapi-axios)
 ![release](https://img.shields.io/github/v/release/FrontEndDev-org/openapi-axios)
 ![license](https://img.shields.io/github/license/FrontEndDev-org/openapi-axios)
 
 OpenAPI ➡️ Axios
 
-将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点
+将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点：
 
 - 每个 API 都是一个函数，用于在构建时轻松进行 tree shaking
 - 轻松与本地请求客户端集成，例如在本地项目中创建的 Axios 实例
 - 易于使用，易于学习，类型安全
 
-# Install
+# 安装
 
 ```shell
 npm i -D openapi-axios
@@ -28,9 +28,9 @@ or
 yarn add --dev openapi-axios
 ```
 
-# Usage
+# 使用
 
-## CLI
+## 命令行
 
 在项目根目录下创建配置文件，配置文件的搜索顺序是 `openapi.config.cjs`、`openapi.config.js`、`openapi.json`。
 
@@ -114,7 +114,7 @@ export async function findPetsByStatus(
 ```ts
 import { findPetsByStatus } from '@/apis/swagger/pet';
 
-// There are type hints when calling functions and writing parameters, thanks to TypeScript.
+// 在调用函数和编写参数时，有类型提示，这要感谢 TypeScript
 const pets = await findPetsByStatus({
   status: ['avaliable'],
 });
@@ -130,7 +130,7 @@ generate({
 });
 ```
 
-# Config
+# 配置
 
 | 参数名               | 类型            | 可选性  | 描述                                                                              | 默认值                                          |
 | -------------------- | --------------- | ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
@@ -138,8 +138,7 @@ generate({
 | `dest`               | `string`        | `false` | 目标目录                                                                          | `src/apis`                                      |
 | `axiosImport`        | `string`        | `false` | axios 导入内容                                                                    | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
 | `unwrapResponseData` | `boolean`       | `false` | 是否取消对 axios response 的包裹（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                         |
-| `list`               | `OpenApiSpec[]` | `false` | OpenAPI 规范声明列表                                                              |                                                 |
-| `[]`                 |                 |         |                                                                                   |                                                 |
+| `list`               | `OpenApiSpec[]` | `false` | OpenAPI 规范声明列表                                                              | `[]`                                            |
 
 `OpenApiSpec` 签名:
 
