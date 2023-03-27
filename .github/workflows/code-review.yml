@@ -5,7 +5,6 @@ name: code review
 on:
   push:
     branches:
-      - master
       - v*.x
   pull_request:
   schedule:
