@@ -6,7 +6,7 @@ name: release please
 on:
   push:
     branches:
-      - v0.x
+      - v*.x
 
 jobs:
   release:
