@@ -1,6 +1,6 @@
 {
   "name": "openapi-axios",
-  "version": "0.6.27",
+  "version": "0.7.0",
   "description": "OpenAPI ➡️ Axios",
   "scripts": {
     "prepare": "husky install",
@@ -57,7 +57,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "lodash-es": "^4.17.21",
-    "swagger-typescript-api": "^12.0.3"
+    "swagger-typescript-api": "^12.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
@@ -65,7 +65,7 @@
     "@commitlint/types": "^17.4.4",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/lodash-es": "^4.17.7",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.7",
     "@types/prettier": "^2.7.2",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
