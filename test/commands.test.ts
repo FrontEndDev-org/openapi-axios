@@ -5,7 +5,7 @@ import { cleanDir } from '../src/utils';
 
 test('start', async () => {
   await start({
-    configFile: path.join(__dirname, './oas.config.cjs'),
+    configFile: path.join(__dirname, './openapi.config.cjs'),
   });
   await cleanDir(path.resolve('dist-test'));
 });

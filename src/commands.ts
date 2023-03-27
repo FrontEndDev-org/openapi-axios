@@ -11,7 +11,7 @@ interface StartConfig {
   configFile?: string;
 }
 
-export const startConfigFiles = ['oas.config.cjs', 'oas.config.js', 'oas.json'];
+export const startConfigFiles = ['openapi.config.cjs', 'openapi.config.js', 'openapi.json'];
 
 export async function resolveConfigFile(cwd: string, configFile?: string) {
   if (configFile) {
