@@ -23,6 +23,10 @@ export function isDate(any: unknown): any is Date {
   return Boolean(any && any instanceof Date);
 }
 
+export function isUrl(any: string): boolean {
+  return /^https:\/\//i.test(any);
+}
+
 export async function isFile(p: string) {
   try {
     const state = await fs.stat(p);
