@@ -3,6 +3,26 @@ import fs from 'fs/promises';
 import path from 'path';
 import * as process from 'process';
 
+export function isString(any: unknown): any is string {
+  return typeof any === 'string';
+}
+
+export function isBoolean(any: unknown): any is boolean {
+  return typeof any === 'boolean';
+}
+
+export function isNumber(any: unknown): any is number {
+  return typeof any === 'number';
+}
+
+export function isObject(any: unknown): any is object {
+  return typeof any === 'object' && any !== null;
+}
+
+export function isDate(any: unknown): any is Date {
+  return Boolean(any && any instanceof Date);
+}
+
 export async function isFile(p: string) {
   try {
     const state = await fs.stat(p);

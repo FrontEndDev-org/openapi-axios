@@ -1,9 +1,12 @@
-import { random } from 'lodash-es';
 import path from 'path';
 import { cleanDir, isFile } from 'src/utils';
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { generate, Generated, GenerateInfo, generateItem, OpenapiSpec, StrictConfig } from '../src';
 import petstore3 from './petstore3.json';
+
+function randomString(): string {
+  return Math.random().toString(16).slice(-6);
+}
 
 describe('generate-item', () => {
   const cwd = process.cwd();
@@ -24,7 +27,7 @@ describe('generate-item', () => {
   test(
     'from url',
     async () => {
-      const name = '/' + random(1, 1000) + '/' + random(1, 1000);
+      const name = '/' + randomString() + '/' + randomString();
       const expectedFile = path.join(cwd, dest, name + '.ts');
 
       const generated = await generateItem(
@@ -43,7 +46,7 @@ describe('generate-item', () => {
   );
 
   test('from sepc', async () => {
-    const name = '/' + random(1, 1000) + '/' + random(1, 1000);
+    const name = '/' + randomString() + '/' + randomString();
     const expectedFile = path.join(cwd, dest, name + '.ts');
 
     const generated = await generateItem(
@@ -69,11 +72,11 @@ test('generate', async () => {
     dest: dest,
     apis: [
       {
-        name: random(1, 1000).toString(),
+        name: randomString(),
         schema: petstore3 as unknown as OpenapiSpec,
       },
       {
-        name: random(1, 1000).toString(),
+        name: randomString(),
         schema: petstore3 as unknown as OpenapiSpec,
       },
     ],
