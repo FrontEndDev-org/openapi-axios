@@ -31,3 +31,4 @@ jobs:
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage/lcov.info
+      - uses: coverallsapp/github-action@v2
