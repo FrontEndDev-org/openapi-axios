@@ -51,7 +51,7 @@ export async function start(startConfig?: StartConfig) {
 
   try {
     await generate(strictConfig, (generated, info) => {
-      const { oasItem } = generated;
+      const { openapi } = generated;
       const { index, length, done, start, end } = info;
       const width = Math.min(String(length).length, 2);
       const stepText = String(index + 1).padStart(width, '0');
@@ -61,14 +61,14 @@ export async function start(startConfig?: StartConfig) {
         console.log(
           chalk.cyanBright(`[${stepText}/${length}]`),
           'generated ',
-          chalk.yellowBright(oasItem.name),
+          chalk.yellowBright(openapi.name),
           chalk.gray(`${past}ms`)
         );
       } else {
         console.log(
           chalk.cyanBright(`[${stepText}/${length}]`),
           'generating',
-          chalk.yellowBright(oasItem.name),
+          chalk.yellowBright(openapi.name),
           chalk.gray('...')
         );
       }

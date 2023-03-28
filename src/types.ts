@@ -1,26 +1,31 @@
-interface OpenApiSpecBase {
+export type OpenapiSpec = import('swagger-schema-official').Spec;
+
+export type OpenapiConfig = {
+  /**
+   * openapi 的名称，将会生成 ${name}.ts 文件
+   */
   name: string;
 
   /**
-   * 全局导入 axios 客户端，优先级低于每个 oas 配置，默认从 axios 官方导入，导入名称必须为 axios，例如
+   * 导入 axios 客户端，默认从 axios 官方导入，导入名称必须为 axios，优先级高于全局配置，例如
    * ```
    * import { axios } from '@/utils/axios';
    * ```
    */
   axiosImport?: string;
-}
 
-export interface OpenApiSpecAsRemote extends OpenApiSpecBase {
-  url: string;
-}
+  /**
+   * 是否取消包装 data，默认 undefined，优先级高于全局配置
+   * false = 返回值就是响应（response），response.data 才是实际值
+   * true = 返回值就是数据
+   */
+  unwrapResponseData?: boolean;
 
-export type Spec = import('swagger-schema-official').Spec;
-
-export interface OpenApiSpecAsLocal extends OpenApiSpecBase {
-  spec: Spec;
-}
-
-export type OpenApiSpec = OpenApiSpecAsRemote | OpenApiSpecAsLocal;
+  /**
+   * openapi 的 schema，可以是一个链接地址，也可以是本地路径，也可以是一个对象
+   */
+  schema: string | OpenapiSpec;
+};
 
 export interface UserConfig {
   /**
@@ -34,7 +39,7 @@ export interface UserConfig {
   dest?: string;
 
   /**
-   * 导入 axios 客户端，优先级高于全局配置，默认从 axios 官方导入，导入名称必须为 axios，例如
+   * 默认从 axios 官方导入，导入名称必须为 axios，例如
    * ```
    * import { axios } from '@/utils/axios';
    * ```
@@ -56,9 +61,9 @@ export interface UserConfig {
   onGenerated?: (generated: Generated) => any;
 
   /**
-   * OpenApiSpec 列表
+   * OpenapiConfig 列表
    */
-  list: OpenApiSpec[];
+  apis: OpenapiConfig[];
 }
 
 export type StrictConfig = Required<UserConfig>;
@@ -73,7 +78,7 @@ export enum ContentKind {
 
 export interface Generated {
   files: string[];
-  oasItem: OpenApiSpec;
+  openapi: OpenapiConfig;
   config: StrictConfig;
 }
 

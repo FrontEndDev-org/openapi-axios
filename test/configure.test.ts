@@ -6,14 +6,14 @@ test('defaults', () => {
 const axios = new Axios();`);
   expect(defaults.dest).toBe('src/apis');
   expect(defaults.cwd).toBe(process.cwd());
-  expect(defaults.list).toHaveLength(0);
+  expect(defaults.apis).toHaveLength(0);
   expect(defaults.unwrapResponseData).toBe(false);
   expect(defaults.onGenerated).toBeTypeOf('function');
 });
 
 test('defineConfig', () => {
   const userConfig: UserConfig = {
-    list: [],
+    apis: [],
   };
   const strictConfig = defineConfig(userConfig);
 

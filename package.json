@@ -6,7 +6,7 @@
     "prepare": "husky install",
     "lint": "eslint src/**/*.ts && tsc --project tsconfig.json --noEmit",
     "test": "vitest run",
-    "test-coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "build:types": "rm -rf dist-dts && tsc --project tsconfig.types.json",
     "build:files": "rm -rf dist-cjs dist-mjs && rollup --config",
     "build": "npm run build:types && npm run build:files"

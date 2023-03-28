@@ -132,24 +132,22 @@ generate({
 
 # 配置
 
-| 参数名               | 类型            | 可选性  | 描述                                                                              | 默认值                                          |
-| -------------------- | --------------- | ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `cwd`                | `string`        | `false` | 当前工作路径                                                                      | `process.cwd()`                                 |
-| `dest`               | `string`        | `false` | 目标目录                                                                          | `src/apis`                                      |
-| `axiosImport`        | `string`        | `false` | axios 导入内容                                                                    | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
-| `unwrapResponseData` | `boolean`       | `false` | 是否取消对 axios response 的包裹（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                         |
-| `list`               | `OpenApiSpec[]` | `false` | OpenAPI 规范声明列表                                                              | `[]`                                            |
+| 参数名               | 类型              | 可选性  | 描述                                                                              | 默认值                                          |
+| -------------------- | ----------------- | ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `cwd`                | `string`          | `false` | 当前工作路径                                                                      | `process.cwd()`                                 |
+| `dest`               | `string`          | `false` | 目标目录                                                                          | `src/apis`                                      |
+| `axiosImport`        | `string`          | `false` | axios 导入内容                                                                    | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
+| `unwrapResponseData` | `boolean`         | `false` | 是否取消对 axios response 的包裹（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                         |
+| `apis`               | `OpenapiConfig[]` | `false` | OpenAPI 列表 <br/> <br/>                                                          | `[]`                                            |
 
-`OpenApiSpec` 签名:
+`OpenapiConfig` 签名:
 
-| 名称          | 类型     | 可选项  | 描述                                   | 默认值          |
-| ------------- | -------- | ------- | -------------------------------------- | --------------- |
-| `name`        | `string` | `true`  | 文件名，可以包含路径，相当于 dest 配置 | `process.cwd()` |
-| `axiosImport` | `string` | `false` | axios 导入内容，优先级更高             | 无              |
-| `url`         | `string` | `false` | 远程 openApi 描述地址                  | `undefined`     |
-| `spec`        | `Spec`   | `false` | 本地 OpenApi 描述文件                  | `undefined`     |
-
-备注：`url` 属性和 `spec` 属性，至少有一个必须。
+| 名称                 | 类型      | 可选项       | 描述                                                                                                          | 默认值                                                                    |
+| -------------------- | --------- | ------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------- |
+| `name`               | `string`  | 必须         | openapi 的名称，将会生成 ${name}.ts 文件                                                                      | `undefined`                                                               |
+| `axiosImport`        | `string`  | 可选         | axios 导入内容，优先级更高                                                                                    | 无                                                                        |
+| `unwrapResponseData` | `boolean` | 可选         | 是否取消对 axios response 的包裹，优先级更高（即直接返回 ResponseData，而不是 <br/><br/>AxiosResponse） <br/> | `false`                                                                   |
+| `schema`             | `string   | OpenApiSpec` | 必须                                                                                                          | openapi 的 schema，可以是一个链接地址，也可以是本地路径，也可以是一个对象 | `undefined` |
 
 # 鸣谢
 
