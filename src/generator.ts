@@ -1,34 +1,52 @@
 import fs from 'fs/promises';
+import { isBoolean, isString } from 'lodash-es';
 import path from 'path';
-import { generateApi } from 'swagger-typescript-api';
+import { generateApi, GenerateApiParams } from 'swagger-typescript-api';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import {
-  Generated,
-  GeneratedCallback,
-  OpenApiSpec,
-  OpenApiSpecAsLocal,
-  OpenApiSpecAsRemote,
-  StrictConfig,
-} from './types';
+import { Generated, GeneratedCallback, OpenapiConfig, StrictConfig } from './types';
 
-export async function generateItem(oasItem: OpenApiSpec, config: StrictConfig): Promise<Generated> {
-  const { name, axiosImport: axiosImportScope } = oasItem;
-  const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
-  const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
-  const { files } = await generateApi({
+export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfig): GenerateApiParams {
+  const { name, schema, unwrapResponseData: unwrapResponseDataScope } = openapiConfig;
+  const { unwrapResponseData: unwrapResponseDataGlobal } = config;
+  const unwrapResponseData = isBoolean(unwrapResponseDataScope) ? unwrapResponseDataScope : unwrapResponseDataGlobal;
+  const common: Omit<GenerateApiParams, 'url' | 'input' | 'spec'> = {
     name,
-    url: (oasItem as OpenApiSpecAsRemote).url,
-    spec: (oasItem as OpenApiSpecAsLocal).spec,
     output: false,
     httpClientType: 'axios',
     templates: templatesDir,
     silent: true,
     unwrapResponseData,
-  });
+  };
 
+  if (isString(schema)) {
+    if (/^https:\/\//i.test(schema)) {
+      return {
+        ...common,
+        url: schema,
+      };
+    } else {
+      return {
+        ...common,
+        input: schema,
+      };
+    }
+  } else {
+    return {
+      ...common,
+      spec: schema,
+    };
+  }
+}
+
+export async function generateItem(openapiConfig: OpenapiConfig, config: StrictConfig): Promise<Generated> {
+  const { axiosImport: axiosImportScope, schema } = openapiConfig;
+  const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
+  const axiosImport = axiosImportScope || axiosImportGlobal || axiosImportDefault;
+  const params = generateParams(openapiConfig, config);
+  const { files } = await generateApi(params);
   const generated: Generated = {
     files: [],
-    oasItem,
+    openapi: openapiConfig,
     config,
   };
 
@@ -47,17 +65,17 @@ export async function generateItem(oasItem: OpenApiSpec, config: StrictConfig): 
 }
 
 export async function generate(config: StrictConfig, callback?: GeneratedCallback): Promise<Generated[]> {
-  const { list, onGenerated } = config;
+  const { apis, onGenerated } = config;
   let index = 0;
-  const length = list.length;
+  const length = apis.length;
   const generatedList: Generated[] = [];
 
-  for (const oasItem of list) {
+  for (const oasItem of apis) {
     const start = Date.now();
     callback?.(
       {
         files: [],
-        oasItem,
+        openapi: oasItem,
         config,
       },
       { index, length, done: false, start, end: start }

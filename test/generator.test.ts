@@ -2,13 +2,20 @@ import { random } from 'lodash-es';
 import path from 'path';
 import { cleanDir, isFile } from 'src/utils';
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
-import { generate, Generated, GenerateInfo, generateItem, Spec } from '../src';
+import { generate, Generated, GenerateInfo, generateItem, OpenapiSpec, StrictConfig } from '../src';
 import petstore3 from './petstore3.json';
 
 describe('generate-item', () => {
   const cwd = process.cwd();
   const dest = 'dist-test';
-  const config = { axiosImport: '', cwd, dest: dest, list: [], unwrapResponseData: false, onGenerated: () => 0 };
+  const config: StrictConfig = {
+    axiosImport: '',
+    cwd,
+    dest: dest,
+    apis: [],
+    unwrapResponseData: false,
+    onGenerated: () => 0,
+  };
 
   afterEach(async () => {
     await cleanDir(path.join(cwd, dest));
@@ -23,7 +30,7 @@ describe('generate-item', () => {
       const generated = await generateItem(
         {
           name,
-          url: 'https://petstore3.swagger.io/api/v3/openapi.json',
+          schema: 'https://petstore3.swagger.io/api/v3/openapi.json',
         },
         config
       );
@@ -42,7 +49,7 @@ describe('generate-item', () => {
     const generated = await generateItem(
       {
         name,
-        spec: petstore3 as unknown as Spec,
+        schema: petstore3 as unknown as OpenapiSpec,
       },
       config
     );
@@ -56,18 +63,18 @@ describe('generate-item', () => {
 test('generate', async () => {
   const cwd = process.cwd();
   const dest = 'dist-test';
-  const config = {
+  const config: StrictConfig = {
     axiosImport: '',
     cwd,
     dest: dest,
-    list: [
+    apis: [
       {
         name: random(1, 1000).toString(),
-        spec: petstore3 as unknown as Spec,
+        schema: petstore3 as unknown as OpenapiSpec,
       },
       {
         name: random(1, 1000).toString(),
-        spec: petstore3 as unknown as Spec,
+        schema: petstore3 as unknown as OpenapiSpec,
       },
     ],
     unwrapResponseData: false,

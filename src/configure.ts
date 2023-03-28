@@ -6,7 +6,7 @@ export const defaults: StrictConfig = {
   dest: 'src/apis',
   axiosImport: axiosImportDefault,
   unwrapResponseData: false,
-  list: [],
+  apis: [],
   onGenerated: () => 0,
 };
 
