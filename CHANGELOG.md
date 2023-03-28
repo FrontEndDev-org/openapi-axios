@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.9.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.8.0...v0.9.0) (2023-03-28)
+
+
+### Features
+
+* 调整配置参数，list -&gt; apis，url/spec 统一为 schema（可以是 url/path/spec） ([48731b1](https://github.com/FrontEndDev-org/openapi-axios/commit/48731b12ddd4f6b898b7b47aa5a7c3166d0f6d80))
+
+## [0.8.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.7.0...v0.8.0) (2023-03-27)
+
+
+### Features
+
+* 增加“鸣谢” ([bd66bda](https://github.com/FrontEndDev-org/openapi-axios/commit/bd66bda20f8c57706031e80a7a1ec665104d6084))
+
+
+### Bug Fixes
+
+* 修复 oas.config 配置文件未调整为 openapi.config ([a2cd0b0](https://github.com/FrontEndDev-org/openapi-axios/commit/a2cd0b00d6e6621c80d9f7c4dbe42ae7c427571b))
+* 修正 readme 描述 ([f718aef](https://github.com/FrontEndDev-org/openapi-axios/commit/f718aef800c4748375d79bd41f40740b6d7d763c))
+
 ## [0.7.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.6.27...v0.7.0) (2023-03-24)
 
 
