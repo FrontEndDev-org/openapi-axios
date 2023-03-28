@@ -1,10 +1,11 @@
 import chalk from 'chalk';
 import path from 'path';
+import { promisify } from 'util';
 import * as process from 'process';
 import { defineConfig } from './configure';
 import { generate } from './generator';
 import { UserConfig } from './types';
-import { exitError, isFile, normalizeError, tryCatch } from './utils';
+import { exitError, isFile, normalizeError, syncPromise, tryCatch } from './utils';
 
 interface StartConfig {
   // 指定配置文件绝对路径
@@ -37,7 +38,7 @@ export async function start(startConfig?: StartConfig) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const [err, config] = await tryCatch<UserConfig>(require(configFile));
+  const [err, config] = await tryCatch<UserConfig>(syncPromise(() => require(configFile)));
 
   if (err) {
     return exitError(err.message);

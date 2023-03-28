@@ -49,6 +49,16 @@ export function normalizeError(err: unknown) {
   return typeof err === 'object' && err !== null && err instanceof Error ? err : new Error(String(err));
 }
 
+export function syncPromise<T>(syncFunc: () => T): Promise<T> {
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(syncFunc());
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 export async function tryCatch<T>(promise: Promise<T>): Promise<[Error | null, T | null]> {
   try {
     return [null, await promise];
