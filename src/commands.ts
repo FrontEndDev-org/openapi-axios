@@ -14,31 +14,35 @@ interface StartConfig {
 
 export const startConfigFiles = ['openapi.config.cjs', 'openapi.config.js', 'openapi.json'];
 
-export async function resolveConfigFile(cwd: string, configFile?: string) {
+export async function resolveConfigPath(cwd: string, configFile?: string) {
   if (configFile) {
-    if (!(await isFile(path.join(configFile)))) {
-      throw new Error(`指定配置文件 "${configFile}" 不存在`);
+    const configPath = path.join(configFile);
+
+    if (!(await isFile(configPath))) {
+      return exitError(`指定配置文件 "${configFile}" 不存在`);
     }
 
-    return configFile;
+    return configPath;
   }
 
   for (const file of startConfigFiles.values()) {
-    if (await isFile(path.join(cwd, file))) {
-      return file;
+    const configPath = path.join(cwd, file);
+
+    if (await isFile(configPath)) {
+      return configPath;
     }
   }
 }
 
 export async function start(startConfig?: StartConfig) {
-  const configFile = await resolveConfigFile(process.cwd(), startConfig?.configFile);
+  const configPath = await resolveConfigPath(process.cwd(), startConfig?.configFile);
 
-  if (!configFile) {
-    return exitError(`配置文件未找到，配置文件可以为 ${startConfigFiles.join('、')} 之一`);
+  if (!configPath) {
+    return exitError(`配置文件未找到，配置文件可以是 ${startConfigFiles.join('、')} 之一`);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const [err, config] = await tryCatch<UserConfig>(syncPromise(() => require(configFile)));
+  const [err, config] = await tryCatch<UserConfig>(syncPromise(() => require(configPath)));
 
   if (err) {
     return exitError(err.message);
