@@ -1,5 +1,5 @@
-import { isBoolean, isDate, isNull, isNumber, isObject, isPlainObject, isString } from 'lodash-es';
 import { ContentKind } from './types';
+import { isBoolean, isDate, isNumber, isObject, isString } from './utils';
 
 /**
  * 格式化请求头
@@ -31,7 +31,7 @@ export function isBlob(value: unknown): value is Blob {
 
 export function toFormDataValue(value: unknown): string | Blob {
   if (isString(value) || isNumber(value) || isBoolean(value)) return String(value);
-  if (isPlainObject(value)) return JSON.stringify(value);
+  if (isObject(value)) return JSON.stringify(value);
   if (isDate(value)) return value.toISOString();
   if (isBlob(value)) return value;
   return '';
@@ -46,7 +46,7 @@ export function toFormDataValue(value: unknown): string | Blob {
 export function formatBody<D>(contentKind: ContentKind, body: D) {
   switch (contentKind) {
     case ContentKind.URL_ENCODED:
-      return isPlainObject(body) ? new URLSearchParams(body as Record<string, string>).toString() : '';
+      return isObject(body) ? new URLSearchParams(body as Record<string, string>).toString() : '';
 
     case ContentKind.FORM_DATA: {
       const fd = new FormData();
