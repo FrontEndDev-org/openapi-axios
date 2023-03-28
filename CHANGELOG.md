@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.9.0...v0.10.0) (2023-03-28)
+
+
+### Features
+
+* 移除对 lodash-es 的引用（node 端运行有问题） ([aaa1cf4](https://github.com/FrontEndDev-org/openapi-axios/commit/aaa1cf4fa7bc802cc337cfd0c9a4bd5da8fc87b5))
+
+
+### Bug Fixes
+
+* 修复构建生成 dts 文件不正确的问题 ([28c35ff](https://github.com/FrontEndDev-org/openapi-axios/commit/28c35ffa4def8f2354c4e47894bdfc07cb2b9116))
+
 ## [0.9.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.8.0...v0.9.0) (2023-03-28)
 
 
