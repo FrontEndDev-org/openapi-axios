@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.8.0...v0.9.0) (2023-03-28)
+
+
+### Features
+
+* 调整配置参数，list -&gt; apis，url/spec 统一为 schema（可以是 url/path/spec） ([48731b1](https://github.com/FrontEndDev-org/openapi-axios/commit/48731b12ddd4f6b898b7b47aa5a7c3166d0f6d80))
+
 ## [0.8.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.7.0...v0.8.0) (2023-03-27)
 
 
