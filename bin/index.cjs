@@ -2,4 +2,10 @@
 
 const { start } = require('../dist-cjs/index.cjs');
 
-start().then();
+start()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch(() => {
+    process.exit(1);
+  });
