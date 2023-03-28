@@ -58,7 +58,7 @@ export async function generateItem(openapiConfig: OpenapiConfig, config: StrictC
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(file, contentFinal);
 
-    generated.files.push(path.relative(cwd, file));
+    generated.files.push(file);
   }
 
   return generated;

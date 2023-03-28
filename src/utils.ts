@@ -40,15 +40,6 @@ export async function cleanDir(p: string) {
   await fs.rm(p, { recursive: true, force: true });
 }
 
-export function exitError(message: string) {
-  console.log(chalk.redBright(message));
-
-  /* istanbul ignore if */
-  if (!process.env.VITEST) {
-    process.exit(1);
-  }
-}
-
 export function normalizeError(err: unknown) {
   return typeof err === 'object' && err !== null && err instanceof Error ? err : new Error(String(err));
 }
