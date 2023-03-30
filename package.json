@@ -4,7 +4,7 @@
   "description": "OpenAPI ➡️ Axios",
   "scripts": {
     "prepare": "husky install",
-    "lint": "eslint src/**/*.ts && tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src/**/*.ts test/**/*.ts && tsc --project tsconfig.json --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "build:types": "rm -rf dist-dts && tsc --project tsconfig.types.json",

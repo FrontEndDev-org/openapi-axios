@@ -1,9 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { exitError, normalizeError, tryCatch } from '../src/utils';
-
-test('Hello', () => {
-  exitError('Hello');
-});
+import { normalizeError, tryCatch } from '../src/utils';
 
 test('normalizeError', () => {
   expect(normalizeError(1).message).toBe('1');

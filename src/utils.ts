@@ -23,6 +23,10 @@ export function isDate(any: unknown): any is Date {
   return Boolean(any && any instanceof Date);
 }
 
+export function isUrl(any: string): boolean {
+  return /^https:\/\//i.test(any);
+}
+
 export async function isFile(p: string) {
   try {
     const state = await fs.stat(p);
@@ -36,17 +40,18 @@ export async function cleanDir(p: string) {
   await fs.rm(p, { recursive: true, force: true });
 }
 
-export function exitError(message: string) {
-  console.log(chalk.redBright(message));
-
-  /* istanbul ignore if */
-  if (!process.env.VITEST) {
-    process.exit(1);
-  }
-}
-
 export function normalizeError(err: unknown) {
   return typeof err === 'object' && err !== null && err instanceof Error ? err : new Error(String(err));
+}
+
+export function syncPromise<T>(syncFunc: () => T): Promise<T> {
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(syncFunc());
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
 export async function tryCatch<T>(promise: Promise<T>): Promise<[Error | null, T | null]> {

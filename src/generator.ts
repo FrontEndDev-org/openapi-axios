@@ -3,7 +3,7 @@ import path from 'path';
 import { generateApi, GenerateApiParams } from 'swagger-typescript-api';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
 import { Generated, GeneratedCallback, OpenapiConfig, StrictConfig } from './types';
-import { isBoolean, isString } from './utils';
+import { isBoolean, isString, isUrl } from './utils';
 
 export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfig): GenerateApiParams {
   const { name, schema, unwrapResponseData: unwrapResponseDataScope } = openapiConfig;
@@ -19,7 +19,7 @@ export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfi
   };
 
   if (isString(schema)) {
-    if (/^https:\/\//i.test(schema)) {
+    if (isUrl(schema)) {
       return {
         ...common,
         url: schema,
