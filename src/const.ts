@@ -1,5 +1,8 @@
 import path from 'path';
 
+export const pkgName = process.env.PKG_NAME!;
+export const pkgVersion = process.env.PKG_VERSION!;
+
 const dirname = __dirname;
 
 export const templatesDir = path.join(dirname, '../templates');
