@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.11.0...v0.12.0) (2023-04-01)
+
+
+### Features
+
+* 增加 pkgName, pkgVersion 导出 ([64df5da](https://github.com/FrontEndDev-org/openapi-axios/commit/64df5da808f4af73fa407bbbbfcb6d7dd5dc0055))
+
+
+### Bug Fixes
+
+* 修正相关文案说明 ([c62b0f8](https://github.com/FrontEndDev-org/openapi-axios/commit/c62b0f871a6c22d5fcdafe3d5638d345ba426be0))
+
 ## [0.11.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.10.0...v0.11.0) (2023-04-01)
 
 
