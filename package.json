@@ -12,7 +12,7 @@
     "build": "npm run build:types && npm run build:files"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=14"
   },
   "engineStrict": true,
   "sideEffects": false,
