@@ -57,12 +57,14 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
-    "swagger-typescript-api": "^12.0.4"
+    "swagger-typescript-api": "^12.0.4",
+    "try-flatten": "^1.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@commitlint/types": "^17.4.4",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^18.15.7",

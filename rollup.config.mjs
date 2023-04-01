@@ -1,3 +1,4 @@
+import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json' assert { type: 'json' };
@@ -21,7 +22,9 @@ export default {
       sourcemap: true,
     },
   ],
+  external: Object.keys(pkg.dependencies),
   plugins: [
+    nodeResolve(),
     replace({
       preventAssignment: true,
       'process.env.PKG_NAME': JSON.stringify(pkg.name),
