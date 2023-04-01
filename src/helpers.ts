@@ -1,5 +1,5 @@
 import { ContentKind } from './types';
-import { isBoolean, isDate, isNumber, isObject, isString } from './utils';
+import { isBoolean, isDate, isNumber, isObject, isString } from './utils/type-is';
 
 /**
  * 格式化请求头

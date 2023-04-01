@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { generateApi, GenerateApiParams } from 'swagger-typescript-api';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
 import { Generated, GeneratedCallback, OpenapiConfig, StrictConfig } from './types';
-import { isBoolean, isString, isUrl } from './utils';
+import { isBoolean, isString, isUrl } from './utils/type-is';
 
 export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfig): GenerateApiParams {
   const { name, schema, unwrapResponseData: unwrapResponseDataScope } = openapiConfig;

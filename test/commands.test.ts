@@ -1,7 +1,8 @@
 import path from 'path';
 import { start } from '../src';
 import { test } from 'vitest';
-import { cleanDir } from '../src/utils';
+
+import { cleanDir } from '../src/utils/fs2';
 
 test('start', async () => {
   await start({
