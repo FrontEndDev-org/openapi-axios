@@ -1,14 +1,13 @@
 # openapi-axios
 
+OpenAPI ➡️ Axios
+
 [![code-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/code-review.yml)
 [![dependency-review](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/FrontEndDev-org/openapi-axios/actions/workflows/dependency-review.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4fa1acaeb717469caddfe21a84c50bb2)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/4fa1acaeb717469caddfe21a84c50bb2)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-![npm](https://img.shields.io/npm/v/openapi-axios)
-![release](https://img.shields.io/github/v/release/FrontEndDev-org/openapi-axios)
-![license](https://img.shields.io/github/license/FrontEndDev-org/openapi-axios)
-
-OpenAPI ➡️ Axios
+[![npm](https://img.shields.io/npm/v/openapi-axios)](https://npmjs.com/package/openapi-axios)
+[![release](https://img.shields.io/github/v/release/FrontEndDev-org/openapi-axios)](https://github.com/FrontEndDev-org/openapi-axios/releases)
 
 将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点：
 
@@ -138,16 +137,16 @@ generate({
 | `dest`               | `string`          | `false` | 目标目录                                                                          | `src/apis`                                      |
 | `axiosImport`        | `string`          | `false` | axios 导入内容                                                                    | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
 | `unwrapResponseData` | `boolean`         | `false` | 是否取消对 axios response 的包裹（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                         |
-| `apis`               | `OpenapiConfig[]` | `false` | OpenAPI 列表 <br/> <br/>                                                          | `[]`                                            |
+| `apis`               | `OpenapiConfig[]` | `false` | OpenAPI 列表                                                                      | `[]`                                            |
 
 `OpenapiConfig` 签名:
 
-| 名称                 | 类型      | 可选项       | 描述                                                                                                          | 默认值                                                                    |
-| -------------------- | --------- | ------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------- |
-| `name`               | `string`  | 必须         | openapi 的名称，将会生成 ${name}.ts 文件                                                                      | `undefined`                                                               |
-| `axiosImport`        | `string`  | 可选         | axios 导入内容，优先级更高                                                                                    | 无                                                                        |
-| `unwrapResponseData` | `boolean` | 可选         | 是否取消对 axios response 的包裹，优先级更高（即直接返回 ResponseData，而不是 <br/><br/>AxiosResponse） <br/> | `false`                                                                   |
-| `schema`             | `string   | OpenApiSpec` | 必须                                                                                                          | openapi 的 schema，可以是一个链接地址，也可以是本地路径，也可以是一个对象 | `undefined` |
+| 名称                 | 类型      | 可选项       | 描述                                                                                          | 默认值                                                                    |
+| -------------------- | --------- | ------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------- |
+| `name`               | `string`  | 必须         | openapi 的名称，将会生成 ${name}.ts 文件                                                      | `undefined`                                                               |
+| `axiosImport`        | `string`  | 可选         | axios 导入内容，优先级更高                                                                    | 无                                                                        |
+| `unwrapResponseData` | `boolean` | 可选         | 是否取消对 axios response 的包裹，优先级更高（即直接返回 ResponseData，而不是 AxiosResponse） | `false`                                                                   |
+| `schema`             | `string   | OpenApiSpec` | 必须                                                                                          | openapi 的 schema，可以是一个链接地址，也可以是本地路径，也可以是一个对象 | `undefined` |
 
 # 鸣谢
 
