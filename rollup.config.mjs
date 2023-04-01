@@ -1,4 +1,7 @@
+import nodeResolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
+import pkg from './package.json' assert { type: 'json' };
 
 /** @type {import('rollup').RollupOptions} */
 export default {
@@ -19,7 +22,14 @@ export default {
       sourcemap: true,
     },
   ],
+  external: Object.keys(pkg.dependencies),
   plugins: [
+    nodeResolve(),
+    replace({
+      preventAssignment: true,
+      'process.env.PKG_NAME': JSON.stringify(pkg.name),
+      'process.env.PKG_VERSION': JSON.stringify(pkg.version),
+    }),
     typescript({
       tsconfig: 'tsconfig.json',
     }),

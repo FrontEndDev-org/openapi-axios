@@ -11,9 +11,26 @@ module.exports = defineConfig({
 
   overrides: [
     {
+      files: ['*.cjs'],
+      extends: [
+        //
+        'eslint:recommended',
+      ],
+      rules: {
+        'prettier/prettier': 'error',
+      },
+    },
+    {
       files: ['*.mjs'],
       parserOptions: {
         sourceType: 'module',
+      },
+      extends: [
+        //
+        'eslint:recommended',
+      ],
+      rules: {
+        'prettier/prettier': 'error',
       },
     },
     {

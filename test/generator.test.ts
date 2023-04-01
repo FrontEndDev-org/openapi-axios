@@ -1,7 +1,7 @@
 import path from 'path';
-import { cleanDir, isFile } from 'src/utils';
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { generate, Generated, GenerateInfo, generateItem, OpenapiSpec, StrictConfig } from '../src';
+import { cleanDir, isFile } from '../src/utils/fs2';
 import petstore3 from './petstore3.json';
 
 function randomString(): string {

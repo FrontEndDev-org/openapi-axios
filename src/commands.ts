@@ -1,10 +1,12 @@
 import chalk from 'chalk';
-import path from 'path';
+import * as path from 'path';
 import * as process from 'process';
+import { normalizeError, tryFlatten } from 'try-flatten';
 import { defineConfig } from './configure';
 import { generate } from './generator';
 import { UserConfig } from './types';
-import { isFile, isString, isUrl, normalizeError, syncPromise, tryCatch } from './utils';
+import { isFile } from './utils/fs2';
+import { isString, isUrl } from './utils/type-is';
 
 interface StartConfig {
   // 指定配置文件绝对路径
@@ -41,7 +43,7 @@ export async function start(startConfig?: StartConfig) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const [err, config] = await tryCatch<UserConfig>(syncPromise(() => require(configPath)));
+  const [err, config] = tryFlatten(() => require(configPath) as UserConfig | undefined);
 
   if (err) {
     throw new Error(err.message);
