@@ -2,6 +2,10 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    env: {
+      PKG_NAME: 'pkg-name-for-test',
+      PKG_VERSION: 'pkg-version-for-test',
+    },
     include: ['test/**/*.test.ts'],
     coverage: {
       include: ['src/**/*.ts'],
