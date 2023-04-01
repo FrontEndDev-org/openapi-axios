@@ -51,7 +51,7 @@
     "OAS",
     "axios"
   ],
-  "author": "publish-node-package-action",
+  "author": "云淡然 <hi@ydr.me> (https://ydr.me)",
   "homepage": "https://github.com/FrontEndDev-org/openapi-axios",
   "repository": "https://github.com/FrontEndDev-org/openapi-axios",
   "license": "MIT",
