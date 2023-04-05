@@ -1,4 +1,4 @@
-name: node env
+name: nvm env
 description: 依照 nvmrc 创建 node 环境
 
 runs:
