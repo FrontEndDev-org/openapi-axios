@@ -1,6 +1,7 @@
 import path from 'path';
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
-import { generate, Generated, GenerateInfo, generateItem, OpenapiSpec, StrictConfig } from '../src';
+import { generate } from '../src';
+import { OpenapiSpec, StrictConfig } from '../src/configure';
+import { Generated, GenerateInfo, generateItem } from '../src/generator';
 import { cleanDir, isFile } from '../src/utils/fs2';
 import petstore3 from './petstore3.json';
 
@@ -17,7 +18,6 @@ describe('generate-item', () => {
     dest: dest,
     apis: [],
     unwrapResponseData: false,
-    onGenerated: () => 0,
   };
 
   afterEach(async () => {
@@ -81,7 +81,6 @@ test('generate', async () => {
       },
     ],
     unwrapResponseData: false,
-    onGenerated: () => 0,
   };
   const fn1 = vi.fn<[Generated, GenerateInfo]>();
 

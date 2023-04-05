@@ -1,5 +1,12 @@
-import { ContentKind } from './types';
 import { isBoolean, isDate, isNumber, isObject, isString } from './utils/type-is';
+
+export enum ContentKind {
+  JSON = 'JSON',
+  URL_ENCODED = 'URL_ENCODED',
+  FORM_DATA = 'FORM_DATA',
+  TEXT = 'TEXT',
+  OTHER = 'OTHER',
+}
 
 /**
  * 格式化请求头

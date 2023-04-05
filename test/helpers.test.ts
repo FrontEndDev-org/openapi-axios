@@ -1,6 +1,4 @@
-import { expect, test } from 'vitest';
-import { formatBody, formatHeaders, isBlob } from '../src/helpers';
-import { ContentKind } from '../src/types';
+import { ContentKind, formatBody, formatHeaders, isBlob } from '../src/helpers';
 
 test('formatHeaders', () => {
   expect(formatHeaders(ContentKind.JSON)).toEqual({ 'Content-Type': 'application/json' });

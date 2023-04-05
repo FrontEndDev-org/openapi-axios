@@ -1,8 +1,8 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { generateApi, GenerateApiParams } from 'swagger-typescript-api';
+import { OpenapiConfig, StrictConfig } from './configure';
 import { axiosImportDefault, helpersImport, templatesDir } from './const';
-import { Generated, GeneratedCallback, OpenapiConfig, StrictConfig } from './types';
 import { isBoolean, isString, isUrl } from './utils/type-is';
 
 export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfig): GenerateApiParams {
@@ -38,6 +38,22 @@ export function generateParams(openapiConfig: OpenapiConfig, config: StrictConfi
   }
 }
 
+export interface Generated {
+  files: string[];
+  openapi: OpenapiConfig;
+  config: StrictConfig;
+}
+
+export type GenerateInfo = {
+  index: number;
+  length: number;
+  done: boolean;
+  start: number;
+  end: number;
+};
+
+export type GeneratedCallback = (generated: Generated, info: GenerateInfo) => any;
+
 export async function generateItem(openapiConfig: OpenapiConfig, config: StrictConfig): Promise<Generated> {
   const { axiosImport: axiosImportScope, schema } = openapiConfig;
   const { cwd, dest, axiosImport: axiosImportGlobal, unwrapResponseData } = config;
@@ -65,7 +81,7 @@ export async function generateItem(openapiConfig: OpenapiConfig, config: StrictC
 }
 
 export async function generate(config: StrictConfig, callback?: GeneratedCallback): Promise<Generated[]> {
-  const { apis, onGenerated } = config;
+  const { apis } = config;
   let index = 0;
   const length = apis.length;
   const generatedList: Generated[] = [];
@@ -82,7 +98,6 @@ export async function generate(config: StrictConfig, callback?: GeneratedCallbac
     );
     const generated = await generateItem(oasItem, config);
     generatedList.push(generated);
-    onGenerated(generated);
     callback?.(generated, { index, length, done: true, start, end: Date.now() });
     index++;
   }

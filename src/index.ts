@@ -1,5 +1,5 @@
 export { pkgName, pkgVersion } from './const';
-export * from './generator';
-export * from './configure';
-export * from './types';
-export * from './commands';
+export { generate } from './generator';
+export { defineConfig, defaults } from './configure';
+export type { UserConfig } from './configure';
+export { run } from './commands';

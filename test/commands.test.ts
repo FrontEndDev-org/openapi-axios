@@ -1,6 +1,5 @@
 import path from 'path';
-import { start } from '../src';
-import { test } from 'vitest';
+import { start } from '../src/commands';
 
 import { cleanDir } from '../src/utils/fs2';
 

@@ -2,9 +2,8 @@ import chalk from 'chalk';
 import * as path from 'path';
 import * as process from 'process';
 import { normalizeError, tryFlatten } from 'try-flatten';
-import { defineConfig } from './configure';
+import { defineConfig, UserConfig } from './configure';
 import { generate } from './generator';
-import { UserConfig } from './types';
 import { isFile } from './utils/fs2';
 import { isString, isUrl } from './utils/type-is';
 
