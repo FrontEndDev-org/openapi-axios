@@ -8,7 +8,6 @@ OpenAPI ➡️ Axios
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/4fa1acaeb717469caddfe21a84c50bb2)](https://app.codacy.com/gh/FrontEndDev-org/openapi-axios/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![npm version](https://badge.fury.io/js/openapi-axios.svg)](https://npmjs.com/package/openapi-axios)
 
-
 将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点：
 
 - 每个 API 都是一个函数，用于在构建时轻松进行 tree shaking
