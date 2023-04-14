@@ -36,3 +36,7 @@ export function findOrigin(source: string, relation: Map<string, string>) {
 
   return origin;
 }
+
+export function varString(string: string): string {
+  return string.replace(/\{[^}]+\}/g, ($0) => `$${$0}`);
+}
