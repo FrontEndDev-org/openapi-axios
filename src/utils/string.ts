@@ -40,3 +40,8 @@ export function findOrigin(source: string, relation: Map<string, string>) {
 export function varString(string: string): string {
   return string.replace(/\{[^}]+\}/g, ($0) => `$${$0}`);
 }
+
+export function toTypePath(props: string[]): string {
+  const path = props.map((p) => JSON.stringify(p)).join('][');
+  return path ? '[' + path + ']' : '';
+}

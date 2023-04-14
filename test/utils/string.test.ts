@@ -1,4 +1,4 @@
-import { buildName, findOrigin, RefInfo, refToType, varString } from '../../src/utils/string';
+import { buildName, findOrigin, RefInfo, refToType, toTypePath, varString } from '../../src/utils/string';
 
 test('buildName', () => {
   expect(buildName('!')).toEqual('unnamed');
@@ -47,4 +47,10 @@ test('varString', () => {
   expect(varString('/a/b')).toEqual('/a/b');
   expect(varString('/a/b/{cc}')).toEqual('/a/b/${cc}');
   expect(varString('/a/b/{cc}/dd/{ee}')).toEqual('/a/b/${cc}/dd/${ee}');
+});
+
+test('toTypePath', () => {
+  expect(toTypePath([])).toEqual('');
+  expect(toTypePath(['a'])).toEqual('["a"]');
+  expect(toTypePath(['a', 'b'])).toEqual('["a"]["b"]');
 });
