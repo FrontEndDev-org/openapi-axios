@@ -9,22 +9,20 @@ export class Named {
     return a;
   }
   resolveAlias() {
-    const aliasTargetList: TypeAlias[] = [];
     this.unresolvedAliasList.forEach((a) => {
       const info = refToType(a.ref);
       a.target = this.pathNameMap.get(info.base) || '';
       a.props = info.props;
 
       // 指向另外一个地址
-      const { name, target } = a;
-      if (name && target) {
+      const { root, name, target } = a;
+      if (root) {
         this.aliasRelationMap.set(name, target);
-        aliasTargetList.push(a);
       }
     });
 
-    aliasTargetList.forEach((a) => {
-      a.origin = findOrigin(a.name, this.aliasRelationMap);
+    this.unresolvedAliasList.forEach((a) => {
+      a.origin = findOrigin(a.root ? a.name : a.target, this.aliasRelationMap);
     });
 
     this.unresolvedAliasList.length = 0;

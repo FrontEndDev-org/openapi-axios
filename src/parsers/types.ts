@@ -5,7 +5,6 @@ export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'a
 
 export interface TypeOrigin {
   kind: TypeKind;
-  // 数组内为空字符串，其他情况有值
   name: string;
   type: TypeUnit;
   required: boolean;
@@ -21,7 +20,7 @@ export interface TypeOrigin {
 
 export interface TypeAlias {
   kind: TypeKind;
-  // 有值时是顶层名称，需要符合编程要求，其他情况无要求，可能是空字符串（对象/数组内 ref）
+  root: boolean;
   name: string;
   target: string;
   origin: string;

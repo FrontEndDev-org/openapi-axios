@@ -13,29 +13,28 @@ export class ComponentsParser extends BaseParser {
 
     if (!schemas) return [];
 
-    const t = Object.entries(schemas).map(([name, schema]) => {
-      const typeName = this.named.nextTypeName(name);
-      return this.isReference(schema)
-        ? this.parseReference(schema)
-        : this.parseSchema(typeName, schema.nullable === false, schema);
-    });
-    this.named.didResolve();
+    const t = Object.entries(schemas)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([name, schema]) => {
+        const typeName = this.named.nextTypeName(name);
+        return this.isReference(schema)
+          ? this.parseReference(typeName, schema, true)
+          : this.parseSchema(typeName, schema.nullable === false, schema);
+      });
+    this.named.resolveAlias();
     return t;
   }
 
-  protected parseReference(reference: OpenAPIV3.ReferenceObject): TypeAlias {
-    const { $ref } = reference;
-    const t: TypeAlias = {
-      // TODO 需要 name，
-      // TODO 并且 $ref 可能指向类型内部 #/components/schemas/Type/inner-inner
-      //                                                  ^^^^^^^^^^^^^^^ 需要完整看待
+  protected parseReference(name: string, reference: OpenAPIV3.ReferenceObject, root = false): TypeAlias {
+    return this.named.addAlias({
       kind: 'alias',
+      root,
+      name,
+      ref: reference.$ref,
       target: '',
-    };
-    this.named.willResolve(() => {
-      t.target = this.named.getName($ref);
+      origin: '',
+      props: [],
     });
-    return t;
   }
 
   protected parseSchema(name: string, required: boolean, schema: OpenAPIV3.SchemaObject) {
@@ -86,7 +85,7 @@ export class ComponentsParser extends BaseParser {
       type: 'object',
       children: properties.map(([propName, propSchema]) => {
         return this.isReference(propSchema)
-          ? this.parseReference(propSchema)
+          ? this.parseReference(propName, propSchema)
           : this.parseSchema(propName, schema.required?.includes(propName) || false, propSchema);
       }),
     };
@@ -101,8 +100,8 @@ export class ComponentsParser extends BaseParser {
       type: 'array',
       children: [schema.items].map((schema) => {
         return this.isReference(schema)
-          ? this.parseReference(schema)
-          : this.parseSchema('', schema.nullable === false, schema);
+          ? this.parseReference(`${name}[]`, schema)
+          : this.parseSchema(`${name}[]`, schema.nullable === false, schema);
       }),
     };
   }

@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { ComponentsParser } from '../../src/parsers/ComponentsParser';
 import { TypeAlias, TypeList } from '../../src/parsers/types';
 
@@ -72,7 +73,23 @@ test('ref once', () => {
   });
 
   const t = parser.parseComponents();
-  expect((t[0] as TypeAlias).target).toEqual('P');
+  expect(t).toEqual<TypeList>([
+    {
+      kind: 'origin',
+      name: 'P',
+      type: 'string',
+      required: false,
+    },
+    {
+      kind: 'alias',
+      root: true,
+      name: 'T',
+      target: 'P',
+      origin: 'P',
+      props: [],
+      ref: '#/components/schemas/P',
+    },
+  ]);
 });
 
 test('ref twice', () => {
@@ -100,9 +117,9 @@ test('ref twice', () => {
 
   const t = parser.parseComponents();
   expect(t).toEqual<TypeList>([
-    { kind: 'alias', target: 'K' },
-    { kind: 'alias', target: 'K' },
     { kind: 'origin', name: 'K', type: 'string', required: false },
+    { kind: 'alias', root: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
+    { kind: 'alias', root: true, name: 'T', target: 'P', origin: 'K', props: [], ref: '#/components/schemas/P' },
   ]);
 });
 
@@ -192,7 +209,7 @@ test('object', () => {
         { name: 'B', type: 'boolean', required: true, kind: 'origin' },
         { name: 'I', type: 'number', required: true, kind: 'origin' },
         { name: 'N', type: 'number', required: true, kind: 'origin' },
-        { kind: 'alias', target: 'R' },
+        { kind: 'alias', root: false, name: 'R', target: 'R', origin: 'R', props: [], ref: '#/components/schemas/R' },
         { name: 'S', type: 'string', required: true, kind: 'origin' },
       ],
     },
@@ -233,7 +250,7 @@ test('array', () => {
       name: 'A',
       type: 'array',
       required: true,
-      children: [{ name: '', type: 'string', required: false, kind: 'origin' }],
+      children: [{ name: 'A[]', type: 'string', required: false, kind: 'origin' }],
     },
   ]);
 });
