@@ -98,9 +98,12 @@ export class PathsParser extends ComponentsParser {
   }
 
   parseOperationRequest(name: string, body: NonNullable<OpenAPIV3.OperationObject['requestBody']>) {
-    if (this.isReference(body)) return this.parseSchemaNever(name, true, {});
+    if (this.isReference(body)) return;
+
     const { content } = body;
     const okMedia = content[this.options.okMediaType];
+    if (!okMedia) return;
+
     return this.parseOperationMedia(name, okMedia);
   }
 
@@ -114,6 +117,8 @@ export class PathsParser extends ComponentsParser {
     if (!content) return;
 
     const okMedia = content[this.options.okMediaType];
+    if (!okMedia) return;
+
     return this.parseOperationMedia(name, okMedia);
   }
 

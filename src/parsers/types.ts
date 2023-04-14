@@ -1,5 +1,3 @@
-import { OpenAPIV3 } from 'openapi-types';
-
 export type TypeKind = 'origin' | 'alias';
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array';
 
@@ -37,7 +35,7 @@ export interface ParseOptions {
 }
 
 export interface TypeOperation {
-  method: OpenAPIV3.HttpMethods;
+  method: string;
   url: string;
   name: string;
   summary?: string;
@@ -58,4 +56,9 @@ export type TypeOperations = TypeOperation[];
 export interface TypeQueryPath {
   query: TypeList;
   path: TypeList;
+}
+
+export interface TypeDocument {
+  components: TypeList;
+  paths: TypeOperations;
 }
