@@ -1,8 +1,8 @@
-import { DocumentParser } from '../../src/parsers/DocumentParser';
-import { TypeDocument } from '../../src/parsers/types';
+import { DocumentReader } from '../../src/readers/DocumentReader';
+import { TypeDocument } from '../../src/readers/types';
 
-test('DocumentParser', () => {
-  const parser = new DocumentParser({
+test('DocumentReader', () => {
+  const reader = new DocumentReader({
     openapi: '3.0.2',
     info: {
       title: 'Swagger Petstore - OpenAPI 3.0',
@@ -643,7 +643,7 @@ test('DocumentParser', () => {
       },
     },
   });
-  const types = parser.parse();
+  const types = reader.parse();
   // console.log(JSON.stringify(types));
   expect(types).toEqual<TypeDocument>({
     components: [

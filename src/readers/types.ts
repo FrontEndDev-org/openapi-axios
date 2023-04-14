@@ -29,10 +29,21 @@ export interface TypeAlias {
 export type TypeItem = TypeOrigin | TypeAlias;
 export type TypeList = TypeItem[];
 
-export interface ParseOptions {
-  okCode: number;
-  okMediaType: string;
+export interface ReaderOptions {
+  /**
+   * ok 的响应码
+   * @default 200
+   */
+  okCode?: number;
+
+  /**
+   * ok 的媒体类型
+   * @default "application/json"
+   */
+  okMediaType?: string;
 }
+
+export type StrictReaderOptions = Required<ReaderOptions>;
 
 export interface TypeOperation {
   method: string;

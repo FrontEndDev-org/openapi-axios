@@ -1,9 +1,9 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { ComponentsParser } from './ComponentsParser';
+import { ComponentsReader } from './ComponentsReader';
 import { methods } from './const';
 import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeQueryPath } from './types';
 
-export class PathsParser extends ComponentsParser {
+export class PathsReader extends ComponentsReader {
   parsingUrl = '';
   parsingMethod: OpenAPIV3.HttpMethods = OpenAPIV3.HttpMethods.GET;
 

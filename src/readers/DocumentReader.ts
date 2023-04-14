@@ -1,7 +1,7 @@
-import { PathsParser } from './PathsParser';
+import { PathsReader } from './PathsReader';
 import { TypeDocument } from './types';
 
-export class DocumentParser extends PathsParser {
+export class DocumentReader extends PathsReader {
   parse(): TypeDocument {
     const components = this.parseComponents();
     const paths = this.parsePaths();

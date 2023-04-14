@@ -1,11 +1,11 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { ComponentsParser } from '../../src/parsers/ComponentsParser';
-import { PathsParser } from '../../src/parsers/PathsParser';
-import { TypeAlias, TypeList, TypeOperations } from '../../src/parsers/types';
+import { ComponentsReader } from '../../src/readers/ComponentsReader';
+import { PathsReader } from '../../src/readers/PathsReader';
+import { TypeAlias, TypeList, TypeOperations } from '../../src/readers/types';
 import HttpMethods = OpenAPIV3.HttpMethods;
 
 test('empty paths keys', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -14,12 +14,12 @@ test('empty paths keys', () => {
     paths: {},
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([]);
 });
 
 test('empty path item keys', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -30,12 +30,12 @@ test('empty path item keys', () => {
     },
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([]);
 });
 
 test('empty path item method responses keys', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -50,7 +50,7 @@ test('empty path item method responses keys', () => {
     },
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'getPet',
@@ -63,7 +63,7 @@ test('empty path item method responses keys', () => {
 });
 
 test('empty path item method responses keys + specify operationId', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -79,7 +79,7 @@ test('empty path item method responses keys + specify operationId', () => {
     },
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -92,7 +92,7 @@ test('empty path item method responses keys + specify operationId', () => {
 });
 
 test('resp ref', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -126,8 +126,8 @@ test('resp ref', () => {
     },
   });
 
-  parser.parseComponents();
-  const t = parser.parsePaths();
+  reader.parseComponents();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -150,7 +150,7 @@ test('resp ref', () => {
 });
 
 test('resp type', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -177,7 +177,7 @@ test('resp type', () => {
     },
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -197,7 +197,7 @@ test('resp type', () => {
 });
 
 test('req body', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -227,7 +227,7 @@ test('req body', () => {
     },
   });
 
-  const t = parser.parsePaths();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -255,7 +255,7 @@ test('req body', () => {
 });
 
 test('req query + path', () => {
-  const parser = new PathsParser({
+  const reader = new PathsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -299,8 +299,8 @@ test('req query + path', () => {
     },
   });
 
-  parser.parseComponents();
-  const t = parser.parsePaths();
+  reader.parseComponents();
+  const t = reader.parsePaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',

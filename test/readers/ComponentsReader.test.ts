@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
-import { ComponentsParser } from '../../src/parsers/ComponentsParser';
-import { TypeAlias, TypeList } from '../../src/parsers/types';
+import { ComponentsReader } from '../../src/readers/ComponentsReader';
+import { TypeAlias, TypeList } from '../../src/readers/types';
 
 test('empty components', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -12,12 +12,12 @@ test('empty components', () => {
     paths: {},
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([]);
 });
 
 test('empty components keys', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -27,12 +27,12 @@ test('empty components keys', () => {
     components: {},
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([]);
 });
 
 test('empty ref', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -48,12 +48,12 @@ test('empty ref', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect((t[0] as TypeAlias).target).toEqual('');
 });
 
 test('ref once', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -72,7 +72,7 @@ test('ref once', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -93,7 +93,7 @@ test('ref once', () => {
 });
 
 test('ref twice', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -115,7 +115,7 @@ test('ref twice', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     { kind: 'origin', name: 'K', type: 'string', required: false },
     { kind: 'alias', root: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
@@ -124,7 +124,7 @@ test('ref twice', () => {
 });
 
 test('primitive', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -149,7 +149,7 @@ test('primitive', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     { name: 'B', type: 'boolean', required: false, kind: 'origin' },
     { name: 'I', type: 'number', required: false, kind: 'origin' },
@@ -159,7 +159,7 @@ test('primitive', () => {
 });
 
 test('object', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -197,7 +197,7 @@ test('object', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -223,7 +223,7 @@ test('object', () => {
 });
 
 test('array', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -243,7 +243,7 @@ test('array', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -256,7 +256,7 @@ test('array', () => {
 });
 
 test('never', () => {
-  const parser = new ComponentsParser({
+  const reader = new ComponentsReader({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -270,7 +270,7 @@ test('never', () => {
     },
   });
 
-  const t = parser.parseComponents();
+  const t = reader.parseComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',

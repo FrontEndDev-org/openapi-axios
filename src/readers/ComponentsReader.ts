@@ -1,9 +1,9 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { BaseParser } from './BaseParser';
+import { BaseReader } from './BaseReader';
 import { Named } from './Named';
 import { TypeAlias, TypeList, TypeOrigin, TypeUnit } from './types';
 
-export class ComponentsParser extends BaseParser {
+export class ComponentsReader extends BaseReader {
   parseComponents(): TypeList {
     const { components } = this.document;
 

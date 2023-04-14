@@ -1,19 +1,19 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { Named } from './Named';
-import { ParseOptions } from './types';
+import { ReaderOptions, StrictReaderOptions } from './types';
 
-export class BaseParser {
+export class BaseReader {
   named = new Named();
 
-  static defaults: ParseOptions = {
+  static defaults: ReaderOptions = {
     okCode: 200,
     okMediaType: 'application/json',
   };
 
-  options: ParseOptions;
+  options: StrictReaderOptions;
 
-  constructor(protected readonly document: OpenAPIV3.Document, options?: Partial<ParseOptions>) {
-    this.options = Object.assign({}, BaseParser.defaults, options);
+  constructor(protected readonly document: OpenAPIV3.Document, options?: ReaderOptions) {
+    this.options = Object.assign({}, BaseReader.defaults, options) as StrictReaderOptions;
   }
 
   protected isReference(
