@@ -43,10 +43,14 @@ export interface TypeOperation {
   summary?: string;
   description?: string;
   deprecated?: boolean;
-  query?: TypeList;
-  path?: TypeList;
-  body?: TypeItem;
-  resp?: TypeItem;
+  request: {
+    query?: TypeList;
+    path?: TypeList;
+    body?: TypeItem;
+  };
+  response: {
+    body?: TypeItem;
+  };
 }
 
 export type TypeOperations = TypeOperation[];

@@ -20,6 +20,7 @@ export class PathsParser extends ComponentsParser {
         types.push(...this.parsePathItem(pathItem));
       });
 
+    this.named.resolveAlias();
     return types;
   }
 
@@ -39,25 +40,32 @@ export class PathsParser extends ComponentsParser {
   }
 
   parseOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
-    const { parameters, requestBody } = operation;
+    const { parameters, requestBody: requestBodySchema } = operation;
     const { query, path } = parameters
       ? this.parseOperationParameters(parameters)
       : { query: undefined, path: undefined };
-
     const name = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
-    const reqTypeName = this.named.nextTypeName(name + 'Request');
-    const resTypeName = this.named.nextTypeName(name + 'Response');
+    const requestBodyTypeName = this.named.nextTypeName(name + 'RequestBody', '');
+    const responseBodyTypeName = this.named.nextTypeName(name + 'ResponseBody', '');
+    const requestBody = requestBodySchema
+      ? this.parseOperationRequest(requestBodyTypeName, requestBodySchema)
+      : undefined;
+
     return {
       name,
       method: this.parsingMethod,
       url: this.parsingUrl,
-      query,
-      path,
       summary: operation.summary,
       description: operation.description,
       deprecated: operation.deprecated,
-      body: requestBody ? this.parseOperationRequest(reqTypeName, requestBody) : undefined,
-      resp: this.parseOperationResponse(resTypeName, operation.responses),
+      request: {
+        query,
+        path,
+        body: requestBody,
+      },
+      response: {
+        body: this.parseOperationResponse(responseBodyTypeName, operation.responses),
+      },
     };
   }
 
@@ -66,26 +74,27 @@ export class PathsParser extends ComponentsParser {
     const path: TypeList = [];
 
     parameters.forEach((parameter) => {
-      if (this.isReference(parameter)) return;
+      const t = this.parseOperationParameter(parameter);
 
-      const ti = this.parseOperationParameter(parameter);
+      if (!t) return;
 
-      if ('in' in ti && ti.in === 'path') {
-        path.push(ti);
+      if ('in' in parameter && parameter.in === 'path') {
+        path.push(t);
       } else {
-        query.push(ti);
+        query.push(t);
       }
     });
 
     return { query, path };
   }
 
-  protected parseOperationParameter(parameter: OpenAPIV3.ParameterObject): TypeItem {
-    const { name, required = false, schema } = parameter;
+  protected parseOperationParameter(parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject) {
+    if (this.isReference(parameter)) return;
 
-    if (!schema) return this.parseSchemaNever(name, required, {});
+    const { schema, name, required = false } = parameter;
+    if (!schema) return;
 
-    return this.isReference(schema) ? this.parseSchemaNever(name, true, {}) : this.parseSchema(name, required, schema);
+    return this.isReference(schema) ? this.parseReference(name, schema) : this.parseSchema(name, required, schema);
   }
 
   parseOperationRequest(name: string, body: NonNullable<OpenAPIV3.OperationObject['requestBody']>) {
@@ -98,11 +107,12 @@ export class PathsParser extends ComponentsParser {
   protected parseOperationResponse(name: string, responses: NonNullable<OpenAPIV3.ResponsesObject>) {
     const okResponse = responses[this.options.okCode];
 
-    if (!okResponse) return this.parseSchemaNever(name, true, {});
-    if (this.isReference(okResponse)) return this.parseSchemaNever(name, true, {});
+    if (!okResponse) return;
+    if (this.isReference(okResponse)) return;
 
     const { content } = okResponse;
-    if (!content) return this.parseSchemaNever(name, true, {});
+    if (!content) return;
+
     const okMedia = content[this.options.okMediaType];
     return this.parseOperationMedia(name, okMedia);
   }
@@ -113,7 +123,7 @@ export class PathsParser extends ComponentsParser {
     if (!schema) return this.parseSchemaNever(name, true, {});
 
     return this.isReference(schema)
-      ? this.parseReference(schema)
+      ? this.parseReference(name, schema)
       : this.parseSchema(name, schema.nullable === false, schema);
   }
 }

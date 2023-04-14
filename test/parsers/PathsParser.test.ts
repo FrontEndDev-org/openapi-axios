@@ -56,12 +56,8 @@ test('empty path item method responses keys', () => {
       name: 'getPet',
       method: OpenAPIV3.HttpMethods.GET,
       url: '/pet',
-      resp: {
-        kind: 'origin',
-        name: 'GetPetResponse',
-        required: true,
-        type: 'never',
-      },
+      request: {},
+      response: {},
     },
   ]);
 });
@@ -89,12 +85,8 @@ test('empty path item method responses keys + specify operationId', () => {
       name: 'findPet',
       method: OpenAPIV3.HttpMethods.GET,
       url: '/pet',
-      resp: {
-        kind: 'origin',
-        name: 'FindPetResponse',
-        required: true,
-        type: 'never',
-      },
+      request: {},
+      response: {},
     },
   ]);
 });
@@ -136,7 +128,25 @@ test('resp ref', () => {
 
   parser.parseComponents();
   const t = parser.parsePaths();
-  expect((t[0].resp as TypeAlias).target).toEqual('T');
+  expect(t).toEqual<TypeOperations>([
+    {
+      name: 'findPet',
+      url: '/pet',
+      method: HttpMethods.GET,
+      request: {},
+      response: {
+        body: {
+          kind: 'alias',
+          root: false,
+          name: 'FindPetResponseBody',
+          target: 'T',
+          origin: 'T',
+          props: [],
+          ref: '#/components/schemas/T',
+        },
+      },
+    },
+  ]);
 });
 
 test('resp type', () => {
@@ -173,11 +183,14 @@ test('resp type', () => {
       name: 'findPet',
       method: OpenAPIV3.HttpMethods.GET,
       url: '/pet',
-      resp: {
-        kind: 'origin',
-        name: 'FindPetResponse',
-        required: false,
-        type: 'string',
+      request: {},
+      response: {
+        body: {
+          kind: 'origin',
+          name: 'FindPetResponseBody',
+          required: false,
+          type: 'string',
+        },
       },
     },
   ]);
@@ -208,18 +221,7 @@ test('req body', () => {
               },
             },
           },
-          responses: {
-            200: {
-              description: '',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'string',
-                  },
-                },
-              },
-            },
-          },
+          responses: {},
         },
       },
     },
@@ -229,14 +231,103 @@ test('req body', () => {
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
-      method: OpenAPIV3.HttpMethods.GET,
+      method: HttpMethods.GET,
       url: '/pet',
-      resp: {
-        kind: 'origin',
-        name: 'FindPetResponse',
-        required: false,
-        type: 'string',
+      request: {
+        body: {
+          kind: 'origin',
+          name: 'FindPetRequestBody',
+          type: 'object',
+          required: false,
+          children: [
+            {
+              kind: 'origin',
+              name: 'p',
+              type: 'string',
+              required: false,
+            },
+          ],
+        },
       },
+      response: {},
+    },
+  ]);
+});
+
+test('req query + path', () => {
+  const parser = new PathsParser({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    openapi: '3.0.0',
+    paths: {
+      '/pet/{name}': {
+        get: {
+          operationId: 'findPet',
+          parameters: [
+            {
+              name: 'name',
+              in: 'path',
+              schema: {
+                $ref: '#/components/schemas/O/p',
+              },
+            },
+            {
+              name: 'keywords',
+              in: 'query',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+          responses: {},
+        },
+      },
+    },
+    components: {
+      schemas: {
+        O: {
+          type: 'object',
+          properties: {
+            P: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  });
+
+  parser.parseComponents();
+  const t = parser.parsePaths();
+  expect(t).toEqual<TypeOperations>([
+    {
+      name: 'findPet',
+      method: HttpMethods.GET,
+      url: '/pet/{name}',
+      request: {
+        path: [
+          {
+            kind: 'alias',
+            root: false,
+            name: 'name',
+            ref: '#/components/schemas/O/p',
+            target: 'O',
+            origin: 'O',
+            props: ['p'],
+          },
+        ],
+        query: [
+          {
+            kind: 'origin',
+            name: 'keywords',
+            type: 'string',
+            required: false,
+          },
+        ],
+      },
+      response: {},
     },
   ]);
 });
