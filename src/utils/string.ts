@@ -11,15 +11,28 @@ export function buildName(origin: string, bigger = false) {
 
 export interface RefInfo {
   type: string;
+  base: string;
   props: string[];
 }
 
-export function refToTypeName(ref: string): RefInfo {
-  // #/components/schemas/{type}/{...prop}
+export function refToType(ref: string): RefInfo {
   const segs = ref.split('/').slice(3);
+  const type = segs.at(0)!;
 
   return {
-    type: segs.at(0)!,
+    type,
+    base: `#/components/schemas/${type}`,
     props: segs.slice(1),
   };
+}
+
+export function findOrigin(source: string, relation: Map<string, string>) {
+  let origin = source;
+  let target: string | undefined;
+
+  while ((target = relation.get(origin))) {
+    origin = target;
+  }
+
+  return origin;
 }

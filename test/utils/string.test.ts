@@ -1,8 +1,8 @@
-import { buildName, RefInfo, refToTypeName } from '../../src/utils/string';
+import { buildName, findOrigin, RefInfo, refToType } from '../../src/utils/string';
 
 test('buildName', () => {
-  expect(buildName('!')).toEqual('untitled');
-  expect(buildName('??')).toEqual('untitled');
+  expect(buildName('!')).toEqual('unnamed');
+  expect(buildName('??')).toEqual('unnamed');
   expect(buildName('hello-world')).toEqual('helloWorld');
   expect(buildName('hello-world123')).toEqual('helloWorld123');
   expect(buildName('123hello-world123')).toEqual('helloWorld123');
@@ -11,17 +11,34 @@ test('buildName', () => {
   expect(buildName('[[[123hello-world123]]]', true)).toEqual('HelloWorld123');
 });
 
-test('refToTypeName', () => {
-  expect(refToTypeName('#/components/schemas/T')).toEqual<RefInfo>({
+test('refToType', () => {
+  expect(refToType('#/components/schemas/T')).toEqual<RefInfo>({
     type: 'T',
+    base: '#/components/schemas/T',
     props: [],
   });
-  expect(refToTypeName('#/components/schemas/T/oo')).toEqual<RefInfo>({
+  expect(refToType('#/components/schemas/T/oo')).toEqual<RefInfo>({
     type: 'T',
+    base: '#/components/schemas/T',
     props: ['oo'],
   });
-  expect(refToTypeName('#/components/schemas/T/oo/pp/qq')).toEqual<RefInfo>({
+  expect(refToType('#/components/schemas/T/oo/pp/qq')).toEqual<RefInfo>({
     type: 'T',
+    base: '#/components/schemas/T',
     props: ['oo', 'pp', 'qq'],
   });
+});
+
+test('findOrigin', () => {
+  // a -> b -> c -> d
+  // x -> y
+  const relation = new Map([
+    ['a', 'b'],
+    ['b', 'c'],
+    ['c', 'd'],
+    ['x', 'y'],
+  ]);
+  expect(findOrigin('a', relation)).toBe('d');
+  expect(findOrigin('x', relation)).toBe('y');
+  expect(findOrigin('y', relation)).toBe('y');
 });
