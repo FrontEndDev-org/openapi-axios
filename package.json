@@ -57,6 +57,10 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
+    "lodash": "^4.17.21",
+    "openapi-types": "^12.1.0",
+    "openapi3-ts": "^4.0.4",
+    "prettier": "^2.8.7",
     "swagger-typescript-api": "^12.0.4",
     "try-flatten": "^1.0.1"
   },
@@ -67,6 +71,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^11.0.0",
+    "@types/lodash": "^4.14.192",
     "@types/node": "^18.15.7",
     "@types/prettier": "^2.7.2",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
@@ -78,7 +83,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.7",
     "rollup": "^3.19.1",
     "typescript": "^5.0.2",
     "vitest": "^0.29.3"

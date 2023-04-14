@@ -1,3 +1,7 @@
+export function isUndefined(any: unknown): any is undefined {
+  return any === undefined;
+}
+
 export function isString(any: unknown): any is string {
   return typeof any === 'string';
 }

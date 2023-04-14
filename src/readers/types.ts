@@ -1,22 +1,25 @@
 export type TypeKind = 'origin' | 'alias';
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array';
 
-export interface TypeOrigin {
+export interface TypeComments {
+  title?: string;
+  description?: string;
+  default?: any;
+  example?: any;
+  deprecated?: boolean;
+  format?: string;
+}
+
+export interface TypeOrigin extends TypeComments {
   kind: TypeKind;
   name: string;
   type: TypeUnit;
   required: boolean;
-  title?: string;
-  description?: string;
-  default?: any;
   enum?: string[];
-  example?: any;
-  deprecated?: boolean;
-  format?: string;
   children?: TypeList;
 }
 
-export interface TypeAlias {
+export interface TypeAlias extends TypeComments {
   kind: TypeKind;
   root: boolean;
   name: string;
