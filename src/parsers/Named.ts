@@ -11,7 +11,7 @@ export class Named {
   resolveAlias() {
     this.unresolvedAliasList.forEach((a) => {
       const info = refToType(a.ref);
-      a.target = this.pathNameMap.get(info.base) || '';
+      a.target = this.getName(info.base);
       a.props = info.props;
 
       // 指向另外一个地址
@@ -29,17 +29,19 @@ export class Named {
   }
 
   nameCountMap = new Map<string /*name*/, number /*count*/>();
-  namePathMap = new Map<string /*name*/, string /*path*/>();
-  pathNameMap = new Map<string /*path*/, string /*name*/>();
+  nameRefMap = new Map<string /*name*/, string /*ref*/>();
+  refNameMap = new Map<string /*ref*/, string /*name*/>();
 
-  nextTypeName(name: string) {
-    const ref = `#/components/schemas/${name}`;
+  nextTypeName(name: string, ref = `#/components/schemas/${name}`) {
     const typeName = buildName(name, true);
     const count = this.nameCountMap.get(typeName) || 0;
     const nextCount = count + 1;
     const returnName = (typeName: string) => {
-      this.namePathMap.set(typeName, ref);
-      this.pathNameMap.set(ref, typeName);
+      if (ref) {
+        this.nameRefMap.set(typeName, ref);
+        this.refNameMap.set(ref, typeName);
+      }
+
       return typeName;
     };
 
@@ -47,8 +49,8 @@ export class Named {
     return nextCount === 1 ? returnName(typeName) : returnName(typeName + nextCount);
   }
 
-  getName(path: string) {
-    return this.pathNameMap.get(path) || '';
+  getName(ref: string) {
+    return this.refNameMap.get(ref) || '';
   }
 
   operationIdCountMap = new Map<string /*operationId*/, number /*count*/>();

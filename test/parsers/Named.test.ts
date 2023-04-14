@@ -22,6 +22,7 @@ test('named', () => {
   // A -> A!(A2) -> aa!!/1/2 == A -> aa!!/1/2(Aa3)
   const a1 = named.addAlias({
     kind: 'alias',
+    root: true,
     name: 'A',
     ref: '#/components/schemas/A!',
     target: '',
@@ -31,6 +32,7 @@ test('named', () => {
   // A!(A2) -> aa!!/1/2(Aa3)
   const a2 = named.addAlias({
     kind: 'alias',
+    root: true,
     name: 'A2',
     ref: '#/components/schemas/aa!!/1/2',
     target: '',
