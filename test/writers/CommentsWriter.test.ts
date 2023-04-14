@@ -9,7 +9,7 @@ test('CommentsWriter', () => {
   });
 
   expect(
-    writer.write({
+    writer.writeComments({
       kind: 'origin',
       name: 'A',
       type: 'string',
@@ -18,7 +18,7 @@ test('CommentsWriter', () => {
   ).toMatchInlineSnapshot('""');
 
   expect(
-    writer.write({
+    writer.writeComments({
       kind: 'origin',
       name: 'A',
       type: 'string',
@@ -32,7 +32,7 @@ test('CommentsWriter', () => {
   `);
 
   expect(
-    writer.write({
+    writer.writeComments({
       kind: 'origin',
       name: 'A',
       type: 'string',
