@@ -1,4 +1,4 @@
-import { buildName, findOrigin, refToType } from '../utils/string';
+import { buildName, findOrigin, nextUniqueName, refToType } from '../utils/string';
 import { TypeAlias } from './types';
 
 export class Named {
@@ -34,20 +34,15 @@ export class Named {
 
   nextTypeName(name: string, refAble = false) {
     const ref = refAble ? `#/components/schemas/${name}` : '';
-    const typeName = buildName(name, true);
-    const count = this.nameCountMap.get(typeName) || 0;
-    const nextCount = count + 1;
-    const returnName = (typeName: string) => {
-      if (ref) {
-        this.nameRefMap.set(typeName, ref);
-        this.refNameMap.set(ref, typeName);
-      }
+    const refTypeName = buildName(name, true);
+    const uniqueTypeName = nextUniqueName(refTypeName, this.nameCountMap);
 
-      return typeName;
-    };
+    if (ref) {
+      this.nameRefMap.set(uniqueTypeName, ref);
+      this.refNameMap.set(ref, uniqueTypeName);
+    }
 
-    this.nameCountMap.set(typeName, nextCount);
-    return nextCount === 1 ? returnName(typeName) : returnName(typeName + nextCount);
+    return uniqueTypeName;
   }
 
   getName(ref: string) {
