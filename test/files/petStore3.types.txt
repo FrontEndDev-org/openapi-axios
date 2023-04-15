@@ -107,8 +107,8 @@ export type Pet = {
   /**
    * @example doggie
    */
-  name?: string;
-  photoUrls?: Array<string>;
+  name: string;
+  photoUrls: Array<string>;
   /**
    * @description pet status in the store
    */
@@ -169,6 +169,7 @@ export type AddPetResData = Pet;
  * @description Add a new pet to the store
  */
 export async function addPet(
+  data: AddPetReqData,
   config?: AxiosRequestConfig
 ): AxiosPromise<AddPetResData> {
   return request({
@@ -186,6 +187,7 @@ export type UpdatePetResData = Pet;
  * @description Update an existing pet by Id
  */
 export async function updatePet(
+  data: UpdatePetReqData,
   config?: AxiosRequestConfig
 ): AxiosPromise<UpdatePetResData> {
   return request({
@@ -356,7 +358,12 @@ export async function findPetsByTags(
   });
 }
 
-export type GetInventoryResData = {};
+export type GetInventoryResData = {
+  /**
+   * @format int32
+   */
+  [key: string]: number;
+};
 /**
  * @title Returns pet inventories by status
  * @description Returns a map of status codes to quantities
@@ -378,6 +385,7 @@ export type PlaceOrderResData = Order;
  * @description Place a new order in the store
  */
 export async function placeOrder(
+  data: PlaceOrderReqData,
   config?: AxiosRequestConfig
 ): AxiosPromise<PlaceOrderResData> {
   return request({
@@ -439,6 +447,7 @@ export type CreateUserReqData = User;
  * @description This can only be done by the logged in user.
  */
 export async function createUser(
+  data: CreateUserReqData,
   config?: AxiosRequestConfig
 ): AxiosPromise<never> {
   return request({
@@ -505,6 +514,7 @@ export type UpdateUserReqData = User;
  */
 export async function updateUser(
   path: UpdateUserReqPath,
+  data: UpdateUserReqData,
   config?: AxiosRequestConfig
 ): AxiosPromise<never> {
   return request({
