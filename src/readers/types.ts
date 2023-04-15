@@ -21,6 +21,7 @@ export interface TypeOrigin extends TypeComments {
 export interface TypeAlias extends TypeComments {
   kind: 'alias';
   refAble: boolean;
+  required: boolean;
   name: string;
   target: string;
   origin: string;

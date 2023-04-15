@@ -137,6 +137,7 @@ test('resp ref', () => {
         body: {
           kind: 'alias',
           refAble: false,
+          required: true,
           name: 'FindPetResData',
           target: 'T',
           origin: 'T',
@@ -293,6 +294,7 @@ test('req file', () => {
           origin: 'Blob',
           props: [],
           refAble: false,
+          required: true,
           target: 'Blob',
         },
       },
@@ -316,6 +318,7 @@ test('req query + path', () => {
             {
               name: 'name',
               in: 'path',
+              required: true,
               schema: {
                 $ref: '#/components/schemas/O/p',
               },
@@ -369,6 +372,7 @@ test('req query + path', () => {
             {
               kind: 'alias',
               refAble: false,
+              required: true,
               name: 'name',
               ref: '#/components/schemas/O/p',
               target: 'O',

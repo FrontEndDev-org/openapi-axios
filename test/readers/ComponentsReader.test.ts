@@ -83,6 +83,7 @@ test('ref once', () => {
     {
       kind: 'alias',
       refAble: true,
+      required: true,
       name: 'T',
       target: 'P',
       origin: 'P',
@@ -118,8 +119,26 @@ test('ref twice', () => {
   const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     { kind: 'origin', name: 'K', type: 'string', required: false },
-    { kind: 'alias', refAble: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
-    { kind: 'alias', refAble: true, name: 'T', target: 'P', origin: 'K', props: [], ref: '#/components/schemas/P' },
+    {
+      kind: 'alias',
+      refAble: true,
+      required: true,
+      name: 'P',
+      target: 'K',
+      origin: 'K',
+      props: [],
+      ref: '#/components/schemas/K',
+    },
+    {
+      kind: 'alias',
+      refAble: true,
+      required: true,
+      name: 'T',
+      target: 'P',
+      origin: 'K',
+      props: [],
+      ref: '#/components/schemas/P',
+    },
   ]);
 });
 
@@ -213,6 +232,7 @@ test('object', () => {
         {
           kind: 'alias',
           refAble: false,
+          required: false,
           name: 'R',
           target: 'R',
           origin: 'R',
@@ -275,6 +295,7 @@ test('array', () => {
           origin: 'T',
           props: [],
           refAble: false,
+          required: true,
           ref: '#/components/schema/T',
         },
       ],

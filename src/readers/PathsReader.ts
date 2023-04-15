@@ -109,7 +109,7 @@ export class PathsReader extends ComponentsReader {
     if (!schema) return;
 
     return this.isReference(schema)
-      ? this.readReference(name, schema)
+      ? this.readReference(name, required, schema)
       : this.readSchema(name, required, {
           deprecated,
           description,
@@ -132,6 +132,7 @@ export class PathsReader extends ComponentsReader {
         kind: 'alias',
         name,
         refAble: false,
+        required: true,
         target: 'Blob',
         origin: 'Blob',
         props: [],
@@ -159,7 +160,7 @@ export class PathsReader extends ComponentsReader {
     if (!schema) return this.readSchemaNever(name, true, {});
 
     return this.isReference(schema)
-      ? this.readReference(name, schema)
+      ? this.readReference(name, true, schema)
       : this.readSchema(name, schema.nullable === false, schema);
   }
 }

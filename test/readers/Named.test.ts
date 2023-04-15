@@ -26,6 +26,7 @@ test('named', () => {
   const a1 = named.addAlias({
     kind: 'alias',
     refAble: true,
+    required: true,
     name: 'A',
     ref: '#/components/schemas/A!',
     target: '',
@@ -36,6 +37,7 @@ test('named', () => {
   const a2 = named.addAlias({
     kind: 'alias',
     refAble: true,
+    required: true,
     name: 'A2',
     ref: '#/components/schemas/aa!!/1/2',
     target: '',

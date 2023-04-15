@@ -18,18 +18,24 @@ export class ComponentsReader extends BaseReader {
       .map(([name, schema]) => {
         const typeName = this.named.nextTypeName(name, true);
         return this.isReference(schema)
-          ? this.readReference(typeName, schema, true)
+          ? this.readReference(typeName, true, schema, true)
           : this.readSchema(typeName, schema.nullable === false, schema);
       });
     this.named.resolveAlias();
     return t;
   }
 
-  protected readReference(name: string, reference: OpenAPIV3.ReferenceObject, refAble = false): TypeAlias {
+  protected readReference(
+    name: string,
+    required: boolean,
+    reference: OpenAPIV3.ReferenceObject,
+    refAble = false
+  ): TypeAlias {
     return this.named.addAlias({
       kind: 'alias',
       refAble,
       name,
+      required,
       ref: reference.$ref,
       target: '',
       origin: '',
@@ -78,9 +84,10 @@ export class ComponentsReader extends BaseReader {
   protected readSchemaObject(name: string, required: boolean, schema: OpenAPIV3.SchemaObject): TypeOrigin {
     const properties = Object.entries(schema.properties || {}).sort((a, b) => a[0].localeCompare(b[0]));
     const children = properties.map(([propName, propSchema]) => {
+      const required = schema.required?.includes(propName) || false;
       return this.isReference(propSchema)
-        ? this.readReference(propName, propSchema)
-        : this.readSchema(propName, schema.required?.includes(propName) || false, propSchema);
+        ? this.readReference(propName, required, propSchema)
+        : this.readSchema(propName, required, propSchema);
     });
 
     const additional = this.readObjectAdditionalProperties(schema.additionalProperties);
@@ -99,7 +106,7 @@ export class ComponentsReader extends BaseReader {
   protected readSchemaArray(name: string, required: boolean, schema: OpenAPIV3.ArraySchemaObject): TypeOrigin {
     const children = [schema.items].map((schema) => {
       return this.isReference(schema)
-        ? this.readReference(`${name}[]`, schema)
+        ? this.readReference(`${name}[]`, true, schema)
         : this.readSchema(`${name}[]`, schema.nullable === false, schema);
     });
 
@@ -136,7 +143,7 @@ export class ComponentsReader extends BaseReader {
     }
 
     return this.isReference(additionalProperties)
-      ? this.readReference(name, additionalProperties)
+      ? this.readReference(name, true, additionalProperties)
       : this.readSchema(name, true, additionalProperties);
   }
 
