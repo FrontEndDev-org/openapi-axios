@@ -1,7 +1,7 @@
-import { CommentsWriter } from '../../src/writers/CommentsWriter';
+import { CommentsPrinter } from '../../src/printers/CommentsPrinter';
 
-test('CommentsWriter', () => {
-  const writer = new CommentsWriter({
+test('CommentsPrinter', () => {
+  const printer = new CommentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -11,10 +11,10 @@ test('CommentsWriter', () => {
     paths: [],
   });
 
-  expect(writer.writeComments({})).toMatchInlineSnapshot('""');
+  expect(printer.writeComments({})).toMatchInlineSnapshot('""');
 
   expect(
-    writer.writeComments({
+    printer.writeComments({
       deprecated: true,
     })
   ).toMatchInlineSnapshot(`
@@ -24,7 +24,7 @@ test('CommentsWriter', () => {
   `);
 
   expect(
-    writer.writeComments({
+    printer.writeComments({
       deprecated: true,
       title: '一个注释标题',
       description: '一个注释描述\n第 2 行描述\n第 3 行描述',

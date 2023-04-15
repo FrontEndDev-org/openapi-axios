@@ -1,12 +1,12 @@
 import { TypeDocument } from '../../src/parsers/types';
-import { DocumentWriter } from '../../src/writers/DocumentWriter';
+import { DocumentPrinter } from '../../src/printers/DocumentPrinter';
 
 import petStore3 from '../files/petStore3.types.json' assert { type: 'json' };
 import { writeFile } from '../helpers';
 
-test('DocumentWriter', () => {
-  const writer = new DocumentWriter(petStore3 as TypeDocument);
-  const text = writer.write();
+test('DocumentPrinter', () => {
+  const printer = new DocumentPrinter(petStore3 as TypeDocument);
+  const text = printer.write();
   writeFile('petStore3.types.txt', text);
   expect(text).toMatchInlineSnapshot(`
     "import type { OneOf } from 'openapi-axios/helpers';

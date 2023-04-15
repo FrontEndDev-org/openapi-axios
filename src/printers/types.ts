@@ -1,6 +1,6 @@
 import { Config } from 'prettier';
 
-export interface WriterOptions {
+export interface PrinterOptions {
   axiosImport?: string;
 
   /**
@@ -14,4 +14,4 @@ export interface WriterOptions {
 
   responseTypeName?: 'Promise' | 'AxiosPromise' | string;
 }
-export type StrictWriterOptions = Required<WriterOptions>;
+export type StrictPrinterOptions = Required<PrinterOptions>;

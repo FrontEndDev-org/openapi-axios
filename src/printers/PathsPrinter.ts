@@ -3,11 +3,11 @@ import { groupBy } from 'lodash';
 import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from '../parsers/types';
 import { joinSlices, nextUniqueName, varString } from '../utils/string';
 import { isBoolean, isString } from '../utils/type-is';
-import { ComponentsWriter } from './ComponentsWriter';
+import { ComponentsPrinter } from './ComponentsPrinter';
 
 const { stringify } = JSON;
 
-export class PathsWriter extends ComponentsWriter {
+export class PathsPrinter extends ComponentsPrinter {
   init() {
     super.init();
     this.imports.push('import type { AxiosPromise, AxiosRequestConfig } from "axios";');

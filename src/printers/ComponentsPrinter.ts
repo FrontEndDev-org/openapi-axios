@@ -1,9 +1,9 @@
 import { TypeItem, TypeOrigin } from '../parsers/types';
 import { joinSlices, toTypePath } from '../utils/string';
-import { BaseWriter } from './BaseWriter';
-import { CommentsWriter } from './CommentsWriter';
+import { BasePrinter } from './BasePrinter';
+import { CommentsPrinter } from './CommentsPrinter';
 
-export class ComponentsWriter extends CommentsWriter {
+export class ComponentsPrinter extends CommentsPrinter {
   init() {
     super.init();
     this.imports.push('import type { OneOf } from "openapi-axios/helpers"');

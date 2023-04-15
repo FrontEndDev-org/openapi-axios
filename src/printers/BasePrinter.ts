@@ -1,10 +1,10 @@
 import { TypeAlias, TypeDocument, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
-import { StrictWriterOptions, WriterOptions } from './types';
+import { StrictPrinterOptions, PrinterOptions } from './types';
 import prettier from 'prettier';
 
-export class BaseWriter {
-  static defaults: StrictWriterOptions = {
+export class BasePrinter {
+  static defaults: StrictPrinterOptions = {
     axiosImport: `import { Axios } from 'axios';
 const axios = new Axios();`,
     prettier: {
@@ -16,9 +16,9 @@ const axios = new Axios();`,
     responseTypeName: 'AxiosPromise',
   };
 
-  options: StrictWriterOptions;
-  constructor(readonly document: TypeDocument, options?: WriterOptions) {
-    this.options = Object.assign({}, BaseWriter.defaults, options) as StrictWriterOptions;
+  options: StrictPrinterOptions;
+  constructor(readonly document: TypeDocument, options?: PrinterOptions) {
+    this.options = Object.assign({}, BasePrinter.defaults, options) as StrictPrinterOptions;
     this.init();
   }
 

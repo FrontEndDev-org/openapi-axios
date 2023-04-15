@@ -1,7 +1,7 @@
-import { PathsWriter } from '../../src/writers/PathsWriter';
+import { PathsPrinter } from '../../src/printers/PathsPrinter';
 
 test('empty paths', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -9,11 +9,11 @@ test('empty paths', () => {
     components: [],
     paths: [],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot('""');
+  expect(printer.writePaths()).toMatchInlineSnapshot('""');
 });
 
 test('empty req && empty res', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -30,7 +30,7 @@ test('empty req && empty res', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "/**
      * @description ddd
      */
@@ -48,7 +48,7 @@ test('empty req && empty res', () => {
 });
 
 test('req.path', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -86,7 +86,7 @@ test('req.path', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -106,7 +106,7 @@ test('req.path', () => {
 });
 
 test('req.query', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -144,7 +144,7 @@ test('req.query', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -165,7 +165,7 @@ test('req.query', () => {
 });
 
 test('req.body', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -203,7 +203,7 @@ test('req.body', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -224,7 +224,7 @@ test('req.body', () => {
 });
 
 test('res.body', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -262,7 +262,7 @@ test('res.body', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -279,7 +279,7 @@ test('res.body', () => {
 });
 
 test('req.path + res.body', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -324,7 +324,7 @@ test('req.path + res.body', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type GetPetByIdRequestPath = {
       /**
        * @format int64
@@ -351,7 +351,7 @@ test('req.path + res.body', () => {
 });
 
 test('req.path + req.query + res.body', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -410,7 +410,7 @@ test('req.path + req.query + res.body', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type UploadFileRequestPath = {
       /**
        * @format int64
@@ -440,7 +440,7 @@ test('req.path + req.query + res.body', () => {
 });
 
 test('req.path + req.query + req.body + res.body', () => {
-  const writer = new PathsWriter({
+  const printer = new PathsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -520,7 +520,7 @@ test('req.path + req.query + req.body + res.body', () => {
       },
     ],
   });
-  expect(writer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.writePaths()).toMatchInlineSnapshot(`
     "export type UploadFileRequestPath = {
       /**
        * @format int64

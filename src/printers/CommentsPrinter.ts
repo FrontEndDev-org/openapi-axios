@@ -1,9 +1,9 @@
 import { TypeComments, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
 import { isUndefined } from '../utils/type-is';
-import { BaseWriter } from './BaseWriter';
+import { BasePrinter } from './BasePrinter';
 
-export class CommentsWriter extends BaseWriter {
+export class CommentsPrinter extends BasePrinter {
   writeComments(type: TypeComments, trailingEndOfLine = false) {
     const orders: (keyof TypeComments)[] = ['title', 'description', 'format', 'default', 'example'];
     const mainLines = joinSlices([

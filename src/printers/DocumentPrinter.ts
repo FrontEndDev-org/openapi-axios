@@ -1,7 +1,7 @@
 import { joinSlices } from '../utils/string';
-import { PathsWriter } from './PathsWriter';
+import { PathsPrinter } from './PathsPrinter';
 
-export class DocumentWriter extends PathsWriter {
+export class DocumentPrinter extends PathsPrinter {
   write() {
     return joinSlices([
       //

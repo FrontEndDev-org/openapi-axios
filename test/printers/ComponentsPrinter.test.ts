@@ -1,7 +1,7 @@
-import { ComponentsWriter } from '../../src/writers/ComponentsWriter';
+import { ComponentsPrinter } from '../../src/printers/ComponentsPrinter';
 
 test('empty components', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -10,12 +10,12 @@ test('empty components', () => {
     components: [],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toEqual('');
 });
 
 test('alias', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -45,7 +45,7 @@ test('alias', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description d1
@@ -61,7 +61,7 @@ test('alias', () => {
 });
 
 test('origin primitive', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -97,7 +97,7 @@ test('origin primitive', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -117,7 +117,7 @@ test('origin primitive', () => {
 });
 
 test('origin enum', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -135,7 +135,7 @@ test('origin enum', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -146,7 +146,7 @@ test('origin enum', () => {
 });
 
 test('origin object', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -205,7 +205,7 @@ test('origin object', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -226,7 +226,7 @@ test('origin object', () => {
 });
 
 test('origin object additional', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -292,7 +292,7 @@ test('origin object additional', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -320,7 +320,7 @@ test('origin object additional', () => {
 });
 
 test('origin array', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -346,7 +346,7 @@ test('origin array', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -360,7 +360,7 @@ test('origin array', () => {
 });
 
 test('origin array additional', () => {
-  const writer = new ComponentsWriter({
+  const printer = new ComponentsPrinter({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -397,7 +397,7 @@ test('origin array additional', () => {
     ],
     paths: [],
   });
-  const text = writer.writeComponents();
+  const text = printer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
