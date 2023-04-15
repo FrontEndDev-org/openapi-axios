@@ -8,21 +8,10 @@ test('CommentsWriter', () => {
     },
   });
 
-  expect(
-    writer.writeComments({
-      kind: 'origin',
-      name: 'A',
-      type: 'string',
-      required: true,
-    })
-  ).toMatchInlineSnapshot('""');
+  expect(writer.writeComments({})).toMatchInlineSnapshot('""');
 
   expect(
     writer.writeComments({
-      kind: 'origin',
-      name: 'A',
-      type: 'string',
-      required: true,
       deprecated: true,
     })
   ).toMatchInlineSnapshot(`
@@ -33,10 +22,6 @@ test('CommentsWriter', () => {
 
   expect(
     writer.writeComments({
-      kind: 'origin',
-      name: 'A',
-      type: 'string',
-      required: true,
       deprecated: true,
       title: '一个注释标题',
       description: '一个注释描述\n第 2 行描述\n第 3 行描述',

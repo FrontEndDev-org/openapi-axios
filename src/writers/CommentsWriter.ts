@@ -3,7 +3,7 @@ import { isUndefined } from '../utils/type-is';
 import { BaseWriter } from './BaseWriter';
 
 export class CommentsWriter extends BaseWriter {
-  writeComments(type: TypeItem, trailingEndOfLine = false) {
+  writeComments(type: TypeComments, trailingEndOfLine = false) {
     const orders: (keyof TypeComments)[] = ['title', 'description', 'format', 'default', 'example'];
     const mainLines = [
       type.deprecated ? ' * @deprecated' : '',
