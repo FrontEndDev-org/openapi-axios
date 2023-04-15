@@ -5,7 +5,7 @@ import { TypeAlias, TypeItem, TypeList, TypeOrigin, TypeUnit } from './types';
 
 export class ComponentsParser extends BaseParser {
   parseComponents(): TypeList {
-    const { components } = this.document!;
+    const { components } = this.document;
 
     if (!components) return [];
 

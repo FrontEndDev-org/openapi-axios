@@ -9,7 +9,7 @@ export class PathsParser extends ComponentsParser {
   parsingMethod: OpenAPIV3.HttpMethods = OpenAPIV3.HttpMethods.GET;
 
   parsePaths(): TypeOperations {
-    const { paths } = this.document!;
+    const { paths } = this.document;
     const types: TypeOperations = [];
 
     Object.entries(paths)
