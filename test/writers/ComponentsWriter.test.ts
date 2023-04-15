@@ -5,6 +5,7 @@ test('empty components', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [],
     paths: [],
@@ -18,6 +19,7 @@ test('alias', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [
       {
@@ -63,6 +65,7 @@ test('origin primitive', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [
       {
@@ -118,6 +121,7 @@ test('origin enum', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [
       {
@@ -146,6 +150,7 @@ test('origin object', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [
       {
@@ -225,6 +230,7 @@ test('origin array', () => {
     info: {
       title: 'test',
       version: '1.0.0',
+      baseURL: '/',
     },
     components: [
       {
