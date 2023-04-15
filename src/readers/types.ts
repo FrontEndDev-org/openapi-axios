@@ -76,7 +76,7 @@ export interface TypeDocument {
     title: string;
     description?: string;
     version: string;
-    baseURL: string;
+    baseURL?: string;
   };
   components: TypeList;
   paths: TypeOperations;

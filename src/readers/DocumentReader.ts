@@ -7,7 +7,7 @@ export class DocumentReader extends PathsReader {
     const paths = this.readPaths();
     const { info, servers } = this.document;
     const firstServer = servers?.at(0);
-    const baseURL = firstServer ? firstServer.url : '/';
+    const baseURL = firstServer && firstServer.url;
     const { title, description, version } = info;
 
     return {
