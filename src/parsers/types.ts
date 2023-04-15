@@ -1,3 +1,5 @@
+import { OpenAPIV3Document } from '../types/openapi';
+
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array' | 'any';
 
 export interface TypeComments {
@@ -32,7 +34,9 @@ export interface TypeAlias extends TypeComments {
 export type TypeItem = TypeOrigin | TypeAlias;
 export type TypeList = TypeItem[];
 
-export interface ReaderOptions {
+export interface ParserOptions {
+  cwd?: string;
+
   /**
    * ok 的响应码
    * @default 200
@@ -51,7 +55,7 @@ export interface ReaderOptions {
   responseBodyTypeName?: string;
 }
 
-export type StrictReaderOptions = Required<ReaderOptions>;
+export type StrictParserOptions = Required<ParserOptions>;
 
 export interface TypeOperation extends TypeComments {
   method: string;
@@ -79,3 +83,5 @@ export interface TypeDocument {
   components: TypeList;
   paths: TypeOperations;
 }
+
+export type AcceptDocument = OpenAPIV3Document | string;

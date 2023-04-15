@@ -1,11 +1,11 @@
-import { PathsReader } from './PathsReader';
+import { PathsParser } from './PathsParser';
 import { TypeDocument } from './types';
 
-export class DocumentReader extends PathsReader {
-  read(): TypeDocument {
-    const components = this.readComponents();
-    const paths = this.readPaths();
-    const { info, servers } = this.document;
+export class DocumentParser extends PathsParser {
+  parseDocument(): TypeDocument {
+    const components = this.parseComponents();
+    const paths = this.parsePaths();
+    const { info, servers } = this.document!;
     const firstServer = servers?.at(0);
     const baseURL = firstServer && firstServer.url;
     const { title, description, version } = info;

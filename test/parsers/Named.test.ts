@@ -1,4 +1,4 @@
-import { Named } from '../../src/readers/Named';
+import { Named } from '../../src/parsers/Named';
 
 test('named', () => {
   const named = new Named();

@@ -1,11 +1,11 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { isBoolean } from '../utils/type-is';
-import { BaseReader } from './BaseReader';
+import { BaseParser } from './BaseParser';
 import { TypeAlias, TypeItem, TypeList, TypeOrigin, TypeUnit } from './types';
 
-export class ComponentsReader extends BaseReader {
-  readComponents(): TypeList {
-    const { components } = this.document;
+export class ComponentsParser extends BaseParser {
+  parseComponents(): TypeList {
+    const { components } = this.document!;
 
     if (!components) return [];
 
@@ -18,14 +18,14 @@ export class ComponentsReader extends BaseReader {
       .map(([name, schema]) => {
         const typeName = this.named.nextTypeName(name, true);
         return this.isReference(schema)
-          ? this.readReference(typeName, true, schema, true)
-          : this.readSchema(typeName, schema.nullable === false, schema);
+          ? this.parseReference(typeName, true, schema, true)
+          : this.parseSchema(typeName, schema.nullable === false, schema);
       });
     this.named.resolveAlias();
     return t;
   }
 
-  protected readReference(
+  protected parseReference(
     name: string,
     required: boolean,
     reference: OpenAPIV3.ReferenceObject,
@@ -43,7 +43,7 @@ export class ComponentsReader extends BaseReader {
     });
   }
 
-  protected readSchema(name: string, required: boolean, schema: OpenAPIV3.SchemaObject) {
+  protected parseSchema(name: string, required: boolean, schema: OpenAPIV3.SchemaObject) {
     const { type } = schema;
 
     switch (type) {
@@ -52,21 +52,21 @@ export class ComponentsReader extends BaseReader {
       case 'number':
       case 'integer': {
         const tsType = type === 'integer' ? 'number' : type;
-        return this.readSchemaPrimitive(name, required, tsType, schema);
+        return this.parseSchemaPrimitive(name, required, tsType, schema);
       }
 
       case 'object':
-        return this.readSchemaObject(name, required, schema);
+        return this.parseSchemaObject(name, required, schema);
 
       case 'array':
-        return this.readSchemaArray(name, required, schema);
+        return this.parseSchemaArray(name, required, schema);
 
       default:
-        return this.readSchemaNever(name, true, schema);
+        return this.parseSchemaNever(name, true, schema);
     }
   }
 
-  protected readSchemaPrimitive(
+  protected parseSchemaPrimitive(
     name: string,
     required: boolean,
     type: TypeUnit,
@@ -81,16 +81,16 @@ export class ComponentsReader extends BaseReader {
     };
   }
 
-  protected readSchemaObject(name: string, required: boolean, schema: OpenAPIV3.SchemaObject): TypeOrigin {
+  protected parseSchemaObject(name: string, required: boolean, schema: OpenAPIV3.SchemaObject): TypeOrigin {
     const properties = Object.entries(schema.properties || {}).sort((a, b) => a[0].localeCompare(b[0]));
     const children = properties.map(([propName, propSchema]) => {
       const required = schema.required?.includes(propName) || false;
       return this.isReference(propSchema)
-        ? this.readReference(propName, required, propSchema)
-        : this.readSchema(propName, required, propSchema);
+        ? this.parseReference(propName, required, propSchema)
+        : this.parseSchema(propName, required, propSchema);
     });
 
-    const additional = this.readObjectAdditionalProperties(schema.additionalProperties);
+    const additional = this.parseObjectAdditionalProperties(schema.additionalProperties);
     if (additional) children.push(additional);
 
     return {
@@ -103,14 +103,14 @@ export class ComponentsReader extends BaseReader {
     };
   }
 
-  protected readSchemaArray(name: string, required: boolean, schema: OpenAPIV3.ArraySchemaObject): TypeOrigin {
+  protected parseSchemaArray(name: string, required: boolean, schema: OpenAPIV3.ArraySchemaObject): TypeOrigin {
     const children = [schema.items].map((schema) => {
       return this.isReference(schema)
-        ? this.readReference(`${name}[]`, true, schema)
-        : this.readSchema(`${name}[]`, schema.nullable === false, schema);
+        ? this.parseReference(`${name}[]`, true, schema)
+        : this.parseSchema(`${name}[]`, schema.nullable === false, schema);
     });
 
-    const additional = this.readObjectAdditionalProperties(schema.additionalProperties);
+    const additional = this.parseObjectAdditionalProperties(schema.additionalProperties);
     if (additional) children.push(additional);
 
     return {
@@ -123,7 +123,7 @@ export class ComponentsReader extends BaseReader {
     };
   }
 
-  protected readObjectAdditionalProperties(
+  protected parseObjectAdditionalProperties(
     additionalProperties: OpenAPIV3.SchemaObject['additionalProperties']
   ): TypeItem | undefined {
     if (!additionalProperties) return;
@@ -143,11 +143,11 @@ export class ComponentsReader extends BaseReader {
     }
 
     return this.isReference(additionalProperties)
-      ? this.readReference(name, true, additionalProperties)
-      : this.readSchema(name, true, additionalProperties);
+      ? this.parseReference(name, true, additionalProperties)
+      : this.parseSchema(name, true, additionalProperties);
   }
 
-  protected readSchemaNever(name: string, required: boolean, schema: OpenAPIV3.SchemaObject): TypeOrigin {
+  protected parseSchemaNever(name: string, required: boolean, schema: OpenAPIV3.SchemaObject): TypeOrigin {
     return {
       ...this.inheritProps(schema),
       name,
