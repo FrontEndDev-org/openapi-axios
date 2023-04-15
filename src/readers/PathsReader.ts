@@ -89,10 +89,11 @@ export class PathsReader extends ComponentsReader {
       const t = this.readOperationParameter(parameter);
 
       if (!t) return;
+      if (!('in' in parameter)) return;
 
-      if ('in' in parameter && parameter.in === 'path') {
+      if (parameter.in === 'path') {
         pathTypes.push(t);
-      } else {
+      } else if (parameter.in === 'query') {
         queryTypes.push(t);
       }
     });
