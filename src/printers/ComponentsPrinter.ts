@@ -4,7 +4,7 @@ import { BasePrinter } from './BasePrinter';
 import { CommentsPrinter } from './CommentsPrinter';
 
 export class ComponentsPrinter extends CommentsPrinter {
-  init() {
+  protected init() {
     super.init();
     this.imports.push('import type { OneOf } from "openapi-axios/helpers"');
   }

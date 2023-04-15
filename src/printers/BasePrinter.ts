@@ -22,7 +22,7 @@ const axios = new Axios();`,
     this.init();
   }
 
-  init() {
+  protected init() {
     //
   }
 
@@ -46,15 +46,15 @@ const axios = new Axios();`,
   // 帮助类型
   helpers: string[] = [];
 
-  printStatements() {
+  protected printStatements() {
     return joinSlices(this.statements);
   }
 
-  printImports() {
+  protected printImports() {
     return this.format(joinSlices(this.imports));
   }
 
-  printHelpers() {
+  protected printHelpers() {
     return this.format(joinSlices(this.helpers));
   }
 }

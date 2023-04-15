@@ -8,7 +8,7 @@ import { ComponentsPrinter } from './ComponentsPrinter';
 const { stringify } = JSON;
 
 export class PathsPrinter extends ComponentsPrinter {
-  init() {
+  protected init() {
     super.init();
     this.imports.push('import type { AxiosPromise, AxiosRequestConfig } from "axios";');
     this.imports.push(
