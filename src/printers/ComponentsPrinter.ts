@@ -9,57 +9,57 @@ export class ComponentsPrinter extends CommentsPrinter {
     this.imports.push('import type { OneOf } from "openapi-axios/helpers"');
   }
 
-  writeComponents() {
-    return this.format(joinSlices(this.document.components.map(this.writeRootType.bind(this)), '\n\n'));
+  printComponents() {
+    return this.format(joinSlices(this.document.components.map(this.printRootType.bind(this)), '\n\n'));
   }
 
-  protected writeRootType(type: TypeItem) {
-    const comments = this.writeComments(type, true);
-    return `${comments}export type ${type.name} = ${this.writeType(type)};`;
+  protected printRootType(type: TypeItem) {
+    const comments = this.printComments(type, true);
+    return `${comments}export type ${type.name} = ${this.printType(type)};`;
   }
 
-  private writeType(type: TypeItem): string {
+  private printType(type: TypeItem): string {
     if (this.isTypeAlias(type)) return `${type.origin}${toTypePath(type.props)}`;
 
     switch (type.type) {
       case 'object':
-        return this.writeObject(type);
+        return this.printObject(type);
 
       case 'array':
-        return this.writeArray(type);
+        return this.printArray(type);
 
       default:
-        return this.writePrimitive(type);
+        return this.printPrimitive(type);
     }
   }
 
-  private writePrimitive(type: TypeOrigin) {
+  private printPrimitive(type: TypeOrigin) {
     return type.enum ? type.enum.map((el) => JSON.stringify(el)).join('|') : `${type.type}`;
   }
 
-  private writeObject(type: TypeOrigin) {
+  private printObject(type: TypeOrigin) {
     const { children } = type;
 
     if (!children || !children.length) return '{[key: string]: never}';
 
     const kvList = children.map((type) => {
-      const comments = this.writeComments(type, true);
+      const comments = this.printComments(type, true);
       const key = type.name;
       const equal = type.required ? ':' : '?:';
-      const value = this.writeType(type);
+      const value = this.printType(type);
       return comments + key + equal + value + ';';
     });
     return '{' + joinSlices(kvList) + '}';
   }
 
-  private writeArray(type: TypeOrigin) {
+  private printArray(type: TypeOrigin) {
     const { children } = type;
 
     if (!children || !children.length) return 'never';
 
     const vList = children.map((type) => {
-      const comments = this.writeComments(type, true);
-      const value = this.writeType(type);
+      const comments = this.printComments(type, true);
+      const value = this.printType(type);
       return comments + value;
     });
 

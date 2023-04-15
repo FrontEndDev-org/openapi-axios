@@ -19,24 +19,24 @@ export class PathsPrinter extends ComponentsPrinter {
     if (this.document.info.baseURL) this.helpers.push(`const BASE_URL = ${stringify(this.document.info.baseURL)};`);
   }
 
-  writePaths() {
-    return this.format(joinSlices(this.document.paths.map(this.writeOperation.bind(this)), '\n\n'));
+  printPaths() {
+    return this.format(joinSlices(this.document.paths.map(this.printOperation.bind(this)), '\n\n'));
   }
 
-  protected writeOperation(type: TypeOperation) {
-    return joinSlices([this.writeOperationTypes(type), this.writeOperationAxios(type)]);
+  protected printOperation(type: TypeOperation) {
+    return joinSlices([this.printOperationTypes(type), this.printOperationAxios(type)]);
   }
 
-  protected writeOperationTypes(type: TypeOperation) {
+  protected printOperationTypes(type: TypeOperation) {
     const {
       request: { path, query, body: reqBody },
       response: { body: resBody },
     } = type;
 
-    return joinSlices(([path, query, reqBody, resBody].filter(Boolean) as TypeList).map(this.writeRootType.bind(this)));
+    return joinSlices(([path, query, reqBody, resBody].filter(Boolean) as TypeList).map(this.printRootType.bind(this)));
   }
 
-  protected writeOperationAxios(type: TypeOperation) {
+  protected printOperationAxios(type: TypeOperation) {
     const {
       name,
       request: { path, query, body: reqBody },
@@ -48,13 +48,13 @@ export class PathsPrinter extends ComponentsPrinter {
     const requestQueryArgName = nextUniqueName(this.options.requestQueryArgName, argNameCountMap);
     const requestBodyArgName = nextUniqueName(this.options.requestBodyArgName, argNameCountMap);
     const configArgName = nextUniqueName('config', argNameCountMap);
-    const comments = this.writeComments(type, true);
+    const comments = this.printComments(type, true);
     const argsGroup = groupBy(
       [
-        this.writeArg(requestPathArgName, path),
-        this.writeArg(requestQueryArgName, query),
-        this.writeArg(requestBodyArgName, reqBody),
-        this.writeArg(configArgName, 'AxiosRequestConfig', false),
+        this.printArg(requestPathArgName, path),
+        this.printArg(requestQueryArgName, query),
+        this.printArg(requestBodyArgName, reqBody),
+        this.printArg(configArgName, 'AxiosRequestConfig', false),
       ],
       (item) => item?.required
     );
@@ -68,10 +68,10 @@ export class PathsPrinter extends ComponentsPrinter {
       ', '
     );
     const return_ = `${responseTypeName}<${resBody?.name || 'never'}>`;
-    const url_ = this.writeAxiosProp('url', this.toURL(type, requestPathArgName));
-    const method_ = this.writeAxiosProp('method', type.method.toUpperCase());
-    const params_ = this.writeAxiosProp('params', query ? requestQueryArgName : '');
-    const data_ = this.writeAxiosProp('data', reqBody ? requestBodyArgName : '');
+    const url_ = this.printAxiosProp('url', this.toURL(type, requestPathArgName));
+    const method_ = this.printAxiosProp('method', type.method.toUpperCase());
+    const params_ = this.printAxiosProp('params', query ? requestQueryArgName : '');
+    const data_ = this.printAxiosProp('data', reqBody ? requestBodyArgName : '');
     const props = joinSlices([
       //
       url_,
@@ -88,12 +88,12 @@ export class PathsPrinter extends ComponentsPrinter {
             }`;
   }
 
-  protected writeAxiosProp(prop: keyof AxiosRequestConfig, value?: string) {
+  protected printAxiosProp(prop: keyof AxiosRequestConfig, value?: string) {
     if (!value) return '';
     return prop === value ? `${prop},` : `${prop}: ${value},`;
   }
 
-  protected writeArg(name: string, type?: TypeItem | string, required?: boolean) {
+  protected printArg(name: string, type?: TypeItem | string, required?: boolean) {
     if (!type) return;
 
     const typeName = isString(type) ? type : type.name;

@@ -11,10 +11,10 @@ test('CommentsPrinter', () => {
     paths: [],
   });
 
-  expect(printer.writeComments({})).toMatchInlineSnapshot('""');
+  expect(printer.printComments({})).toMatchInlineSnapshot('""');
 
   expect(
-    printer.writeComments({
+    printer.printComments({
       deprecated: true,
     })
   ).toMatchInlineSnapshot(`
@@ -24,7 +24,7 @@ test('CommentsPrinter', () => {
   `);
 
   expect(
-    printer.writeComments({
+    printer.printComments({
       deprecated: true,
       title: '一个注释标题',
       description: '一个注释描述\n第 2 行描述\n第 3 行描述',

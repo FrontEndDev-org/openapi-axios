@@ -2,14 +2,14 @@ import { joinSlices } from '../utils/string';
 import { PathsPrinter } from './PathsPrinter';
 
 export class DocumentPrinter extends PathsPrinter {
-  write() {
+  print() {
     return joinSlices([
       //
-      this.writeStatements(),
-      this.writeImports(),
-      this.writeHelpers(),
-      this.writeComponents(),
-      this.writePaths(),
+      this.printStatements(),
+      this.printImports(),
+      this.printHelpers(),
+      this.printComponents(),
+      this.printPaths(),
     ]);
   }
 }

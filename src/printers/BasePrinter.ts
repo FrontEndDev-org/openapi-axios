@@ -46,15 +46,15 @@ const axios = new Axios();`,
   // 帮助类型
   helpers: string[] = [];
 
-  writeStatements() {
+  printStatements() {
     return joinSlices(this.statements);
   }
 
-  writeImports() {
+  printImports() {
     return this.format(joinSlices(this.imports));
   }
 
-  writeHelpers() {
+  printHelpers() {
     return this.format(joinSlices(this.helpers));
   }
 }

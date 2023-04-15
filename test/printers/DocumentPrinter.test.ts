@@ -6,7 +6,7 @@ import { writeFile } from '../helpers';
 
 test('DocumentPrinter', () => {
   const printer = new DocumentPrinter(petStore3 as TypeDocument);
-  const text = printer.write();
+  const text = printer.print();
   writeFile('petStore3.types.txt', text);
   expect(text).toMatchInlineSnapshot(`
     "import type { OneOf } from 'openapi-axios/helpers';

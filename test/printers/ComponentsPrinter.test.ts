@@ -10,7 +10,7 @@ test('empty components', () => {
     components: [],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toEqual('');
 });
 
@@ -45,7 +45,7 @@ test('alias', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description d1
@@ -97,7 +97,7 @@ test('origin primitive', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -135,7 +135,7 @@ test('origin enum', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -205,7 +205,7 @@ test('origin object', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -292,7 +292,7 @@ test('origin object additional', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -346,7 +346,7 @@ test('origin array', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
@@ -397,7 +397,7 @@ test('origin array additional', () => {
     ],
     paths: [],
   });
-  const text = printer.writeComponents();
+  const text = printer.printComponents();
   expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1

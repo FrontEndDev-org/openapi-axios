@@ -4,7 +4,7 @@ import { isUndefined } from '../utils/type-is';
 import { BasePrinter } from './BasePrinter';
 
 export class CommentsPrinter extends BasePrinter {
-  writeComments(type: TypeComments, trailingEndOfLine = false) {
+  printComments(type: TypeComments, trailingEndOfLine = false) {
     const orders: (keyof TypeComments)[] = ['title', 'description', 'format', 'default', 'example'];
     const mainLines = joinSlices([
       type.deprecated ? ' * @deprecated' : '',

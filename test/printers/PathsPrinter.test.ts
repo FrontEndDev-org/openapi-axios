@@ -9,7 +9,7 @@ test('empty paths', () => {
     components: [],
     paths: [],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot('""');
+  expect(printer.printPaths()).toMatchInlineSnapshot('""');
 });
 
 test('empty req && empty res', () => {
@@ -30,7 +30,7 @@ test('empty req && empty res', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "/**
      * @description ddd
      */
@@ -86,7 +86,7 @@ test('req.path', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -144,7 +144,7 @@ test('req.query', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -203,7 +203,7 @@ test('req.body', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -262,7 +262,7 @@ test('res.body', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type T = { name: string; age: number };
     /**
      * @description ddd
@@ -324,7 +324,7 @@ test('req.path + res.body', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type GetPetByIdRequestPath = {
       /**
        * @format int64
@@ -410,7 +410,7 @@ test('req.path + req.query + res.body', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type UploadFileRequestPath = {
       /**
        * @format int64
@@ -520,7 +520,7 @@ test('req.path + req.query + req.body + res.body', () => {
       },
     ],
   });
-  expect(printer.writePaths()).toMatchInlineSnapshot(`
+  expect(printer.printPaths()).toMatchInlineSnapshot(`
     "export type UploadFileRequestPath = {
       /**
        * @format int64
