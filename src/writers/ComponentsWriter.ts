@@ -1,4 +1,4 @@
-import { TypeItem, TypeOrigin } from '../readers/types';
+import { TypeItem, TypeOrigin } from '../parsers/types';
 import { joinSlices, toTypePath } from '../utils/string';
 import { BaseWriter } from './BaseWriter';
 import { CommentsWriter } from './CommentsWriter';

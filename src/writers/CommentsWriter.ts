@@ -1,4 +1,4 @@
-import { TypeComments, TypeItem } from '../readers/types';
+import { TypeComments, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
 import { isUndefined } from '../utils/type-is';
 import { BaseWriter } from './BaseWriter';

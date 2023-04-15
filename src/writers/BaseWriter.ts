@@ -1,4 +1,4 @@
-import { TypeAlias, TypeDocument, TypeItem } from '../readers/types';
+import { TypeAlias, TypeDocument, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
 import { StrictWriterOptions, WriterOptions } from './types';
 import prettier from 'prettier';

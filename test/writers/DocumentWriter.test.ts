@@ -1,4 +1,4 @@
-import { TypeDocument } from '../../src/readers/types';
+import { TypeDocument } from '../../src/parsers/types';
 import { DocumentWriter } from '../../src/writers/DocumentWriter';
 
 import petStore3 from '../files/petStore3.types.json' assert { type: 'json' };
