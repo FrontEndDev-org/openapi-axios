@@ -43,10 +43,10 @@ export class PathsReader extends ComponentsReader {
     const { parameters, requestBody: requestBodySchema } = operation;
     const { pathTypes, queryTypes } = this.parseOperationParameters(parameters);
     const name = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
-    const requestPathTypeName = this.named.nextTypeName(name + 'RequestPath', '');
-    const requestQueryTypeName = this.named.nextTypeName(name + 'RequestQuery', '');
-    const requestBodyTypeName = this.named.nextTypeName(name + 'RequestBody', '');
-    const responseBodyTypeName = this.named.nextTypeName(name + 'ResponseBody', '');
+    const requestPathTypeName = this.named.nextTypeName(name + this.options.requestPathTypeName);
+    const requestQueryTypeName = this.named.nextTypeName(name + this.options.requestQueryTypeName);
+    const requestBodyTypeName = this.named.nextTypeName(name + this.options.requestBodyTypeName);
+    const responseBodyTypeName = this.named.nextTypeName(name + this.options.responseBodyTypeName);
     const requestBody = this.parseOperationRequest(requestBodyTypeName, requestBodySchema);
 
     return {

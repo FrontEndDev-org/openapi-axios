@@ -137,7 +137,7 @@ test('resp ref', () => {
         body: {
           kind: 'alias',
           root: false,
-          name: 'FindPetResponseBody',
+          name: 'FindPetResData',
           target: 'T',
           origin: 'T',
           props: [],
@@ -186,7 +186,7 @@ test('resp type', () => {
       response: {
         body: {
           kind: 'origin',
-          name: 'FindPetResponseBody',
+          name: 'FindPetResData',
           required: false,
           type: 'string',
         },
@@ -235,7 +235,7 @@ test('req body', () => {
       request: {
         body: {
           kind: 'origin',
-          name: 'FindPetRequestBody',
+          name: 'FindPetReqData',
           type: 'object',
           required: false,
           children: [
@@ -308,7 +308,7 @@ test('req query + path', () => {
       request: {
         path: {
           kind: 'origin',
-          name: 'FindPetRequestPath',
+          name: 'FindPetReqPath',
           type: 'object',
           required: true,
           children: [
@@ -325,7 +325,7 @@ test('req query + path', () => {
         },
         query: {
           kind: 'origin',
-          name: 'FindPetRequestQuery',
+          name: 'FindPetReqParams',
           type: 'object',
           required: true,
           children: [

@@ -826,7 +826,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'AddPetRequestBody',
+            name: 'AddPetReqData',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
             origin: 'Pet',
@@ -837,7 +837,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'AddPetResponseBody',
+            name: 'AddPetResData',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
             origin: 'Pet',
@@ -855,7 +855,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'UpdatePetRequestBody',
+            name: 'UpdatePetReqData',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
             origin: 'Pet',
@@ -866,7 +866,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'UpdatePetResponseBody',
+            name: 'UpdatePetResData',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
             origin: 'Pet',
@@ -883,14 +883,14 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'DeletePetRequestPath',
+            name: 'DeletePetReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
           },
           query: {
             kind: 'origin',
-            name: 'DeletePetRequestQuery',
+            name: 'DeletePetReqParams',
             type: 'object',
             required: true,
             children: [{ name: 'api_key', type: 'string', required: false, kind: 'origin' }],
@@ -907,7 +907,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'GetPetByIdRequestPath',
+            name: 'GetPetByIdReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
@@ -917,7 +917,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'GetPetByIdResponseBody',
+            name: 'GetPetByIdResData',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
             origin: 'Pet',
@@ -934,14 +934,14 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'UpdatePetWithFormRequestPath',
+            name: 'UpdatePetWithFormReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
           },
           query: {
             kind: 'origin',
-            name: 'UpdatePetWithFormRequestQuery',
+            name: 'UpdatePetWithFormReqParams',
             type: 'object',
             required: true,
             children: [
@@ -961,14 +961,14 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'UploadFileRequestPath',
+            name: 'UploadFileReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
           },
           query: {
             kind: 'origin',
-            name: 'UploadFileRequestQuery',
+            name: 'UploadFileReqParams',
             type: 'object',
             required: true,
             children: [{ name: 'additionalMetadata', type: 'string', required: false, kind: 'origin' }],
@@ -978,7 +978,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'UploadFileResponseBody',
+            name: 'UploadFileResData',
             ref: '#/components/schemas/ApiResponse',
             target: 'ApiResponse',
             origin: 'ApiResponse',
@@ -995,7 +995,7 @@ test('DocumentReader', () => {
         request: {
           query: {
             kind: 'origin',
-            name: 'FindPetsByStatusRequestQuery',
+            name: 'FindPetsByStatusReqParams',
             type: 'object',
             required: true,
             children: [
@@ -1012,7 +1012,7 @@ test('DocumentReader', () => {
         },
         response: {
           body: {
-            name: 'FindPetsByStatusResponseBody',
+            name: 'FindPetsByStatusResData',
             required: false,
             kind: 'origin',
             type: 'array',
@@ -1020,7 +1020,7 @@ test('DocumentReader', () => {
               {
                 kind: 'alias',
                 root: false,
-                name: 'FindPetsByStatusResponseBody[]',
+                name: 'FindPetsByStatusResData[]',
                 ref: '#/components/schemas/Pet',
                 target: 'Pet',
                 origin: 'Pet',
@@ -1039,7 +1039,7 @@ test('DocumentReader', () => {
         request: {
           query: {
             kind: 'origin',
-            name: 'FindPetsByTagsRequestQuery',
+            name: 'FindPetsByTagsReqParams',
             type: 'object',
             required: true,
             children: [
@@ -1055,7 +1055,7 @@ test('DocumentReader', () => {
         },
         response: {
           body: {
-            name: 'FindPetsByTagsResponseBody',
+            name: 'FindPetsByTagsResData',
             required: false,
             kind: 'origin',
             type: 'array',
@@ -1063,7 +1063,7 @@ test('DocumentReader', () => {
               {
                 kind: 'alias',
                 root: false,
-                name: 'FindPetsByTagsResponseBody[]',
+                name: 'FindPetsByTagsResData[]',
                 ref: '#/components/schemas/Pet',
                 target: 'Pet',
                 origin: 'Pet',
@@ -1081,7 +1081,7 @@ test('DocumentReader', () => {
         description: 'Returns a map of status codes to quantities',
         request: {},
         response: {
-          body: { name: 'GetInventoryResponseBody', required: false, kind: 'origin', type: 'object', children: [] },
+          body: { name: 'GetInventoryResData', required: false, kind: 'origin', type: 'object', children: [] },
         },
       },
       {
@@ -1094,7 +1094,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'PlaceOrderRequestBody',
+            name: 'PlaceOrderReqData',
             ref: '#/components/schemas/Order',
             target: 'Order',
             origin: 'Order',
@@ -1105,7 +1105,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'PlaceOrderResponseBody',
+            name: 'PlaceOrderResData',
             ref: '#/components/schemas/Order',
             target: 'Order',
             origin: 'Order',
@@ -1123,7 +1123,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'DeleteOrderRequestPath',
+            name: 'DeleteOrderReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'orderId', type: 'number', required: true, kind: 'origin' }],
@@ -1141,7 +1141,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'GetOrderByIdRequestPath',
+            name: 'GetOrderByIdReqPath',
             type: 'object',
             required: true,
             children: [{ format: 'int64', name: 'orderId', type: 'number', required: true, kind: 'origin' }],
@@ -1151,7 +1151,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'GetOrderByIdResponseBody',
+            name: 'GetOrderByIdResData',
             ref: '#/components/schemas/Order',
             target: 'Order',
             origin: 'Order',
@@ -1169,7 +1169,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'CreateUserRequestBody',
+            name: 'CreateUserReqData',
             ref: '#/components/schemas/User',
             target: 'User',
             origin: 'User',
@@ -1187,7 +1187,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'DeleteUserRequestPath',
+            name: 'DeleteUserReqPath',
             type: 'object',
             required: true,
             children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
@@ -1204,7 +1204,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'GetUserByNameRequestPath',
+            name: 'GetUserByNameReqPath',
             type: 'object',
             required: true,
             children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
@@ -1214,7 +1214,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'GetUserByNameResponseBody',
+            name: 'GetUserByNameResData',
             ref: '#/components/schemas/User',
             target: 'User',
             origin: 'User',
@@ -1231,7 +1231,7 @@ test('DocumentReader', () => {
         request: {
           path: {
             kind: 'origin',
-            name: 'UpdateUserRequestPath',
+            name: 'UpdateUserReqPath',
             type: 'object',
             required: true,
             children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
@@ -1239,7 +1239,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'UpdateUserRequestBody',
+            name: 'UpdateUserReqData',
             ref: '#/components/schemas/User',
             target: 'User',
             origin: 'User',
@@ -1256,7 +1256,7 @@ test('DocumentReader', () => {
         description: 'Creates list of users with given input array',
         request: {
           body: {
-            name: 'CreateUsersWithListInputRequestBody',
+            name: 'CreateUsersWithListInputReqData',
             required: false,
             kind: 'origin',
             type: 'array',
@@ -1264,7 +1264,7 @@ test('DocumentReader', () => {
               {
                 kind: 'alias',
                 root: false,
-                name: 'CreateUsersWithListInputRequestBody[]',
+                name: 'CreateUsersWithListInputReqData[]',
                 ref: '#/components/schemas/User',
                 target: 'User',
                 origin: 'User',
@@ -1277,7 +1277,7 @@ test('DocumentReader', () => {
           body: {
             kind: 'alias',
             root: false,
-            name: 'CreateUsersWithListInputResponseBody',
+            name: 'CreateUsersWithListInputResData',
             ref: '#/components/schemas/User',
             target: 'User',
             origin: 'User',
@@ -1294,7 +1294,7 @@ test('DocumentReader', () => {
         request: {
           query: {
             kind: 'origin',
-            name: 'LoginUserRequestQuery',
+            name: 'LoginUserReqParams',
             type: 'object',
             required: true,
             children: [
@@ -1303,7 +1303,7 @@ test('DocumentReader', () => {
             ],
           },
         },
-        response: { body: { name: 'LoginUserResponseBody', type: 'string', required: false, kind: 'origin' } },
+        response: { body: { name: 'LoginUserResData', type: 'string', required: false, kind: 'origin' } },
       },
       {
         name: 'logoutUser',

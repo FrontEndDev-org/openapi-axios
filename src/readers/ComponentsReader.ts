@@ -16,7 +16,7 @@ export class ComponentsReader extends BaseReader {
     const t = Object.entries(schemas)
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([name, schema]) => {
-        const typeName = this.named.nextTypeName(name);
+        const typeName = this.named.nextTypeName(name, true);
         return this.isReference(schema)
           ? this.parseReference(typeName, schema, true)
           : this.parseSchema(typeName, schema.nullable === false, schema);
