@@ -1,7 +1,4 @@
-import { OpenAPIV3 } from 'openapi-types';
-
-export type TypeKind = 'origin' | 'alias';
-export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array';
+export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array' | 'any';
 
 export interface TypeComments {
   title?: string;
@@ -13,7 +10,7 @@ export interface TypeComments {
 }
 
 export interface TypeOrigin extends TypeComments {
-  kind: TypeKind;
+  kind: 'origin';
   name: string;
   type: TypeUnit;
   required: boolean;
@@ -22,13 +19,13 @@ export interface TypeOrigin extends TypeComments {
 }
 
 export interface TypeAlias extends TypeComments {
-  kind: TypeKind;
-  root: boolean;
+  kind: 'alias';
+  refAble: boolean;
   name: string;
   target: string;
   origin: string;
   props: string[];
-  ref: string;
+  ref?: string;
 }
 
 export type TypeItem = TypeOrigin | TypeAlias;

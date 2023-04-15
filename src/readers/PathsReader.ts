@@ -131,12 +131,10 @@ export class PathsReader extends ComponentsReader {
       return {
         kind: 'alias',
         name,
-        root: false,
+        refAble: false,
         target: 'Blob',
         origin: 'Blob',
         props: [],
-        required: true,
-        ref: '',
       };
   }
 

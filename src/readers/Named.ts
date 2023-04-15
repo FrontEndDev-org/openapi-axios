@@ -10,19 +10,21 @@ export class Named {
   }
   resolveAlias() {
     this.unresolvedAliasList.forEach((a) => {
+      if (!a.ref) return;
+
       const info = refToType(a.ref);
       a.target = this.getName(info.base);
       a.props = info.props;
 
       // 指向另外一个地址
-      const { root, name, target } = a;
-      if (root) {
+      const { refAble, name, target } = a;
+      if (refAble) {
         this.aliasRelationMap.set(name, target);
       }
     });
 
     this.unresolvedAliasList.forEach((a) => {
-      a.origin = findOrigin(a.root ? a.name : a.target, this.aliasRelationMap);
+      a.origin = findOrigin(a.refAble ? a.name : a.target, this.aliasRelationMap);
     });
 
     this.unresolvedAliasList.length = 0;

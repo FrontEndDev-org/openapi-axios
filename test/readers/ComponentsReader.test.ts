@@ -82,7 +82,7 @@ test('ref once', () => {
     },
     {
       kind: 'alias',
-      root: true,
+      refAble: true,
       name: 'T',
       target: 'P',
       origin: 'P',
@@ -118,8 +118,8 @@ test('ref twice', () => {
   const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     { kind: 'origin', name: 'K', type: 'string', required: false },
-    { kind: 'alias', root: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
-    { kind: 'alias', root: true, name: 'T', target: 'P', origin: 'K', props: [], ref: '#/components/schemas/P' },
+    { kind: 'alias', refAble: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
+    { kind: 'alias', refAble: true, name: 'T', target: 'P', origin: 'K', props: [], ref: '#/components/schemas/P' },
   ]);
 });
 
@@ -189,6 +189,7 @@ test('object', () => {
             },
           },
           required: ['B', 'S', 'N', 'I'],
+          additionalProperties: true,
         },
         R: {
           type: 'string',
@@ -209,8 +210,17 @@ test('object', () => {
         { name: 'B', type: 'boolean', required: true, kind: 'origin' },
         { name: 'I', type: 'number', required: true, kind: 'origin' },
         { name: 'N', type: 'number', required: true, kind: 'origin' },
-        { kind: 'alias', root: false, name: 'R', target: 'R', origin: 'R', props: [], ref: '#/components/schemas/R' },
+        {
+          kind: 'alias',
+          refAble: false,
+          name: 'R',
+          target: 'R',
+          origin: 'R',
+          props: [],
+          ref: '#/components/schemas/R',
+        },
         { name: 'S', type: 'string', required: true, kind: 'origin' },
+        { name: '[key: string]', type: 'any', required: true, kind: 'origin' },
       ],
     },
     {
@@ -238,6 +248,12 @@ test('array', () => {
           items: {
             type: 'string',
           },
+          additionalProperties: {
+            $ref: '#/components/schema/T',
+          },
+        },
+        T: {
+          type: 'string',
         },
       },
     },
@@ -250,7 +266,24 @@ test('array', () => {
       name: 'A',
       type: 'array',
       required: true,
-      children: [{ name: 'A[]', type: 'string', required: false, kind: 'origin' }],
+      children: [
+        { kind: 'origin', name: 'A[]', type: 'string', required: false },
+        {
+          kind: 'alias',
+          name: '[key: string]',
+          target: 'T',
+          origin: 'T',
+          props: [],
+          refAble: false,
+          ref: '#/components/schema/T',
+        },
+      ],
+    },
+    {
+      kind: 'origin',
+      name: 'T',
+      type: 'string',
+      required: false,
     },
   ]);
 });
