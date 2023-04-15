@@ -849,7 +849,16 @@ test('DocumentReader', () => {
           "method": "post",
           "name": "uploadFile",
           "request": {
-            "body": undefined,
+            "body": {
+              "kind": "alias",
+              "name": "UploadFileReqData",
+              "origin": "Blob",
+              "props": [],
+              "ref": "",
+              "required": true,
+              "root": false,
+              "target": "Blob",
+            },
             "path": {
               "children": [
                 {

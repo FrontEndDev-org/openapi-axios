@@ -1,7 +1,8 @@
 import { OpenAPIV3 } from 'openapi-types';
+import { BLOB_MIME, JSON_MIME } from '../const';
 import { ComponentsReader } from './ComponentsReader';
 import { methods } from './const';
-import { TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
+import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
 
 export class PathsReader extends ComponentsReader {
   readingUrl = '';
@@ -117,15 +118,26 @@ export class PathsReader extends ComponentsReader {
         });
   }
 
-  readOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']) {
+  readOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']): TypeItem | undefined {
     if (!body) return;
     if (this.isReference(body)) return;
 
     const { content } = body;
-    const okMedia = content[this.options.okMediaType];
-    if (!okMedia) return;
+    const jsonReq = content[JSON_MIME];
+    const blobReq = content[BLOB_MIME];
 
-    return this.readOperationMedia(name, okMedia);
+    if (jsonReq) return this.readOperationMedia(name, jsonReq);
+    if (blobReq)
+      return {
+        kind: 'alias',
+        name,
+        root: false,
+        target: 'Blob',
+        origin: 'Blob',
+        props: [],
+        required: true,
+        ref: '',
+      };
   }
 
   protected readOperationResponse(name: string, responses: NonNullable<OpenAPIV3.ResponsesObject>) {

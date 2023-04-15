@@ -42,7 +42,7 @@ export interface ReaderOptions {
   okCode?: number;
 
   /**
-   * ok 的媒体类型
+   * ok 的响应类型
    * @default ["application/json"]
    */
   okMediaType?: string;

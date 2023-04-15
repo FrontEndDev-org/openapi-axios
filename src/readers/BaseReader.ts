@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { INTERNAL_TYPE_NAMES } from '../const';
+import { INTERNAL_TYPE_NAMES, JSON_MIME } from '../const';
 import { Named } from './Named';
 import { ReaderOptions, StrictReaderOptions, TypeAlias, TypeItem } from './types';
 
@@ -8,7 +8,7 @@ export class BaseReader {
 
   static defaults: StrictReaderOptions = {
     okCode: 200,
-    okMediaType: 'application/json',
+    okMediaType: JSON_MIME,
     requestPathTypeName: 'ReqPath',
     requestQueryTypeName: 'ReqParams',
     requestBodyTypeName: 'ReqData',

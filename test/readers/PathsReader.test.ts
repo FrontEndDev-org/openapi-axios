@@ -253,6 +253,56 @@ test('req body', () => {
   ]);
 });
 
+test('req file', () => {
+  const reader = new PathsReader({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    openapi: '3.0.0',
+    paths: {
+      '/pet': {
+        get: {
+          operationId: 'findPet',
+          requestBody: {
+            content: {
+              'application/octet-stream': {
+                schema: {
+                  type: 'string',
+                  format: 'binary',
+                },
+              },
+            },
+          },
+          responses: {},
+        },
+      },
+    },
+  });
+
+  const t = reader.readPaths();
+  expect(t).toEqual<TypeOperations>([
+    {
+      name: 'findPet',
+      method: HttpMethods.GET,
+      url: '/pet',
+      request: {
+        body: {
+          kind: 'alias',
+          name: 'FindPetReqData',
+          origin: 'Blob',
+          props: [],
+          ref: '',
+          required: true,
+          root: false,
+          target: 'Blob',
+        },
+      },
+      response: {},
+    },
+  ]);
+});
+
 test('req query + path', () => {
   const reader = new PathsReader({
     info: {
