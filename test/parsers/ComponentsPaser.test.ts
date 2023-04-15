@@ -4,7 +4,7 @@ import { TypeAlias, TypeList } from '../../src/parsers/types';
 
 test('empty components', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -19,7 +19,7 @@ test('empty components', async () => {
 
 test('empty components keys', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -35,7 +35,7 @@ test('empty components keys', async () => {
 
 test('empty ref', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -57,7 +57,7 @@ test('empty ref', async () => {
 
 test('ref once', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -99,7 +99,7 @@ test('ref once', async () => {
 
 test('ref twice', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -149,7 +149,7 @@ test('ref twice', async () => {
 
 test('primitive', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -185,7 +185,7 @@ test('primitive', async () => {
 
 test('object', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -261,7 +261,7 @@ test('object', async () => {
 
 test('array', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -319,7 +319,7 @@ test('array', async () => {
 
 test('never', async () => {
   const parser = new ComponentsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',

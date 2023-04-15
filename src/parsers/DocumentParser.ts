@@ -2,7 +2,7 @@ import { PathsParser } from './PathsParser';
 import { TypeDocument } from './types';
 
 export class DocumentParser extends PathsParser {
-  parseDocument(): TypeDocument {
+  parse(): TypeDocument {
     const components = this.parseComponents();
     const paths = this.parsePaths();
     const { info, servers } = this.document!;

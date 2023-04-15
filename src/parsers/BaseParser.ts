@@ -30,24 +30,24 @@ export class BaseParser {
     this.init();
   }
 
-  async get(document: AcceptDocument) {
+  async read(document: AcceptDocument) {
     if (isString(document)) {
       if (/^https?:/i.test(document)) {
-        this.document = await this.parseRemote(document);
+        this.document = await this.readRemote(document);
       } else {
-        this.document = this.parseLocal(document);
+        this.document = this.readLocal(document);
       }
     } else {
-      this.document = this.parseObject(document);
+      this.document = this.readObject(document);
     }
   }
 
-  parseLocal(file: string) {
+  protected readLocal(file: string) {
     const data = fs.readFileSync(path.resolve(this.options.cwd, file), 'utf8');
     return JSON.parse(data) as OpenAPIV3Document;
   }
 
-  async parseRemote(url: string) {
+  protected async readRemote(url: string) {
     const { data } = await axios.request<OpenAPIV3Document>({
       url,
       method: 'get',
@@ -55,7 +55,7 @@ export class BaseParser {
     return data;
   }
 
-  parseObject(document: OpenAPIV3Document) {
+  protected readObject(document: OpenAPIV3Document) {
     return document;
   }
 

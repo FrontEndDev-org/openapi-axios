@@ -7,8 +7,8 @@ import { writeFile } from '../helpers';
 
 test('DocumentParser', () => {
   const parser = new DocumentParser();
-  parser.get(document as unknown as OpenAPIV3.Document);
-  const types = parser.parseDocument();
+  parser.read(document as unknown as OpenAPIV3.Document);
+  const types = parser.parse();
   writeFile('petStore3.types.json', types);
   expect(types).toMatchInlineSnapshot(`
     {

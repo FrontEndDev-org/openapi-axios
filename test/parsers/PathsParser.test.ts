@@ -5,7 +5,7 @@ import HttpMethods = OpenAPIV3.HttpMethods;
 
 test('empty paths keys', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -20,7 +20,7 @@ test('empty paths keys', async () => {
 
 test('empty path item keys', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -37,7 +37,7 @@ test('empty path item keys', async () => {
 
 test('empty path item method responses keys', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -66,7 +66,7 @@ test('empty path item method responses keys', async () => {
 
 test('empty path item method responses keys + specify operationId', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -96,7 +96,7 @@ test('empty path item method responses keys + specify operationId', async () => 
 
 test('resp ref', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -156,7 +156,7 @@ test('resp ref', async () => {
 
 test('resp type', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -204,7 +204,7 @@ test('resp type', async () => {
 
 test('req body', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -263,7 +263,7 @@ test('req body', async () => {
 
 test('req file', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
@@ -313,7 +313,7 @@ test('req file', async () => {
 
 test('req query + path', async () => {
   const parser = new PathsParser();
-  await parser.get({
+  await parser.read({
     info: {
       title: 'test',
       version: '1.0.0',
