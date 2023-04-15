@@ -118,8 +118,8 @@ test('DocumentWriter', () => {
       /**
        * @example doggie
        */
-      name?: string;
-      photoUrls?: Array<string>;
+      name: string;
+      photoUrls: Array<string>;
       /**
        * @description pet status in the store
        */
@@ -180,6 +180,7 @@ test('DocumentWriter', () => {
      * @description Add a new pet to the store
      */
     export async function addPet(
+      data: AddPetReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<AddPetResData> {
       return request({
@@ -197,6 +198,7 @@ test('DocumentWriter', () => {
      * @description Update an existing pet by Id
      */
     export async function updatePet(
+      data: UpdatePetReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<UpdatePetResData> {
       return request({
@@ -367,7 +369,12 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type GetInventoryResData = {};
+    export type GetInventoryResData = {
+      /**
+       * @format int32
+       */
+      [key: string]: number;
+    };
     /**
      * @title Returns pet inventories by status
      * @description Returns a map of status codes to quantities
@@ -389,6 +396,7 @@ test('DocumentWriter', () => {
      * @description Place a new order in the store
      */
     export async function placeOrder(
+      data: PlaceOrderReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<PlaceOrderResData> {
       return request({
@@ -450,6 +458,7 @@ test('DocumentWriter', () => {
      * @description This can only be done by the logged in user.
      */
     export async function createUser(
+      data: CreateUserReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
@@ -516,6 +525,7 @@ test('DocumentWriter', () => {
      */
     export async function updateUser(
       path: UpdateUserReqPath,
+      data: UpdateUserReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({

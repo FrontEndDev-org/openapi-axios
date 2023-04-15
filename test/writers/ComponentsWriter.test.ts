@@ -28,8 +28,8 @@ test('alias', () => {
         target: 'P',
         origin: 'Q',
         props: [],
-        ref: '',
-        root: true,
+        refAble: true,
+        required: true,
         description: 'd1',
       },
       {
@@ -38,8 +38,8 @@ test('alias', () => {
         target: 'P',
         origin: 'Q',
         props: ['q1', 'q2'],
-        ref: '',
-        root: true,
+        refAble: true,
+        required: true,
         description: 'd2',
       },
     ],
@@ -173,8 +173,8 @@ test('origin object', () => {
             target: 'P',
             origin: 'Q',
             props: ['q1', 'q2'],
-            ref: '',
-            root: false,
+            refAble: false,
+            required: false,
             description: 'ddd3',
           },
           {
@@ -195,8 +195,8 @@ test('origin object', () => {
                 target: 'X',
                 origin: 'X',
                 props: [],
-                ref: '',
-                root: false,
+                refAble: false,
+                required: false,
               },
             ],
           },
@@ -218,8 +218,102 @@ test('origin object', () => {
       /**
        * @description ddd3
        */
-      ooo: Q['q1']['q2'];
-      ppp: { nnn: number; qqq: X };
+      ooo?: Q['q1']['q2'];
+      ppp: { nnn: number; qqq?: X };
+    };
+    "
+  `);
+});
+
+test('origin object additional', () => {
+  const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+      baseURL: '/',
+    },
+    components: [
+      {
+        kind: 'origin',
+        type: 'object',
+        name: 'O1',
+        required: true,
+        description: 'ddd1',
+        children: [
+          {
+            kind: 'origin',
+            type: 'string',
+            name: 'sss',
+            required: true,
+            description: 'ddd2',
+          },
+          {
+            kind: 'alias',
+            name: 'ooo',
+            target: 'P',
+            origin: 'Q',
+            props: ['q1', 'q2'],
+            refAble: false,
+            required: false,
+            description: 'ddd3',
+          },
+          {
+            kind: 'origin',
+            type: 'object',
+            name: 'ppp',
+            required: true,
+            children: [
+              {
+                kind: 'origin',
+                type: 'number',
+                name: 'nnn',
+                required: true,
+              },
+              {
+                kind: 'alias',
+                name: 'qqq',
+                target: 'X',
+                origin: 'X',
+                props: [],
+                refAble: false,
+                required: false,
+              },
+              {
+                format: 'int32',
+                name: '[key: string]',
+                type: 'number',
+                required: true,
+                kind: 'origin',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    paths: [],
+  });
+  const text = writer.writeComponents();
+  expect(text).toMatchInlineSnapshot(`
+    "/**
+     * @description ddd1
+     */
+    export type O1 = {
+      /**
+       * @description ddd2
+       */
+      sss: string;
+      /**
+       * @description ddd3
+       */
+      ooo?: Q['q1']['q2'];
+      ppp: {
+        nnn: number;
+        qqq?: X;
+        /**
+         * @format int32
+         */
+        [key: string]: number;
+      };
     };
     "
   `);
@@ -242,52 +336,10 @@ test('origin array', () => {
         children: [
           {
             kind: 'origin',
-            type: 'object',
-            name: 'O1',
-            required: true,
+            name: 'A[]',
+            type: 'string',
+            required: false,
             description: 'ddd2',
-            children: [
-              {
-                kind: 'origin',
-                type: 'string',
-                name: 'sss',
-                required: true,
-              },
-              {
-                kind: 'alias',
-                name: 'ooo',
-                target: 'P',
-                origin: 'Q',
-                props: ['q1', 'q2'],
-                ref: '',
-                root: false,
-              },
-              {
-                kind: 'origin',
-                type: 'object',
-                name: 'ppp',
-                required: true,
-                description: 'ddd3',
-                children: [
-                  {
-                    kind: 'origin',
-                    type: 'number',
-                    name: 'nnn',
-                    required: true,
-                    description: 'ddd4',
-                  },
-                  {
-                    kind: 'alias',
-                    name: 'qqq',
-                    target: 'X',
-                    origin: 'X',
-                    props: [],
-                    ref: '',
-                    root: false,
-                  },
-                ],
-              },
-            ],
           },
         ],
       },
@@ -299,20 +351,67 @@ test('origin array', () => {
     "/**
      * @description ddd1
      */
-    export type A = Array<{
-      sss: string;
-      ooo: Q['q1']['q2'];
+    export type A = Array</**
+     * @description ddd2
+     */
+    string>;
+    "
+  `);
+});
+
+test('origin array additional', () => {
+  const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+      baseURL: '/',
+    },
+    components: [
+      {
+        kind: 'origin',
+        type: 'array',
+        name: 'A',
+        required: true,
+        description: 'ddd1',
+        children: [
+          {
+            kind: 'origin',
+            name: 'A[]',
+            type: 'string',
+            required: false,
+            description: 'ddd2',
+          },
+          {
+            kind: 'alias',
+            name: '[key: string]',
+            target: 'T',
+            origin: 'T',
+            props: [],
+            refAble: false,
+            required: false,
+            ref: '#/components/schema/T',
+            description: 'ddd3',
+          },
+        ],
+      },
+    ],
+    paths: [],
+  });
+  const text = writer.writeComponents();
+  expect(text).toMatchInlineSnapshot(`
+    "/**
+     * @description ddd1
+     */
+    export type A = Array<
+      /**
+       * @description ddd2
+       */
+      | string
       /**
        * @description ddd3
        */
-      ppp: {
-        /**
-         * @description ddd4
-         */
-        nnn: number;
-        qqq: X;
-      };
-    }>;
+      | T
+    >;
     "
   `);
 });

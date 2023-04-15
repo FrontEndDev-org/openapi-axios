@@ -312,7 +312,8 @@ test('req.path + res.body', () => {
         response: {
           body: {
             kind: 'alias',
-            root: false,
+            refAble: false,
+            required: false,
             name: 'GetPetByIdResponseBody',
             ref: '#/components/schemas/Pet',
             target: 'Pet',
@@ -383,7 +384,7 @@ test('req.path + req.query + res.body', () => {
             kind: 'origin',
             name: 'UploadFileRequestQuery',
             type: 'object',
-            required: true,
+            required: false,
             children: [
               {
                 name: 'additionalMetadata',
@@ -397,7 +398,8 @@ test('req.path + req.query + res.body', () => {
         response: {
           body: {
             kind: 'alias',
-            root: false,
+            refAble: false,
+            required: false,
             name: 'UploadFileResponseBody',
             ref: '#/components/schemas/ApiResponse',
             target: 'ApiResponse',
@@ -415,7 +417,7 @@ test('req.path + req.query + res.body', () => {
        */
       petId: number;
     };
-    export type UploadFileRequestQuery = { additionalMetadata: string };
+    export type UploadFileRequestQuery = { additionalMetadata?: string };
     export type UploadFileResponseBody = ApiResponse;
     /**
      * @title uploads an image
@@ -423,7 +425,7 @@ test('req.path + req.query + res.body', () => {
      */
     export async function uploadFile(
       path: UploadFileRequestPath,
-      params: UploadFileRequestQuery,
+      params?: UploadFileRequestQuery,
       config?: AxiosRequestConfig
     ): AxiosPromise<UploadFileResponseBody> {
       return request({
@@ -471,7 +473,7 @@ test('req.path + req.query + req.body + res.body', () => {
             kind: 'origin',
             name: 'UploadFileRequestQuery',
             type: 'object',
-            required: true,
+            required: false,
             children: [
               {
                 name: 'additionalMetadata',
@@ -484,7 +486,7 @@ test('req.path + req.query + req.body + res.body', () => {
           body: {
             kind: 'origin',
             name: 'UploadFileRequestBody',
-            type: 'object',
+            type: 'array',
             required: true,
             children: [
               {
@@ -493,13 +495,21 @@ test('req.path + req.query + req.body + res.body', () => {
                 required: false,
                 kind: 'origin',
               },
+              {
+                format: 'int32',
+                name: '[key: string]',
+                type: 'number',
+                required: true,
+                kind: 'origin',
+              },
             ],
           },
         },
         response: {
           body: {
             kind: 'alias',
-            root: false,
+            refAble: false,
+            required: false,
             name: 'UploadFileResponseBody',
             ref: '#/components/schemas/ApiResponse',
             target: 'ApiResponse',
@@ -517,8 +527,14 @@ test('req.path + req.query + req.body + res.body', () => {
        */
       petId: number;
     };
-    export type UploadFileRequestQuery = { additionalMetadata: string };
-    export type UploadFileRequestBody = { additionalMetadata: string };
+    export type UploadFileRequestQuery = { additionalMetadata?: string };
+    export type UploadFileRequestBody = Array<
+      | string
+      /**
+       * @format int32
+       */
+      | number
+    >;
     export type UploadFileResponseBody = ApiResponse;
     /**
      * @title uploads an image
@@ -526,8 +542,8 @@ test('req.path + req.query + req.body + res.body', () => {
      */
     export async function uploadFile(
       path: UploadFileRequestPath,
-      params: UploadFileRequestQuery,
       data: UploadFileRequestBody,
+      params?: UploadFileRequestQuery,
       config?: AxiosRequestConfig
     ): AxiosPromise<UploadFileResponseBody> {
       return request({

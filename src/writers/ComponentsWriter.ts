@@ -22,17 +22,14 @@ export class ComponentsWriter extends CommentsWriter {
     if (this.isTypeAlias(type)) return `${type.origin}${toTypePath(type.props)}`;
 
     switch (type.type) {
-      case 'number':
-      case 'string':
-      case 'boolean':
-      case 'never':
-        return this.writePrimitive(type);
-
       case 'object':
         return this.writeObject(type);
 
       case 'array':
         return this.writeArray(type);
+
+      default:
+        return this.writePrimitive(type);
     }
   }
 
@@ -41,17 +38,31 @@ export class ComponentsWriter extends CommentsWriter {
   }
 
   private writeObject(type: TypeOrigin) {
-    const kvList = type.children!.map((t) => {
-      const c = this.writeComments(t, true);
-      const e = type.required ? ':' : '?:';
-      const v = this.writeType(t);
-      return `${c}${t.name}${e}${v};`;
+    const { children } = type;
+
+    if (!children || !children.length) return '{[key: string]: never}';
+
+    const kvList = children.map((type) => {
+      const comments = this.writeComments(type, true);
+      const key = type.name;
+      const equal = type.required ? ':' : '?:';
+      const value = this.writeType(type);
+      return comments + key + equal + value + ';';
     });
     return '{' + joinSlices(kvList) + '}';
   }
 
   private writeArray(type: TypeOrigin) {
-    const one = this.writeType(type.children!.at(0)!);
-    return `Array<${one}>`;
+    const { children } = type;
+
+    if (!children || !children.length) return 'never';
+
+    const vList = children.map((type) => {
+      const comments = this.writeComments(type, true);
+      const value = this.writeType(type);
+      return comments + value;
+    });
+
+    return `Array<${joinSlices(vList, '|')}>`;
   }
 }
