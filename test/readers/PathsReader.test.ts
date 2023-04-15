@@ -273,10 +273,15 @@ test('req query + path', () => {
               },
             },
             {
-              name: 'keywords',
+              name: 'status',
               in: 'query',
+              description: 'Status values that need to be considered for filter',
+              required: false,
+              explode: true,
               schema: {
                 type: 'string',
+                default: 'available',
+                enum: ['available', 'pending', 'sold'],
               },
             },
           ],
@@ -300,10 +305,11 @@ test('req query + path', () => {
 
   reader.readComponents();
   const t = reader.readPaths();
+  // console.log(JSON.stringify(t));
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
-      method: HttpMethods.GET,
+      method: 'get',
       url: '/pet/{name}',
       request: {
         path: {
@@ -327,13 +333,16 @@ test('req query + path', () => {
           kind: 'origin',
           name: 'FindPetReqParams',
           type: 'object',
-          required: true,
+          required: false,
           children: [
             {
-              kind: 'origin',
-              name: 'keywords',
+              default: 'available',
+              description: 'Status values that need to be considered for filter',
+              enum: ['available', 'pending', 'sold'],
+              name: 'status',
               type: 'string',
               required: false,
+              kind: 'origin',
             },
           ],
         },

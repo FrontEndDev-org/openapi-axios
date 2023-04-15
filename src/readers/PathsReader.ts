@@ -75,7 +75,8 @@ export class PathsReader extends ComponentsReader {
       kind: 'origin',
       name,
       type: 'object',
-      required: true,
+      // 有一个必填属性时，则该对象必填
+      required: types.some((type) => (this.isTypeAlias(type) ? true : type.required)),
       children: types,
     };
   }
@@ -102,10 +103,17 @@ export class PathsReader extends ComponentsReader {
   protected readOperationParameter(parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject) {
     if (this.isReference(parameter)) return;
 
-    const { schema, name, required = false } = parameter;
+    const { schema, name, required = false, deprecated, description, example } = parameter;
     if (!schema) return;
 
-    return this.isReference(schema) ? this.readReference(name, schema) : this.readSchema(name, required, schema);
+    return this.isReference(schema)
+      ? this.readReference(name, schema)
+      : this.readSchema(name, required, {
+          deprecated,
+          description,
+          example,
+          ...schema,
+        });
   }
 
   readOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']) {

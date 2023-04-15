@@ -1,7 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { INTERNAL_TYPE_NAMES } from '../const';
 import { Named } from './Named';
-import { ReaderOptions, StrictReaderOptions } from './types';
+import { ReaderOptions, StrictReaderOptions, TypeAlias, TypeItem } from './types';
 
 export class BaseReader {
   named = new Named();
@@ -31,5 +31,9 @@ export class BaseReader {
     object: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | OpenAPIV3.ParameterObject | OpenAPIV3.RequestBodyObject
   ): object is OpenAPIV3.ReferenceObject {
     return '$ref' in object;
+  }
+
+  protected isTypeAlias(type: TypeItem): type is TypeAlias {
+    return type.kind === 'alias';
   }
 }
