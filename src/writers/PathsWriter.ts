@@ -1,13 +1,22 @@
 import { AxiosRequestConfig } from 'axios';
 import { TypeItem, TypeList, TypeOperation, TypeOperations } from '../readers/types';
-import { joinSlices, varString } from '../utils/string';
+import { joinSlices, nextUniqueName, varString } from '../utils/string';
+import { isString } from '../utils/type-is';
 import { ComponentsWriter } from './ComponentsWriter';
 
 const { stringify } = JSON;
 
 export class PathsWriter extends ComponentsWriter {
+  init() {
+    super.init();
+    this.imports.push('import type { AxiosPromise, AxiosRequestConfig } from "axios";');
+    this.imports.push('import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT } from "openapi-axios/helpers";');
+    this.imports.push(this.options.axiosImport);
+    this.helpers.push(`const request = axios.request;`);
+  }
+
   writePaths() {
-    return this.format(this.options.document.paths.map(this.writeOperation.bind(this)).join('\n\n'));
+    return this.format(this.document.paths.map(this.writeOperation.bind(this)).join('\n\n'));
   }
 
   protected writeOperation(type: TypeOperation) {
@@ -29,7 +38,12 @@ export class PathsWriter extends ComponentsWriter {
       request: { path, query, body: reqBody },
       response: { body: resBody },
     } = type;
-    const { requestPathArgName, requestQueryArgName, requestBodyArgName, responseTypeName } = this.options;
+    const { responseTypeName } = this.options;
+    const argNameCountMap = new Map<string, number>();
+    const requestPathArgName = nextUniqueName(this.options.requestPathArgName, argNameCountMap);
+    const requestQueryArgName = nextUniqueName(this.options.requestQueryArgName, argNameCountMap);
+    const requestBodyArgName = nextUniqueName(this.options.requestBodyArgName, argNameCountMap);
+    const configArgName = nextUniqueName('config', argNameCountMap);
     const comments = this.writeComments(type, true);
     const args_ = joinSlices(
       [
@@ -37,13 +51,14 @@ export class PathsWriter extends ComponentsWriter {
         this.writeArg(requestPathArgName, path),
         this.writeArg(requestQueryArgName, query),
         this.writeArg(requestBodyArgName, reqBody),
+        this.writeArg(configArgName, 'AxiosRequestConfig', true),
       ],
       ', '
     );
     const return_ = `${responseTypeName}<${resBody?.name || 'never'}>`;
 
     const url_ = this.writeAxiosProp('url', stringify(varString(type.url, 'path.')).replace(/"/g, '`'));
-    const method_ = this.writeAxiosProp('method', stringify(type.method));
+    const method_ = this.writeAxiosProp('method', type.method.toUpperCase());
     const params_ = this.writeAxiosProp('params', query ? requestQueryArgName : '');
     const data_ = this.writeAxiosProp('data', reqBody ? requestBodyArgName : '');
     const props = joinSlices([
@@ -52,10 +67,11 @@ export class PathsWriter extends ComponentsWriter {
       method_,
       params_,
       data_,
+      `...${configArgName}`,
     ]);
 
     return `${comments}export async function ${name}(${args_}):${return_}  {
-          return axios({
+          return request({
             ${props}
           });
         }`;
@@ -66,9 +82,11 @@ export class PathsWriter extends ComponentsWriter {
     return prop === value ? `${prop},` : `${prop}: ${value},`;
   }
 
-  protected writeArg(name: string, type?: TypeItem) {
+  protected writeArg(name: string, type?: TypeItem | string, optional?: boolean) {
     if (!type) return;
 
-    return `${name}: ${type.name}`;
+    const typeName = isString(type) ? type : type.name;
+    const equal = optional ? '?:' : ':';
+    return `${name}${equal}${typeName}`;
   }
 }

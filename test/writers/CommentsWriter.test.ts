@@ -2,10 +2,12 @@ import { CommentsWriter } from '../../src/writers/CommentsWriter';
 
 test('CommentsWriter', () => {
   const writer = new CommentsWriter({
-    document: {
-      components: [],
-      paths: [],
+    info: {
+      title: 'test',
+      version: '1.0.0',
     },
+    components: [],
+    paths: [],
   });
 
   expect(writer.writeComments({})).toMatchInlineSnapshot('""');

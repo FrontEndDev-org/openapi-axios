@@ -2,6 +2,10 @@ import { ComponentsWriter } from '../../src/writers/ComponentsWriter';
 
 test('empty components', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [],
     paths: [],
   });
@@ -11,6 +15,10 @@ test('empty components', () => {
 
 test('alias', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [
       {
         kind: 'alias',
@@ -52,6 +60,10 @@ test('alias', () => {
 
 test('origin primitive', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [
       {
         kind: 'origin',
@@ -103,6 +115,10 @@ test('origin primitive', () => {
 
 test('origin enum', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [
       {
         kind: 'origin',
@@ -127,6 +143,10 @@ test('origin enum', () => {
 
 test('origin object', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [
       {
         kind: 'origin',
@@ -202,6 +222,10 @@ test('origin object', () => {
 
 test('origin array', () => {
   const writer = new ComponentsWriter({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
     components: [
       {
         kind: 'origin',

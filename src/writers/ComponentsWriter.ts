@@ -4,6 +4,11 @@ import { BaseWriter } from './BaseWriter';
 import { CommentsWriter } from './CommentsWriter';
 
 export class ComponentsWriter extends CommentsWriter {
+  init() {
+    super.init();
+    this.imports.push('import type { OneOf } from "openapi-axios/helpers"');
+  }
+
   writeComponents() {
     return this.format(this.document.components.map(this.writeRootType.bind(this)).join('\n\n'));
   }
