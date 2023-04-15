@@ -5,14 +5,12 @@ import { CommentsWriter } from './CommentsWriter';
 
 export class ComponentsWriter extends CommentsWriter {
   writeComponents() {
-    return this.format(
-      this.options.document.components
-        .map((type) => {
-          const comments = this.writeComments(type, true);
-          return `${comments}export type ${type.name} = ${this.writeType(type)};`;
-        })
-        .join('\n\n')
-    );
+    return this.format(this.options.document.components.map(this.writeRootType.bind(this)).join('\n\n'));
+  }
+
+  protected writeRootType(type: TypeItem) {
+    const comments = this.writeComments(type, true);
+    return `${comments}export type ${type.name} = ${this.writeType(type)};`;
   }
 
   private writeType(type: TypeItem): string {

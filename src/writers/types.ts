@@ -11,4 +11,11 @@ export interface WriterOptions {
    * 格式化配置
    */
   prettier?: Config;
+
+  requestPathArgName?: string;
+  requestQueryArgName?: string;
+  requestBodyArgName?: string;
+
+  responseTypeName?: 'Promise' | 'AxiosPromise' | string;
 }
+export type StrictWriterOptions = Required<WriterOptions>;

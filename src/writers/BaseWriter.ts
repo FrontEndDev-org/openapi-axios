@@ -1,5 +1,5 @@
 import { TypeAlias, TypeItem } from '../readers/types';
-import { WriterOptions } from './types';
+import { StrictWriterOptions, WriterOptions } from './types';
 import prettier from 'prettier';
 
 export class BaseWriter {
@@ -8,11 +8,15 @@ export class BaseWriter {
     prettier: {
       singleQuote: true,
     },
+    requestPathArgName: 'path',
+    requestQueryArgName: 'params',
+    requestBodyArgName: 'data',
+    responseTypeName: 'AxiosPromise',
   };
 
-  options: WriterOptions;
+  options: StrictWriterOptions;
   constructor(options: WriterOptions) {
-    this.options = Object.assign({}, BaseWriter.defaults, options);
+    this.options = Object.assign({}, BaseWriter.defaults, options) as StrictWriterOptions;
   }
 
   protected isTypeAlias(type: TypeItem): type is TypeAlias {
