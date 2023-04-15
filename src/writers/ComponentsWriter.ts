@@ -1,5 +1,5 @@
 import { TypeItem, TypeOrigin } from '../readers/types';
-import { toTypePath } from '../utils/string';
+import { joinSlices, toTypePath } from '../utils/string';
 import { BaseWriter } from './BaseWriter';
 import { CommentsWriter } from './CommentsWriter';
 
@@ -10,7 +10,7 @@ export class ComponentsWriter extends CommentsWriter {
   }
 
   writeComponents() {
-    return this.format(this.document.components.map(this.writeRootType.bind(this)).join('\n\n'));
+    return this.format(joinSlices(this.document.components.map(this.writeRootType.bind(this)), '\n\n'));
   }
 
   protected writeRootType(type: TypeItem) {
@@ -47,7 +47,7 @@ export class ComponentsWriter extends CommentsWriter {
       const v = this.writeType(t);
       return `${c}${t.name}${e}${v};`;
     });
-    return '{' + kvList.join('\n') + '}';
+    return '{' + joinSlices(kvList) + '}';
   }
 
   private writeArray(type: TypeOrigin) {

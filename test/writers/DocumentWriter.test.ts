@@ -1,981 +1,13 @@
+import { TypeDocument } from '../../src/readers/types';
 import { DocumentWriter } from '../../src/writers/DocumentWriter';
 
+import petStore3 from '../files/petStore3.types.json' assert { type: 'json' };
+import { writeFile } from '../helpers';
+
 test('DocumentWriter', () => {
-  const writer = new DocumentWriter({
-    info: {
-      title: 'Swagger Petstore - OpenAPI 3.0',
-      description:
-        "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [http://swagger.io](http://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!\nYou can now help us improve the API whether it's by making changes to the definition itself or to the code.\nThat way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n\nSome useful links:\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
-      version: '1.0.17',
-      baseURL: '/api/v3/',
-    },
-    components: [
-      {
-        name: 'Address',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            example: 'Palo Alto',
-            name: 'city',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'CA',
-            name: 'state',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '437 Lytton',
-            name: 'street',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '94301',
-            name: 'zip',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'ApiResponse',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            format: 'int32',
-            name: 'code',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'message',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'type',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'Category',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            example: 1,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'Dogs',
-            name: 'name',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'Customer',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            name: 'address',
-            required: false,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                kind: 'alias',
-                root: false,
-                name: 'address[]',
-                ref: '#/components/schemas/Address',
-                target: 'Address',
-                origin: 'Address',
-                props: [],
-              },
-            ],
-          },
-          {
-            example: 100000,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'fehguy',
-            name: 'username',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'Order',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            name: 'complete',
-            type: 'boolean',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 198772,
-            format: 'int64',
-            name: 'petId',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 7,
-            format: 'int32',
-            name: 'quantity',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            format: 'date-time',
-            name: 'shipDate',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            description: 'Order Status',
-            example: 'approved',
-            enum: ['placed', 'approved', 'delivered'],
-            name: 'status',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'Pet',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            kind: 'alias',
-            root: false,
-            name: 'category',
-            ref: '#/components/schemas/Category',
-            target: 'Category',
-            origin: 'Category',
-            props: [],
-          },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'doggie',
-            name: 'name',
-            type: 'string',
-            required: true,
-            kind: 'origin',
-          },
-          {
-            name: 'photoUrls',
-            required: true,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                name: 'photoUrls[]',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-          {
-            description: 'pet status in the store',
-            enum: ['available', 'pending', 'sold'],
-            name: 'status',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'tags',
-            required: false,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                kind: 'alias',
-                root: false,
-                name: 'tags[]',
-                ref: '#/components/schemas/Tag',
-                target: 'Tag',
-                origin: 'Tag',
-                props: [],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'Tag',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'name',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-      {
-        name: 'User',
-        required: false,
-        kind: 'origin',
-        type: 'object',
-        children: [
-          {
-            example: 'john@email.com',
-            name: 'email',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'John',
-            name: 'firstName',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'James',
-            name: 'lastName',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '12345',
-            name: 'password',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '12345',
-            name: 'phone',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'theUser',
-            name: 'username',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            description: 'User Status',
-            example: 1,
-            format: 'int32',
-            name: 'userStatus',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-        ],
-      },
-    ],
-    paths: [
-      {
-        name: 'addPet',
-        method: 'post',
-        url: '/pet',
-        title: 'Add a new pet to the store',
-        description: 'Add a new pet to the store',
-        request: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'AddPetReqData',
-            ref: '#/components/schemas/Pet',
-            target: 'Pet',
-            origin: 'Pet',
-            props: [],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'AddPetResData',
-            ref: '#/components/schemas/Pet',
-            target: 'Pet',
-            origin: 'Pet',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'updatePet',
-        method: 'put',
-        url: '/pet',
-        title: 'Update an existing pet',
-        description: 'Update an existing pet by Id',
-        request: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'UpdatePetReqData',
-            ref: '#/components/schemas/Pet',
-            target: 'Pet',
-            origin: 'Pet',
-            props: [],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'UpdatePetResData',
-            ref: '#/components/schemas/Pet',
-            target: 'Pet',
-            origin: 'Pet',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'deletePet',
-        method: 'delete',
-        url: '/pet/{petId}',
-        title: 'Deletes a pet',
-        description: '',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'DeletePetReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'petId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-          query: {
-            kind: 'origin',
-            name: 'DeletePetReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'api_key',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'getPetById',
-        method: 'get',
-        url: '/pet/{petId}',
-        title: 'Find pet by ID',
-        description: 'Returns a single pet',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'GetPetByIdReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'petId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'GetPetByIdResData',
-            ref: '#/components/schemas/Pet',
-            target: 'Pet',
-            origin: 'Pet',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'updatePetWithForm',
-        method: 'post',
-        url: '/pet/{petId}',
-        title: 'Updates a pet in the store with form data',
-        description: '',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'UpdatePetWithFormReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'petId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-          query: {
-            kind: 'origin',
-            name: 'UpdatePetWithFormReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'name',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-              {
-                name: 'status',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'uploadFile',
-        method: 'post',
-        url: '/pet/{petId}/uploadImage',
-        title: 'uploads an image',
-        description: '',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'UploadFileReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'petId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-          query: {
-            kind: 'origin',
-            name: 'UploadFileReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'additionalMetadata',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'UploadFileResData',
-            ref: '#/components/schemas/ApiResponse',
-            target: 'ApiResponse',
-            origin: 'ApiResponse',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'findPetsByStatus',
-        method: 'get',
-        url: '/pet/findByStatus',
-        title: 'Finds Pets by status',
-        description: 'Multiple status values can be provided with comma separated strings',
-        request: {
-          query: {
-            kind: 'origin',
-            name: 'FindPetsByStatusReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                default: 'available',
-                enum: ['available', 'pending', 'sold'],
-                name: 'status',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            name: 'FindPetsByStatusResData',
-            required: false,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                kind: 'alias',
-                root: false,
-                name: 'FindPetsByStatusResData[]',
-                ref: '#/components/schemas/Pet',
-                target: 'Pet',
-                origin: 'Pet',
-                props: [],
-              },
-            ],
-          },
-        },
-      },
-      {
-        name: 'findPetsByTags',
-        method: 'get',
-        url: '/pet/findByTags',
-        title: 'Finds Pets by tags',
-        description: 'Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.',
-        request: {
-          query: {
-            kind: 'origin',
-            name: 'FindPetsByTagsReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'tags',
-                required: false,
-                kind: 'origin',
-                type: 'array',
-                children: [
-                  {
-                    name: 'tags[]',
-                    type: 'string',
-                    required: false,
-                    kind: 'origin',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            name: 'FindPetsByTagsResData',
-            required: false,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                kind: 'alias',
-                root: false,
-                name: 'FindPetsByTagsResData[]',
-                ref: '#/components/schemas/Pet',
-                target: 'Pet',
-                origin: 'Pet',
-                props: [],
-              },
-            ],
-          },
-        },
-      },
-      {
-        name: 'getInventory',
-        method: 'get',
-        url: '/store/inventory',
-        title: 'Returns pet inventories by status',
-        description: 'Returns a map of status codes to quantities',
-        request: {},
-        response: {
-          body: {
-            name: 'GetInventoryResData',
-            required: false,
-            kind: 'origin',
-            type: 'object',
-            children: [],
-          },
-        },
-      },
-      {
-        name: 'placeOrder',
-        method: 'post',
-        url: '/store/order',
-        title: 'Place an order for a pet',
-        description: 'Place a new order in the store',
-        request: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'PlaceOrderReqData',
-            ref: '#/components/schemas/Order',
-            target: 'Order',
-            origin: 'Order',
-            props: [],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'PlaceOrderResData',
-            ref: '#/components/schemas/Order',
-            target: 'Order',
-            origin: 'Order',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'deleteOrder',
-        method: 'delete',
-        url: '/store/order/{orderId}',
-        title: 'Delete purchase order by ID',
-        description:
-          'For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'DeleteOrderReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'orderId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'getOrderById',
-        method: 'get',
-        url: '/store/order/{orderId}',
-        title: 'Find purchase order by ID',
-        description:
-          'For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'GetOrderByIdReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                format: 'int64',
-                name: 'orderId',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'GetOrderByIdResData',
-            ref: '#/components/schemas/Order',
-            target: 'Order',
-            origin: 'Order',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'createUser',
-        method: 'post',
-        url: '/user',
-        title: 'Create user',
-        description: 'This can only be done by the logged in user.',
-        request: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'CreateUserReqData',
-            ref: '#/components/schemas/User',
-            target: 'User',
-            origin: 'User',
-            props: [],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'deleteUser',
-        method: 'delete',
-        url: '/user/{username}',
-        title: 'Delete user',
-        description: 'This can only be done by the logged in user.',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'DeleteUserReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'username',
-                type: 'string',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'getUserByName',
-        method: 'get',
-        url: '/user/{username}',
-        title: 'Get user by user name',
-        description: '',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'GetUserByNameReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'username',
-                type: 'string',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'GetUserByNameResData',
-            ref: '#/components/schemas/User',
-            target: 'User',
-            origin: 'User',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'updateUser',
-        method: 'put',
-        url: '/user/{username}',
-        title: 'Update user',
-        description: 'This can only be done by the logged in user.',
-        request: {
-          path: {
-            kind: 'origin',
-            name: 'UpdateUserReqPath',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'username',
-                type: 'string',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'UpdateUserReqData',
-            ref: '#/components/schemas/User',
-            target: 'User',
-            origin: 'User',
-            props: [],
-          },
-        },
-        response: {},
-      },
-      {
-        name: 'createUsersWithListInput',
-        method: 'post',
-        url: '/user/createWithList',
-        title: 'Creates list of users with given input array',
-        description: 'Creates list of users with given input array',
-        request: {
-          body: {
-            name: 'CreateUsersWithListInputReqData',
-            required: false,
-            kind: 'origin',
-            type: 'array',
-            children: [
-              {
-                kind: 'alias',
-                root: false,
-                name: 'CreateUsersWithListInputReqData[]',
-                ref: '#/components/schemas/User',
-                target: 'User',
-                origin: 'User',
-                props: [],
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            kind: 'alias',
-            root: false,
-            name: 'CreateUsersWithListInputResData',
-            ref: '#/components/schemas/User',
-            target: 'User',
-            origin: 'User',
-            props: [],
-          },
-        },
-      },
-      {
-        name: 'loginUser',
-        method: 'get',
-        url: '/user/login',
-        title: 'Logs user into the system',
-        description: '',
-        request: {
-          query: {
-            kind: 'origin',
-            name: 'LoginUserReqParams',
-            type: 'object',
-            required: true,
-            children: [
-              {
-                name: 'username',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-              {
-                name: 'password',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
-          },
-        },
-        response: {
-          body: {
-            name: 'LoginUserResData',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-        },
-      },
-      {
-        name: 'logoutUser',
-        method: 'get',
-        url: '/user/logout',
-        title: 'Logs out current logged in user session',
-        description: '',
-        request: {},
-        response: {},
-      },
-    ],
-  });
+  const writer = new DocumentWriter(petStore3 as TypeDocument);
   const text = writer.write();
-  // console.log(text);
+  writeFile('petStore3.types.txt', text);
   expect(text).toMatchInlineSnapshot(`
     "import type { OneOf } from 'openapi-axios/helpers';
     import type { AxiosPromise, AxiosRequestConfig } from 'axios';
@@ -987,13 +19,13 @@ test('DocumentWriter', () => {
       PATCH,
       POST,
       PUT,
-      resolveBaseURL,
+      resolveURL,
     } from 'openapi-axios/helpers';
     import { Axios } from 'axios';
     const axios = new Axios();
 
     const request = axios.request;
-    const BASE_URL = '/api/v3/';
+    const BASE_URL = '/api/v3';
 
     export type Address = {
       /**
@@ -1148,7 +180,6 @@ test('DocumentWriter', () => {
      * @description Add a new pet to the store
      */
     export async function addPet(
-      data: AddPetReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<AddPetResData> {
       return request({
@@ -1166,7 +197,6 @@ test('DocumentWriter', () => {
      * @description Update an existing pet by Id
      */
     export async function updatePet(
-      data: UpdatePetReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<UpdatePetResData> {
       return request({
@@ -1179,30 +209,29 @@ test('DocumentWriter', () => {
 
     export type DeletePetReqPath = {
       /**
+       * @description Pet id to delete
        * @format int64
        */
       petId: number;
     };
-    export type DeletePetReqParams = { api_key: string };
     /**
      * @title Deletes a pet
      * @description
      */
     export async function deletePet(
       path: DeletePetReqPath,
-      params: DeletePetReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
         url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
         method: DELETE,
-        params,
         ...config,
       });
     }
 
     export type GetPetByIdReqPath = {
       /**
+       * @description ID of pet to return
        * @format int64
        */
       petId: number;
@@ -1225,18 +254,28 @@ test('DocumentWriter', () => {
 
     export type UpdatePetWithFormReqPath = {
       /**
+       * @description ID of pet that needs to be updated
        * @format int64
        */
       petId: number;
     };
-    export type UpdatePetWithFormReqParams = { name: string; status: string };
+    export type UpdatePetWithFormReqParams = {
+      /**
+       * @description Name of pet that needs to be updated
+       */
+      name?: string;
+      /**
+       * @description Status of pet that needs to be updated
+       */
+      status?: string;
+    };
     /**
      * @title Updates a pet in the store with form data
      * @description
      */
     export async function updatePetWithForm(
       path: UpdatePetWithFormReqPath,
-      params: UpdatePetWithFormReqParams,
+      params?: UpdatePetWithFormReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
@@ -1249,11 +288,17 @@ test('DocumentWriter', () => {
 
     export type UploadFileReqPath = {
       /**
+       * @description ID of pet to update
        * @format int64
        */
       petId: number;
     };
-    export type UploadFileReqParams = { additionalMetadata: string };
+    export type UploadFileReqParams = {
+      /**
+       * @description Additional Metadata
+       */
+      additionalMetadata?: string;
+    };
     export type UploadFileResData = ApiResponse;
     /**
      * @title uploads an image
@@ -1261,7 +306,7 @@ test('DocumentWriter', () => {
      */
     export async function uploadFile(
       path: UploadFileReqPath,
-      params: UploadFileReqParams,
+      params?: UploadFileReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<UploadFileResData> {
       return request({
@@ -1274,9 +319,10 @@ test('DocumentWriter', () => {
 
     export type FindPetsByStatusReqParams = {
       /**
+       * @description Status values that need to be considered for filter
        * @default available
        */
-      status: 'available' | 'pending' | 'sold';
+      status?: 'available' | 'pending' | 'sold';
     };
     export type FindPetsByStatusResData = Array<Pet>;
     /**
@@ -1284,7 +330,7 @@ test('DocumentWriter', () => {
      * @description Multiple status values can be provided with comma separated strings
      */
     export async function findPetsByStatus(
-      params: FindPetsByStatusReqParams,
+      params?: FindPetsByStatusReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<FindPetsByStatusResData> {
       return request({
@@ -1295,14 +341,19 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type FindPetsByTagsReqParams = { tags: Array<string> };
+    export type FindPetsByTagsReqParams = {
+      /**
+       * @description Tags to filter by
+       */
+      tags?: Array<string>;
+    };
     export type FindPetsByTagsResData = Array<Pet>;
     /**
      * @title Finds Pets by tags
      * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      */
     export async function findPetsByTags(
-      params: FindPetsByTagsReqParams,
+      params?: FindPetsByTagsReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<FindPetsByTagsResData> {
       return request({
@@ -1335,7 +386,6 @@ test('DocumentWriter', () => {
      * @description Place a new order in the store
      */
     export async function placeOrder(
-      data: PlaceOrderReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<PlaceOrderResData> {
       return request({
@@ -1348,6 +398,7 @@ test('DocumentWriter', () => {
 
     export type DeleteOrderReqPath = {
       /**
+       * @description ID of the order that needs to be deleted
        * @format int64
        */
       orderId: number;
@@ -1369,6 +420,7 @@ test('DocumentWriter', () => {
 
     export type GetOrderByIdReqPath = {
       /**
+       * @description ID of order that needs to be fetched
        * @format int64
        */
       orderId: number;
@@ -1395,7 +447,6 @@ test('DocumentWriter', () => {
      * @description This can only be done by the logged in user.
      */
     export async function createUser(
-      data: CreateUserReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
@@ -1406,7 +457,12 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type DeleteUserReqPath = { username: string };
+    export type DeleteUserReqPath = {
+      /**
+       * @description The name that needs to be deleted
+       */
+      username: string;
+    };
     /**
      * @title Delete user
      * @description This can only be done by the logged in user.
@@ -1422,7 +478,12 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type GetUserByNameReqPath = { username: string };
+    export type GetUserByNameReqPath = {
+      /**
+       * @description The name that needs to be fetched. Use user1 for testing.
+       */
+      username: string;
+    };
     export type GetUserByNameResData = User;
     /**
      * @title Get user by user name
@@ -1439,7 +500,12 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type UpdateUserReqPath = { username: string };
+    export type UpdateUserReqPath = {
+      /**
+       * @description name that need to be deleted
+       */
+      username: string;
+    };
     export type UpdateUserReqData = User;
     /**
      * @title Update user
@@ -1447,7 +513,6 @@ test('DocumentWriter', () => {
      */
     export async function updateUser(
       path: UpdateUserReqPath,
-      data: UpdateUserReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
@@ -1465,7 +530,7 @@ test('DocumentWriter', () => {
      * @description Creates list of users with given input array
      */
     export async function createUsersWithListInput(
-      data: CreateUsersWithListInputReqData,
+      data?: CreateUsersWithListInputReqData,
       config?: AxiosRequestConfig
     ): AxiosPromise<CreateUsersWithListInputResData> {
       return request({
@@ -1476,14 +541,23 @@ test('DocumentWriter', () => {
       });
     }
 
-    export type LoginUserReqParams = { username: string; password: string };
+    export type LoginUserReqParams = {
+      /**
+       * @description The user name for login
+       */
+      username?: string;
+      /**
+       * @description The password for login in clear text
+       */
+      password?: string;
+    };
     export type LoginUserResData = string;
     /**
      * @title Logs user into the system
      * @description
      */
     export async function loginUser(
-      params: LoginUserReqParams,
+      params?: LoginUserReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<LoginUserResData> {
       return request({

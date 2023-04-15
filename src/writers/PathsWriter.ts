@@ -1,7 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
-import { TypeItem, TypeList, TypeOperation, TypeOperations } from '../readers/types';
+import { groupBy } from 'lodash';
+import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from '../readers/types';
 import { joinSlices, nextUniqueName, varString } from '../utils/string';
-import { isString } from '../utils/type-is';
+import { isBoolean, isString } from '../utils/type-is';
 import { ComponentsWriter } from './ComponentsWriter';
 
 const { stringify } = JSON;
@@ -19,11 +20,11 @@ export class PathsWriter extends ComponentsWriter {
   }
 
   writePaths() {
-    return this.format(this.document.paths.map(this.writeOperation.bind(this)).join('\n\n'));
+    return this.format(joinSlices(this.document.paths.map(this.writeOperation.bind(this)), '\n\n'));
   }
 
   protected writeOperation(type: TypeOperation) {
-    return [this.writeOperationTypes(type), this.writeOperationAxios(type)].join('\n');
+    return joinSlices([this.writeOperationTypes(type), this.writeOperationAxios(type)]);
   }
 
   protected writeOperationTypes(type: TypeOperation) {
@@ -32,7 +33,7 @@ export class PathsWriter extends ComponentsWriter {
       response: { body: resBody },
     } = type;
 
-    return ([path, query, reqBody, resBody].filter(Boolean) as TypeList).map(this.writeRootType.bind(this)).join('\n');
+    return joinSlices(([path, query, reqBody, resBody].filter(Boolean) as TypeList).map(this.writeRootType.bind(this)));
   }
 
   protected writeOperationAxios(type: TypeOperation) {
@@ -48,14 +49,22 @@ export class PathsWriter extends ComponentsWriter {
     const requestBodyArgName = nextUniqueName(this.options.requestBodyArgName, argNameCountMap);
     const configArgName = nextUniqueName('config', argNameCountMap);
     const comments = this.writeComments(type, true);
-    const args_ = joinSlices(
+    const argsGroup = groupBy(
       [
-        //
         this.writeArg(requestPathArgName, path),
         this.writeArg(requestQueryArgName, query),
         this.writeArg(requestBodyArgName, reqBody),
-        this.writeArg(configArgName, 'AxiosRequestConfig', true),
+        this.writeArg(configArgName, 'AxiosRequestConfig', false),
       ],
+      (item) => item?.required
+    );
+    const args_ = joinSlices(
+      [
+        // 可能没有任何必填参数
+        ...(argsGroup['true'] || []),
+        // 至少有一个 config 可选参数
+        ...argsGroup['false'],
+      ].map((desc) => desc?.text),
       ', '
     );
     const return_ = `${responseTypeName}<${resBody?.name || 'never'}>`;
@@ -84,12 +93,17 @@ export class PathsWriter extends ComponentsWriter {
     return prop === value ? `${prop},` : `${prop}: ${value},`;
   }
 
-  protected writeArg(name: string, type?: TypeItem | string, optional?: boolean) {
+  protected writeArg(name: string, type?: TypeItem | string, required?: boolean) {
     if (!type) return;
 
     const typeName = isString(type) ? type : type.name;
-    const equal = optional ? '?:' : ':';
-    return `${name}${equal}${typeName}`;
+    required = isString(type) ? required : (type as TypeOrigin).required;
+    const equal = required ? ':' : '?:';
+
+    return {
+      required,
+      text: `${name}${equal}${typeName}`,
+    };
   }
 
   protected toURL(type: TypeOperation, requestPathArgName: string) {

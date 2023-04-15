@@ -14,7 +14,7 @@ export class CommentsWriter extends BaseWriter {
         if (isUndefined(val)) return '';
 
         const [firstLine, ...restLines] = String(val).split('\n');
-        return [`@${key} ${firstLine}`, ...restLines].map((line) => ` * ${line}`).join('\n');
+        return joinSlices([`@${key} ${firstLine}`, ...restLines].map((line) => ` * ${line}`));
       }),
     ]);
 
