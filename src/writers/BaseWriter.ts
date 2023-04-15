@@ -1,10 +1,9 @@
-import { TypeAlias, TypeItem } from '../readers/types';
+import { TypeAlias, TypeDocument, TypeItem } from '../readers/types';
 import { StrictWriterOptions, WriterOptions } from './types';
 import prettier from 'prettier';
 
 export class BaseWriter {
   static defaults: WriterOptions = {
-    document: { components: [], paths: [] },
     prettier: {
       singleQuote: true,
     },
@@ -15,7 +14,7 @@ export class BaseWriter {
   };
 
   options: StrictWriterOptions;
-  constructor(options: WriterOptions) {
+  constructor(readonly document: TypeDocument, options?: WriterOptions) {
     this.options = Object.assign({}, BaseWriter.defaults, options) as StrictWriterOptions;
   }
 
