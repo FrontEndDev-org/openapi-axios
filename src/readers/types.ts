@@ -41,9 +41,14 @@ export interface ReaderOptions {
 
   /**
    * ok 的媒体类型
-   * @default "application/json"
+   * @default ["application/json"]
    */
   okMediaType?: string;
+
+  requestPathTypeName?: string;
+  requestQueryTypeName?: string;
+  requestBodyTypeName?: string;
+  responseBodyTypeName?: string;
 }
 
 export type StrictReaderOptions = Required<ReaderOptions>;
@@ -53,8 +58,8 @@ export interface TypeOperation extends TypeComments {
   url: string;
   name: string;
   request: {
-    path?: TypeOrigin;
-    query?: TypeOrigin;
+    path?: TypeItem;
+    query?: TypeItem;
     body?: TypeItem;
   };
   response: {

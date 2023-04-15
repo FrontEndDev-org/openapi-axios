@@ -8,6 +8,10 @@ export class BaseReader {
   static defaults: ReaderOptions = {
     okCode: 200,
     okMediaType: 'application/json',
+    requestPathTypeName: 'ReqPath',
+    requestQueryTypeName: 'ReqParams',
+    requestBodyTypeName: 'ReqData',
+    responseBodyTypeName: 'ResData',
   };
 
   options: StrictReaderOptions;
