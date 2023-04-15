@@ -1,4 +1,13 @@
-import { buildName, findOrigin, joinSlices, RefInfo, refToType, toTypePath, varString } from '../../src/utils/string';
+import {
+  buildName,
+  findOrigin,
+  joinSlices,
+  nextUniqueName,
+  RefInfo,
+  refToType,
+  toTypePath,
+  varString,
+} from '../../src/utils/string';
 
 test('buildName', () => {
   expect(buildName('!')).toEqual('unnamed');
@@ -59,4 +68,12 @@ test('toTypePath', () => {
 test('joinSlices', () => {
   expect(joinSlices(['', undefined, ''])).toEqual('');
   expect(joinSlices(['1', undefined, '2', ''])).toEqual('1\n2');
+});
+
+test('nextUniqueName', () => {
+  const map = new Map<string, number>();
+  expect(nextUniqueName('abc', map)).toBe('abc');
+  expect(nextUniqueName('abc', map)).toBe('abc2');
+  expect(nextUniqueName('abc', map)).toBe('abc3');
+  expect(nextUniqueName('abc2', map)).toBe('abc4');
 });

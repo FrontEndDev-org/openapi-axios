@@ -49,3 +49,12 @@ export function toTypePath(props: string[]): string {
 export function joinSlices(slices: Array<string | undefined>, separator = '\n') {
   return slices.filter(Boolean).join(separator);
 }
+
+export function nextUniqueName(refName: string, nameCountMap: Map<string, number>) {
+  // abc123 -> abc
+  const baseName = refName.replace(/\d+$/, '');
+  const count = nameCountMap.get(baseName) || 0;
+  const nextCount = count + 1;
+  nameCountMap.set(baseName, nextCount);
+  return nextCount === 1 ? baseName : baseName + nextCount;
+}
