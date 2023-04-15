@@ -653,34 +653,10 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            example: 'Palo Alto',
-            name: 'city',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'CA',
-            name: 'state',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '437 Lytton',
-            name: 'street',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '94301',
-            name: 'zip',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { example: 'Palo Alto', name: 'city', type: 'string', required: false, kind: 'origin' },
+          { example: 'CA', name: 'state', type: 'string', required: false, kind: 'origin' },
+          { example: '437 Lytton', name: 'street', type: 'string', required: false, kind: 'origin' },
+          { example: '94301', name: 'zip', type: 'string', required: false, kind: 'origin' },
         ],
       },
       {
@@ -689,25 +665,9 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            format: 'int32',
-            name: 'code',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'message',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'type',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { format: 'int32', name: 'code', type: 'number', required: false, kind: 'origin' },
+          { name: 'message', type: 'string', required: false, kind: 'origin' },
+          { name: 'type', type: 'string', required: false, kind: 'origin' },
         ],
       },
       {
@@ -716,21 +676,8 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            example: 1,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'Dogs',
-            name: 'name',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { example: 1, format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { example: 'Dogs', name: 'name', type: 'string', required: false, kind: 'origin' },
         ],
       },
       {
@@ -756,21 +703,8 @@ test('DocumentReader', () => {
               },
             ],
           },
-          {
-            example: 100000,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'fehguy',
-            name: 'username',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { example: 100000, format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { example: 'fehguy', name: 'username', type: 'string', required: false, kind: 'origin' },
         ],
       },
       {
@@ -779,43 +713,11 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            name: 'complete',
-            type: 'boolean',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 198772,
-            format: 'int64',
-            name: 'petId',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 7,
-            format: 'int32',
-            name: 'quantity',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            format: 'date-time',
-            name: 'shipDate',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { name: 'complete', type: 'boolean', required: false, kind: 'origin' },
+          { example: 10, format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { example: 198772, format: 'int64', name: 'petId', type: 'number', required: false, kind: 'origin' },
+          { example: 7, format: 'int32', name: 'quantity', type: 'number', required: false, kind: 'origin' },
+          { format: 'date-time', name: 'shipDate', type: 'string', required: false, kind: 'origin' },
           {
             description: 'Order Status',
             example: 'approved',
@@ -842,34 +744,14 @@ test('DocumentReader', () => {
             origin: 'Category',
             props: [],
           },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'doggie',
-            name: 'name',
-            type: 'string',
-            required: true,
-            kind: 'origin',
-          },
+          { example: 10, format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { example: 'doggie', name: 'name', type: 'string', required: true, kind: 'origin' },
           {
             name: 'photoUrls',
             required: true,
             kind: 'origin',
             type: 'array',
-            children: [
-              {
-                name: 'photoUrls[]',
-                type: 'string',
-                required: false,
-                kind: 'origin',
-              },
-            ],
+            children: [{ name: 'photoUrls[]', type: 'string', required: false, kind: 'origin' }],
           },
           {
             description: 'pet status in the store',
@@ -904,19 +786,8 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            name: 'name',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { name: 'name', type: 'string', required: false, kind: 'origin' },
         ],
       },
       {
@@ -925,56 +796,13 @@ test('DocumentReader', () => {
         kind: 'origin',
         type: 'object',
         children: [
-          {
-            example: 'john@email.com',
-            name: 'email',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'John',
-            name: 'firstName',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 10,
-            format: 'int64',
-            name: 'id',
-            type: 'number',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'James',
-            name: 'lastName',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '12345',
-            name: 'password',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: '12345',
-            name: 'phone',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
-          {
-            example: 'theUser',
-            name: 'username',
-            type: 'string',
-            required: false,
-            kind: 'origin',
-          },
+          { example: 'john@email.com', name: 'email', type: 'string', required: false, kind: 'origin' },
+          { example: 'John', name: 'firstName', type: 'string', required: false, kind: 'origin' },
+          { example: 10, format: 'int64', name: 'id', type: 'number', required: false, kind: 'origin' },
+          { example: 'James', name: 'lastName', type: 'string', required: false, kind: 'origin' },
+          { example: '12345', name: 'password', type: 'string', required: false, kind: 'origin' },
+          { example: '12345', name: 'phone', type: 'string', required: false, kind: 'origin' },
+          { example: 'theUser', name: 'username', type: 'string', required: false, kind: 'origin' },
           {
             description: 'User Status',
             example: 1,
@@ -992,7 +820,7 @@ test('DocumentReader', () => {
         name: 'addPet',
         method: 'post',
         url: '/pet',
-        summary: 'Add a new pet to the store',
+        title: 'Add a new pet to the store',
         description: 'Add a new pet to the store',
         request: {
           body: {
@@ -1021,7 +849,7 @@ test('DocumentReader', () => {
         name: 'updatePet',
         method: 'put',
         url: '/pet',
-        summary: 'Update an existing pet',
+        title: 'Update an existing pet',
         description: 'Update an existing pet by Id',
         request: {
           body: {
@@ -1050,26 +878,23 @@ test('DocumentReader', () => {
         name: 'deletePet',
         method: 'delete',
         url: '/pet/{petId}',
-        summary: 'Deletes a pet',
+        title: 'Deletes a pet',
         description: '',
         request: {
-          query: [
-            {
-              name: 'api_key',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-          ],
-          path: [
-            {
-              format: 'int64',
-              name: 'petId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'DeletePetRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
+          },
+          query: {
+            kind: 'origin',
+            name: 'DeletePetRequestQuery',
+            type: 'object',
+            required: true,
+            children: [{ name: 'api_key', type: 'string', required: false, kind: 'origin' }],
+          },
         },
         response: {},
       },
@@ -1077,19 +902,16 @@ test('DocumentReader', () => {
         name: 'getPetById',
         method: 'get',
         url: '/pet/{petId}',
-        summary: 'Find pet by ID',
+        title: 'Find pet by ID',
         description: 'Returns a single pet',
         request: {
-          query: [],
-          path: [
-            {
-              format: 'int64',
-              name: 'petId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'GetPetByIdRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
+          },
         },
         response: {
           body: {
@@ -1107,32 +929,26 @@ test('DocumentReader', () => {
         name: 'updatePetWithForm',
         method: 'post',
         url: '/pet/{petId}',
-        summary: 'Updates a pet in the store with form data',
+        title: 'Updates a pet in the store with form data',
         description: '',
         request: {
-          query: [
-            {
-              name: 'name',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-            {
-              name: 'status',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-          ],
-          path: [
-            {
-              format: 'int64',
-              name: 'petId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'UpdatePetWithFormRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
+          },
+          query: {
+            kind: 'origin',
+            name: 'UpdatePetWithFormRequestQuery',
+            type: 'object',
+            required: true,
+            children: [
+              { name: 'name', type: 'string', required: false, kind: 'origin' },
+              { name: 'status', type: 'string', required: false, kind: 'origin' },
+            ],
+          },
         },
         response: {},
       },
@@ -1140,26 +956,23 @@ test('DocumentReader', () => {
         name: 'uploadFile',
         method: 'post',
         url: '/pet/{petId}/uploadImage',
-        summary: 'uploads an image',
+        title: 'uploads an image',
         description: '',
         request: {
-          query: [
-            {
-              name: 'additionalMetadata',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-          ],
-          path: [
-            {
-              format: 'int64',
-              name: 'petId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'UploadFileRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'petId', type: 'number', required: true, kind: 'origin' }],
+          },
+          query: {
+            kind: 'origin',
+            name: 'UploadFileRequestQuery',
+            type: 'object',
+            required: true,
+            children: [{ name: 'additionalMetadata', type: 'string', required: false, kind: 'origin' }],
+          },
         },
         response: {
           body: {
@@ -1177,20 +990,25 @@ test('DocumentReader', () => {
         name: 'findPetsByStatus',
         method: 'get',
         url: '/pet/findByStatus',
-        summary: 'Finds Pets by status',
+        title: 'Finds Pets by status',
         description: 'Multiple status values can be provided with comma separated strings',
         request: {
-          query: [
-            {
-              default: 'available',
-              enum: ['available', 'pending', 'sold'],
-              name: 'status',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-          ],
-          path: [],
+          query: {
+            kind: 'origin',
+            name: 'FindPetsByStatusRequestQuery',
+            type: 'object',
+            required: true,
+            children: [
+              {
+                default: 'available',
+                enum: ['available', 'pending', 'sold'],
+                name: 'status',
+                type: 'string',
+                required: false,
+                kind: 'origin',
+              },
+            ],
+          },
         },
         response: {
           body: {
@@ -1216,26 +1034,24 @@ test('DocumentReader', () => {
         name: 'findPetsByTags',
         method: 'get',
         url: '/pet/findByTags',
-        summary: 'Finds Pets by tags',
+        title: 'Finds Pets by tags',
         description: 'Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.',
         request: {
-          query: [
-            {
-              name: 'tags',
-              required: false,
-              kind: 'origin',
-              type: 'array',
-              children: [
-                {
-                  name: 'tags[]',
-                  type: 'string',
-                  required: false,
-                  kind: 'origin',
-                },
-              ],
-            },
-          ],
-          path: [],
+          query: {
+            kind: 'origin',
+            name: 'FindPetsByTagsRequestQuery',
+            type: 'object',
+            required: true,
+            children: [
+              {
+                name: 'tags',
+                required: false,
+                kind: 'origin',
+                type: 'array',
+                children: [{ name: 'tags[]', type: 'string', required: false, kind: 'origin' }],
+              },
+            ],
+          },
         },
         response: {
           body: {
@@ -1261,24 +1077,18 @@ test('DocumentReader', () => {
         name: 'getInventory',
         method: 'get',
         url: '/store/inventory',
-        summary: 'Returns pet inventories by status',
+        title: 'Returns pet inventories by status',
         description: 'Returns a map of status codes to quantities',
         request: {},
         response: {
-          body: {
-            name: 'GetInventoryResponseBody',
-            required: false,
-            kind: 'origin',
-            type: 'object',
-            children: [],
-          },
+          body: { name: 'GetInventoryResponseBody', required: false, kind: 'origin', type: 'object', children: [] },
         },
       },
       {
         name: 'placeOrder',
         method: 'post',
         url: '/store/order',
-        summary: 'Place an order for a pet',
+        title: 'Place an order for a pet',
         description: 'Place a new order in the store',
         request: {
           body: {
@@ -1307,20 +1117,17 @@ test('DocumentReader', () => {
         name: 'deleteOrder',
         method: 'delete',
         url: '/store/order/{orderId}',
-        summary: 'Delete purchase order by ID',
+        title: 'Delete purchase order by ID',
         description:
           'For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors',
         request: {
-          query: [],
-          path: [
-            {
-              format: 'int64',
-              name: 'orderId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'DeleteOrderRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'orderId', type: 'number', required: true, kind: 'origin' }],
+          },
         },
         response: {},
       },
@@ -1328,20 +1135,17 @@ test('DocumentReader', () => {
         name: 'getOrderById',
         method: 'get',
         url: '/store/order/{orderId}',
-        summary: 'Find purchase order by ID',
+        title: 'Find purchase order by ID',
         description:
           'For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.',
         request: {
-          query: [],
-          path: [
-            {
-              format: 'int64',
-              name: 'orderId',
-              type: 'number',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'GetOrderByIdRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ format: 'int64', name: 'orderId', type: 'number', required: true, kind: 'origin' }],
+          },
         },
         response: {
           body: {
@@ -1359,7 +1163,7 @@ test('DocumentReader', () => {
         name: 'createUser',
         method: 'post',
         url: '/user',
-        summary: 'Create user',
+        title: 'Create user',
         description: 'This can only be done by the logged in user.',
         request: {
           body: {
@@ -1378,18 +1182,16 @@ test('DocumentReader', () => {
         name: 'deleteUser',
         method: 'delete',
         url: '/user/{username}',
-        summary: 'Delete user',
+        title: 'Delete user',
         description: 'This can only be done by the logged in user.',
         request: {
-          query: [],
-          path: [
-            {
-              name: 'username',
-              type: 'string',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'DeleteUserRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
+          },
         },
         response: {},
       },
@@ -1397,18 +1199,16 @@ test('DocumentReader', () => {
         name: 'getUserByName',
         method: 'get',
         url: '/user/{username}',
-        summary: 'Get user by user name',
+        title: 'Get user by user name',
         description: '',
         request: {
-          query: [],
-          path: [
-            {
-              name: 'username',
-              type: 'string',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'GetUserByNameRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
+          },
         },
         response: {
           body: {
@@ -1426,18 +1226,16 @@ test('DocumentReader', () => {
         name: 'updateUser',
         method: 'put',
         url: '/user/{username}',
-        summary: 'Update user',
+        title: 'Update user',
         description: 'This can only be done by the logged in user.',
         request: {
-          query: [],
-          path: [
-            {
-              name: 'username',
-              type: 'string',
-              required: true,
-              kind: 'origin',
-            },
-          ],
+          path: {
+            kind: 'origin',
+            name: 'UpdateUserRequestPath',
+            type: 'object',
+            required: true,
+            children: [{ name: 'username', type: 'string', required: true, kind: 'origin' }],
+          },
           body: {
             kind: 'alias',
             root: false,
@@ -1454,7 +1252,7 @@ test('DocumentReader', () => {
         name: 'createUsersWithListInput',
         method: 'post',
         url: '/user/createWithList',
-        summary: 'Creates list of users with given input array',
+        title: 'Creates list of users with given input array',
         description: 'Creates list of users with given input array',
         request: {
           body: {
@@ -1491,44 +1289,29 @@ test('DocumentReader', () => {
         name: 'loginUser',
         method: 'get',
         url: '/user/login',
-        summary: 'Logs user into the system',
+        title: 'Logs user into the system',
         description: '',
         request: {
-          query: [
-            {
-              name: 'username',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-            {
-              name: 'password',
-              type: 'string',
-              required: false,
-              kind: 'origin',
-            },
-          ],
-          path: [],
-        },
-        response: {
-          body: {
-            name: 'LoginUserResponseBody',
-            type: 'string',
-            required: false,
+          query: {
             kind: 'origin',
+            name: 'LoginUserRequestQuery',
+            type: 'object',
+            required: true,
+            children: [
+              { name: 'username', type: 'string', required: false, kind: 'origin' },
+              { name: 'password', type: 'string', required: false, kind: 'origin' },
+            ],
           },
         },
+        response: { body: { name: 'LoginUserResponseBody', type: 'string', required: false, kind: 'origin' } },
       },
       {
         name: 'logoutUser',
         method: 'get',
         url: '/user/logout',
-        summary: 'Logs out current logged in user session',
+        title: 'Logs out current logged in user session',
         description: '',
-        request: {
-          query: [],
-          path: [],
-        },
+        request: {},
         response: {},
       },
     ],

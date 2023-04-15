@@ -48,16 +48,13 @@ export interface ReaderOptions {
 
 export type StrictReaderOptions = Required<ReaderOptions>;
 
-export interface TypeOperation {
+export interface TypeOperation extends TypeComments {
   method: string;
   url: string;
   name: string;
-  summary?: string;
-  description?: string;
-  deprecated?: boolean;
   request: {
-    query?: TypeList;
-    path?: TypeList;
+    path?: TypeOrigin;
+    query?: TypeOrigin;
     body?: TypeItem;
   };
   response: {
@@ -66,11 +63,6 @@ export interface TypeOperation {
 }
 
 export type TypeOperations = TypeOperation[];
-
-export interface TypeQueryPath {
-  query: TypeList;
-  path: TypeList;
-}
 
 export interface TypeDocument {
   components: TypeList;

@@ -1,7 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { ComponentsReader } from './ComponentsReader';
 import { methods } from './const';
-import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeQueryPath } from './types';
+import { TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
 
 export class PathsReader extends ComponentsReader {
   parsingUrl = '';
@@ -41,26 +41,24 @@ export class PathsReader extends ComponentsReader {
 
   parseOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
     const { parameters, requestBody: requestBodySchema } = operation;
-    const { query, path } = parameters
-      ? this.parseOperationParameters(parameters)
-      : { query: undefined, path: undefined };
+    const { pathTypes, queryTypes } = this.parseOperationParameters(parameters);
     const name = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
+    const requestPathTypeName = this.named.nextTypeName(name + 'RequestPath', '');
+    const requestQueryTypeName = this.named.nextTypeName(name + 'RequestQuery', '');
     const requestBodyTypeName = this.named.nextTypeName(name + 'RequestBody', '');
     const responseBodyTypeName = this.named.nextTypeName(name + 'ResponseBody', '');
-    const requestBody = requestBodySchema
-      ? this.parseOperationRequest(requestBodyTypeName, requestBodySchema)
-      : undefined;
+    const requestBody = this.parseOperationRequest(requestBodyTypeName, requestBodySchema);
 
     return {
       name,
       method: this.parsingMethod,
       url: this.parsingUrl,
-      summary: operation.summary,
+      title: operation.summary,
       description: operation.description,
       deprecated: operation.deprecated,
       request: {
-        query,
-        path,
+        path: this.wrapParameters(requestPathTypeName, pathTypes),
+        query: this.wrapParameters(requestQueryTypeName, queryTypes),
         body: requestBody,
       },
       response: {
@@ -69,9 +67,22 @@ export class PathsReader extends ComponentsReader {
     };
   }
 
-  protected parseOperationParameters(parameters: NonNullable<OpenAPIV3.OperationObject['parameters']>): TypeQueryPath {
-    const query: TypeList = [];
-    const path: TypeList = [];
+  protected wrapParameters(name: string, types?: TypeList): TypeOrigin | undefined {
+    if (!types) return;
+    if (types.length === 0) return;
+
+    return {
+      kind: 'origin',
+      name,
+      type: 'object',
+      required: true,
+      children: types,
+    };
+  }
+
+  protected parseOperationParameters(parameters: OpenAPIV3.OperationObject['parameters'] = []) {
+    const pathTypes: TypeList = [];
+    const queryTypes: TypeList = [];
 
     parameters.forEach((parameter) => {
       const t = this.parseOperationParameter(parameter);
@@ -79,13 +90,13 @@ export class PathsReader extends ComponentsReader {
       if (!t) return;
 
       if ('in' in parameter && parameter.in === 'path') {
-        path.push(t);
+        pathTypes.push(t);
       } else {
-        query.push(t);
+        queryTypes.push(t);
       }
     });
 
-    return { query, path };
+    return { pathTypes, queryTypes };
   }
 
   protected parseOperationParameter(parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject) {
@@ -97,7 +108,8 @@ export class PathsReader extends ComponentsReader {
     return this.isReference(schema) ? this.parseReference(name, schema) : this.parseSchema(name, required, schema);
   }
 
-  parseOperationRequest(name: string, body: NonNullable<OpenAPIV3.OperationObject['requestBody']>) {
+  parseOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']) {
+    if (!body) return;
     if (this.isReference(body)) return;
 
     const { content } = body;

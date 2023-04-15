@@ -1,7 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { ComponentsReader } from '../../src/readers/ComponentsReader';
 import { PathsReader } from '../../src/readers/PathsReader';
-import { TypeAlias, TypeList, TypeOperations } from '../../src/readers/types';
+import { TypeOperations } from '../../src/readers/types';
 import HttpMethods = OpenAPIV3.HttpMethods;
 
 test('empty paths keys', () => {
@@ -307,25 +306,37 @@ test('req query + path', () => {
       method: HttpMethods.GET,
       url: '/pet/{name}',
       request: {
-        path: [
-          {
-            kind: 'alias',
-            root: false,
-            name: 'name',
-            ref: '#/components/schemas/O/p',
-            target: 'O',
-            origin: 'O',
-            props: ['p'],
-          },
-        ],
-        query: [
-          {
-            kind: 'origin',
-            name: 'keywords',
-            type: 'string',
-            required: false,
-          },
-        ],
+        path: {
+          kind: 'origin',
+          name: 'FindPetRequestPath',
+          type: 'object',
+          required: true,
+          children: [
+            {
+              kind: 'alias',
+              root: false,
+              name: 'name',
+              ref: '#/components/schemas/O/p',
+              target: 'O',
+              origin: 'O',
+              props: ['p'],
+            },
+          ],
+        },
+        query: {
+          kind: 'origin',
+          name: 'FindPetRequestQuery',
+          type: 'object',
+          required: true,
+          children: [
+            {
+              kind: 'origin',
+              name: 'keywords',
+              type: 'string',
+              required: false,
+            },
+          ],
+        },
       },
       response: {},
     },
