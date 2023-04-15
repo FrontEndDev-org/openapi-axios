@@ -1,4 +1,4 @@
-import { buildName, findOrigin, RefInfo, refToType, toTypePath, varString } from '../../src/utils/string';
+import { buildName, findOrigin, joinSlices, RefInfo, refToType, toTypePath, varString } from '../../src/utils/string';
 
 test('buildName', () => {
   expect(buildName('!')).toEqual('unnamed');
@@ -54,4 +54,9 @@ test('toTypePath', () => {
   expect(toTypePath([])).toEqual('');
   expect(toTypePath(['a'])).toEqual('["a"]');
   expect(toTypePath(['a', 'b'])).toEqual('["a"]["b"]');
+});
+
+test('joinSlices', () => {
+  expect(joinSlices(['', undefined, ''])).toEqual('');
+  expect(joinSlices(['1', undefined, '2', ''])).toEqual('1\n2');
 });

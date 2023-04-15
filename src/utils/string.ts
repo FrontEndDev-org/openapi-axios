@@ -45,3 +45,7 @@ export function toTypePath(props: string[]): string {
   const path = props.map((p) => JSON.stringify(p)).join('][');
   return path ? '[' + path + ']' : '';
 }
+
+export function joinSlices(slices: Array<string | undefined>, separator = '\n') {
+  return slices.filter(Boolean).join(separator);
+}
