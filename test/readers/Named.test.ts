@@ -3,15 +3,15 @@ import { Named } from '../../src/readers/Named';
 test('named', () => {
   const named = new Named();
 
-  expect(named.nextTypeName('-')).toEqual('Unnamed');
-  expect(named.nextTypeName('!')).toEqual('Unnamed2');
+  expect(named.nextTypeName('-', true)).toEqual('Unnamed');
+  expect(named.nextTypeName('!', true)).toEqual('Unnamed2');
 
-  expect(named.nextTypeName('A')).toEqual('A');
-  expect(named.nextTypeName('A!')).toEqual('A2');
+  expect(named.nextTypeName('A', true)).toEqual('A');
+  expect(named.nextTypeName('A!', true)).toEqual('A2');
 
-  expect(named.nextTypeName('aa')).toEqual('Aa');
-  expect(named.nextTypeName('aa!')).toEqual('Aa2');
-  expect(named.nextTypeName('aa!!')).toEqual('Aa3');
+  expect(named.nextTypeName('aa', true)).toEqual('Aa');
+  expect(named.nextTypeName('aa!', true)).toEqual('Aa2');
+  expect(named.nextTypeName('aa!!', true)).toEqual('Aa3');
 
   expect(named.nextOperationId('get', '/path/to/foo')).toEqual('getFoo');
   expect(named.nextOperationId('get', '/path/to/foo')).toEqual('getFoo2');

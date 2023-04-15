@@ -32,7 +32,8 @@ export class Named {
   nameRefMap = new Map<string /*name*/, string /*ref*/>();
   refNameMap = new Map<string /*ref*/, string /*name*/>();
 
-  nextTypeName(name: string, ref = `#/components/schemas/${name}`) {
+  nextTypeName(name: string, refAble = false) {
+    const ref = refAble ? `#/components/schemas/${name}` : '';
     const typeName = buildName(name, true);
     const count = this.nameCountMap.get(typeName) || 0;
     const nextCount = count + 1;
