@@ -107,8 +107,7 @@ export class PathsWriter extends ComponentsWriter {
   }
 
   protected toURL(type: TypeOperation, requestPathArgName: string) {
-    const leading = `${requestPathArgName}.`;
-    const url = stringify(varString(type.url, leading)).replace(/"/g, '`');
+    const url = stringify(varString(type.url, requestPathArgName)).replace(/"/g, '`');
 
     if (!this.document.info.baseURL) return url;
 

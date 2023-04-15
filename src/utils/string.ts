@@ -1,3 +1,5 @@
+import { isVarName } from './type-is';
+
 export function buildName(origin: string, bigger = false) {
   const name =
     origin
@@ -38,7 +40,10 @@ export function findOrigin(source: string, relation: Map<string, string>) {
 }
 
 export function varString(string: string, leading = ''): string {
-  return string.replace(/\{([^}]+)\}/g, ($0, $1: string) => `$\{${leading + $1}}`);
+  return string.replace(/\{([^}]+)\}/g, ($0, $1: string) => {
+    const key = leading ? (isVarName($1) ? `${leading}.${$1}` : `${leading}[${JSON.stringify($1)}]`) : $1;
+    return `$\{${key}}`;
+  });
 }
 
 export function toTypePath(props: string[]): string {

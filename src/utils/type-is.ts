@@ -25,3 +25,7 @@ export function isDate(any: unknown): any is Date {
 export function isUrl(any: string): boolean {
   return /^https:\/\//i.test(any);
 }
+
+export function isVarName(varName: string) {
+  return /^[a-z_$]\w*$/i.test(varName);
+}
