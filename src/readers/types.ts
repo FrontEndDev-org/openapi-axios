@@ -72,8 +72,12 @@ export interface TypeOperation extends TypeComments {
 export type TypeOperations = TypeOperation[];
 
 export interface TypeDocument {
-  info: OpenAPIV3.InfoObject;
-  servers?: OpenAPIV3.ServerObject[];
+  info: {
+    title: string;
+    description?: string;
+    version: string;
+    baseURL: string;
+  };
   components: TypeList;
   paths: TypeOperations;
 }
