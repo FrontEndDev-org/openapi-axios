@@ -3,6 +3,9 @@ import { Named } from '../../src/readers/Named';
 test('named', () => {
   const named = new Named();
 
+  named.internalName('Internal');
+  expect(named.nextTypeName('Internal', true)).toEqual('Internal2');
+
   expect(named.nextTypeName('-', true)).toEqual('Unnamed');
   expect(named.nextTypeName('!', true)).toEqual('Unnamed2');
 

@@ -1,3 +1,5 @@
+import { OpenAPIV3 } from 'openapi-types';
+
 export type TypeKind = 'origin' | 'alias';
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array';
 
@@ -70,6 +72,8 @@ export interface TypeOperation extends TypeComments {
 export type TypeOperations = TypeOperation[];
 
 export interface TypeDocument {
+  info: OpenAPIV3.InfoObject;
+  servers?: OpenAPIV3.ServerObject[];
   components: TypeList;
   paths: TypeOperations;
 }

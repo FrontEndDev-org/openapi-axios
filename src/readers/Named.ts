@@ -32,6 +32,14 @@ export class Named {
   nameRefMap = new Map<string /*name*/, string /*ref*/>();
   refNameMap = new Map<string /*ref*/, string /*name*/>();
 
+  /**
+   * 注册内部名称
+   * @param {string} name
+   */
+  internalName(name: string) {
+    this.nameCountMap.set(name, 1);
+  }
+
   nextTypeName(name: string, refAble = false) {
     const ref = refAble ? `#/components/schemas/${name}` : '';
     const refTypeName = buildName(name, true);
@@ -49,14 +57,8 @@ export class Named {
     return this.refNameMap.get(ref) || '';
   }
 
-  operationIdCountMap = new Map<string /*operationId*/, number /*count*/>();
-
   nextOperationId(method: string, url: string, operationId?: string) {
     operationId = operationId || buildName([method, url.split('/').pop()!].join('_'));
-    const count = this.operationIdCountMap.get(operationId) || 0;
-    const nextCount = count + 1;
-
-    this.operationIdCountMap.set(operationId, nextCount);
-    return nextCount === 1 ? operationId : operationId + nextCount;
+    return nextUniqueName(operationId, this.nameCountMap);
   }
 }
