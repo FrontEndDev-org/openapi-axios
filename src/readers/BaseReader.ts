@@ -16,7 +16,7 @@ export class BaseReader {
 
   options: StrictReaderOptions;
 
-  constructor(protected readonly document: OpenAPIV3.Document, options?: ReaderOptions) {
+  constructor(readonly document: OpenAPIV3.Document, options?: ReaderOptions) {
     this.options = Object.assign({}, BaseReader.defaults, options) as StrictReaderOptions;
   }
 
