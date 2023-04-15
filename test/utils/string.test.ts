@@ -47,6 +47,7 @@ test('varString', () => {
   expect(varString('/a/b')).toEqual('/a/b');
   expect(varString('/a/b/{cc}')).toEqual('/a/b/${cc}');
   expect(varString('/a/b/{cc}/dd/{ee}')).toEqual('/a/b/${cc}/dd/${ee}');
+  expect(varString('/a/b/{cc}/dd/{ee}', 'path.')).toEqual('/a/b/${path.cc}/dd/${path.ee}');
 });
 
 test('toTypePath', () => {
