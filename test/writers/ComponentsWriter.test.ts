@@ -2,10 +2,8 @@ import { ComponentsWriter } from '../../src/writers/ComponentsWriter';
 
 test('empty components', () => {
   const writer = new ComponentsWriter({
-    document: {
-      components: [],
-      paths: [],
-    },
+    components: [],
+    paths: [],
   });
   const text = writer.writeComponents();
   expect(text).toEqual('');
@@ -13,31 +11,29 @@ test('empty components', () => {
 
 test('alias', () => {
   const writer = new ComponentsWriter({
-    document: {
-      components: [
-        {
-          kind: 'alias',
-          name: 'O',
-          target: 'P',
-          origin: 'Q',
-          props: [],
-          ref: '',
-          root: true,
-          description: 'd1',
-        },
-        {
-          kind: 'alias',
-          name: 'O',
-          target: 'P',
-          origin: 'Q',
-          props: ['q1', 'q2'],
-          ref: '',
-          root: true,
-          description: 'd2',
-        },
-      ],
-      paths: [],
-    },
+    components: [
+      {
+        kind: 'alias',
+        name: 'O',
+        target: 'P',
+        origin: 'Q',
+        props: [],
+        ref: '',
+        root: true,
+        description: 'd1',
+      },
+      {
+        kind: 'alias',
+        name: 'O',
+        target: 'P',
+        origin: 'Q',
+        props: ['q1', 'q2'],
+        ref: '',
+        root: true,
+        description: 'd2',
+      },
+    ],
+    paths: [],
   });
   const text = writer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
@@ -56,37 +52,35 @@ test('alias', () => {
 
 test('origin primitive', () => {
   const writer = new ComponentsWriter({
-    document: {
-      components: [
-        {
-          kind: 'origin',
-          type: 'number',
-          name: 'N1',
-          required: true,
-          description: 'ddd1',
-        },
-        {
-          kind: 'origin',
-          type: 'string',
-          name: 'S1',
-          required: true,
-          description: 'ddd2',
-        },
-        {
-          kind: 'origin',
-          type: 'boolean',
-          name: 'B1',
-          required: true,
-        },
-        {
-          kind: 'origin',
-          type: 'never',
-          name: 'N2',
-          required: true,
-        },
-      ],
-      paths: [],
-    },
+    components: [
+      {
+        kind: 'origin',
+        type: 'number',
+        name: 'N1',
+        required: true,
+        description: 'ddd1',
+      },
+      {
+        kind: 'origin',
+        type: 'string',
+        name: 'S1',
+        required: true,
+        description: 'ddd2',
+      },
+      {
+        kind: 'origin',
+        type: 'boolean',
+        name: 'B1',
+        required: true,
+      },
+      {
+        kind: 'origin',
+        type: 'never',
+        name: 'N2',
+        required: true,
+      },
+    ],
+    paths: [],
   });
   const text = writer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
@@ -107,62 +101,84 @@ test('origin primitive', () => {
   `);
 });
 
+test('origin enum', () => {
+  const writer = new ComponentsWriter({
+    components: [
+      {
+        kind: 'origin',
+        type: 'string',
+        name: 'N1',
+        required: true,
+        description: 'ddd1',
+        enum: ['aaa', 'bbb', 'ccc'],
+      },
+    ],
+    paths: [],
+  });
+  const text = writer.writeComponents();
+  expect(text).toMatchInlineSnapshot(`
+    "/**
+     * @description ddd1
+     */
+    export type N1 = 'aaa' | 'bbb' | 'ccc';
+    "
+  `);
+});
+
 test('origin object', () => {
   const writer = new ComponentsWriter({
-    document: {
-      components: [
-        {
-          kind: 'origin',
-          type: 'object',
-          name: 'O1',
-          required: true,
-          description: 'ddd1',
-          children: [
-            {
-              kind: 'origin',
-              type: 'string',
-              name: 'sss',
-              required: true,
-              description: 'ddd2',
-            },
-            {
-              kind: 'alias',
-              name: 'ooo',
-              target: 'P',
-              origin: 'Q',
-              props: ['q1', 'q2'],
-              ref: '',
-              root: false,
-              description: 'ddd3',
-            },
-            {
-              kind: 'origin',
-              type: 'object',
-              name: 'ppp',
-              required: true,
-              children: [
-                {
-                  kind: 'origin',
-                  type: 'number',
-                  name: 'nnn',
-                  required: true,
-                },
-                {
-                  kind: 'alias',
-                  name: 'qqq',
-                  target: 'X',
-                  origin: 'X',
-                  props: [],
-                  ref: '',
-                  root: false,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      paths: [],
-    },
+    components: [
+      {
+        kind: 'origin',
+        type: 'object',
+        name: 'O1',
+        required: true,
+        description: 'ddd1',
+        children: [
+          {
+            kind: 'origin',
+            type: 'string',
+            name: 'sss',
+            required: true,
+            description: 'ddd2',
+          },
+          {
+            kind: 'alias',
+            name: 'ooo',
+            target: 'P',
+            origin: 'Q',
+            props: ['q1', 'q2'],
+            ref: '',
+            root: false,
+            description: 'ddd3',
+          },
+          {
+            kind: 'origin',
+            type: 'object',
+            name: 'ppp',
+            required: true,
+            children: [
+              {
+                kind: 'origin',
+                type: 'number',
+                name: 'nnn',
+                required: true,
+              },
+              {
+                kind: 'alias',
+                name: 'qqq',
+                target: 'X',
+                origin: 'X',
+                props: [],
+                ref: '',
+                root: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    paths: [],
   });
   const text = writer.writeComponents();
   expect(text).toMatchInlineSnapshot(`
@@ -186,69 +202,67 @@ test('origin object', () => {
 
 test('origin array', () => {
   const writer = new ComponentsWriter({
-    document: {
-      components: [
-        {
-          kind: 'origin',
-          type: 'array',
-          name: 'A',
-          required: true,
-          description: 'ddd1',
-          children: [
-            {
-              kind: 'origin',
-              type: 'object',
-              name: 'O1',
-              required: true,
-              description: 'ddd2',
-              children: [
-                {
-                  kind: 'origin',
-                  type: 'string',
-                  name: 'sss',
-                  required: true,
-                },
-                {
-                  kind: 'alias',
-                  name: 'ooo',
-                  target: 'P',
-                  origin: 'Q',
-                  props: ['q1', 'q2'],
-                  ref: '',
-                  root: false,
-                },
-                {
-                  kind: 'origin',
-                  type: 'object',
-                  name: 'ppp',
-                  required: true,
-                  description: 'ddd3',
-                  children: [
-                    {
-                      kind: 'origin',
-                      type: 'number',
-                      name: 'nnn',
-                      required: true,
-                      description: 'ddd4',
-                    },
-                    {
-                      kind: 'alias',
-                      name: 'qqq',
-                      target: 'X',
-                      origin: 'X',
-                      props: [],
-                      ref: '',
-                      root: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      paths: [],
-    },
+    components: [
+      {
+        kind: 'origin',
+        type: 'array',
+        name: 'A',
+        required: true,
+        description: 'ddd1',
+        children: [
+          {
+            kind: 'origin',
+            type: 'object',
+            name: 'O1',
+            required: true,
+            description: 'ddd2',
+            children: [
+              {
+                kind: 'origin',
+                type: 'string',
+                name: 'sss',
+                required: true,
+              },
+              {
+                kind: 'alias',
+                name: 'ooo',
+                target: 'P',
+                origin: 'Q',
+                props: ['q1', 'q2'],
+                ref: '',
+                root: false,
+              },
+              {
+                kind: 'origin',
+                type: 'object',
+                name: 'ppp',
+                required: true,
+                description: 'ddd3',
+                children: [
+                  {
+                    kind: 'origin',
+                    type: 'number',
+                    name: 'nnn',
+                    required: true,
+                    description: 'ddd4',
+                  },
+                  {
+                    kind: 'alias',
+                    name: 'qqq',
+                    target: 'X',
+                    origin: 'X',
+                    props: [],
+                    ref: '',
+                    root: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    paths: [],
   });
   const text = writer.writeComponents();
   expect(text).toMatchInlineSnapshot(`

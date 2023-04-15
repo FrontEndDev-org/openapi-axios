@@ -5,7 +5,7 @@ import { CommentsWriter } from './CommentsWriter';
 
 export class ComponentsWriter extends CommentsWriter {
   writeComponents() {
-    return this.format(this.options.document.components.map(this.writeRootType.bind(this)).join('\n\n'));
+    return this.format(this.document.components.map(this.writeRootType.bind(this)).join('\n\n'));
   }
 
   protected writeRootType(type: TypeItem) {
@@ -32,14 +32,15 @@ export class ComponentsWriter extends CommentsWriter {
   }
 
   private writePrimitive(type: TypeOrigin) {
-    return `${type.type}`;
+    return type.enum ? type.enum.map((el) => JSON.stringify(el)).join('|') : `${type.type}`;
   }
 
   private writeObject(type: TypeOrigin) {
     const kvList = type.children!.map((t) => {
       const c = this.writeComments(t, true);
+      const e = type.required ? ':' : '?:';
       const v = this.writeType(t);
-      return `${c}${t.name}: ${v};`;
+      return `${c}${t.name}${e}${v};`;
     });
     return '{' + kvList.join('\n') + '}';
   }
