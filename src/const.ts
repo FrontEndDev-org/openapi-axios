@@ -10,8 +10,13 @@ export const axiosImportDefault = `import { Axios } from 'axios';
 const axios = new Axios();`;
 export const helpersImport = `import { formatHeaders, formatBody } from 'openapi-axios/helpers';`;
 
+export const JSON_MIME = 'application/json';
+export const BLOB_MIME = 'application/octet-stream';
+
 // 内部类型名称，文档里如果重复了会生成新的唯一值
 export const INTERNAL_TYPE_NAMES = [
+  // native
+  'Blob',
   // @ref ComponentsWriter
   'OneOf',
   // @ref PathsWriter

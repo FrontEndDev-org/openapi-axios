@@ -299,6 +299,7 @@ test('DocumentWriter', () => {
        */
       additionalMetadata?: string;
     };
+    export type UploadFileReqData = Blob;
     export type UploadFileResData = ApiResponse;
     /**
      * @title uploads an image
@@ -306,6 +307,7 @@ test('DocumentWriter', () => {
      */
     export async function uploadFile(
       path: UploadFileReqPath,
+      data: UploadFileReqData,
       params?: UploadFileReqParams,
       config?: AxiosRequestConfig
     ): AxiosPromise<UploadFileResData> {
@@ -313,6 +315,7 @@ test('DocumentWriter', () => {
         url: resolveURL(BASE_URL, \`/pet/\${path.petId}/uploadImage\`),
         method: POST,
         params,
+        data,
         ...config,
       });
     }
