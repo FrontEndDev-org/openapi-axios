@@ -12,7 +12,7 @@ test('empty components', () => {
     paths: {},
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([]);
 });
 
@@ -27,7 +27,7 @@ test('empty components keys', () => {
     components: {},
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([]);
 });
 
@@ -48,7 +48,7 @@ test('empty ref', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect((t[0] as TypeAlias).target).toEqual('');
 });
 
@@ -72,7 +72,7 @@ test('ref once', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -115,7 +115,7 @@ test('ref twice', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     { kind: 'origin', name: 'K', type: 'string', required: false },
     { kind: 'alias', root: true, name: 'P', target: 'K', origin: 'K', props: [], ref: '#/components/schemas/K' },
@@ -149,7 +149,7 @@ test('primitive', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     { name: 'B', type: 'boolean', required: false, kind: 'origin' },
     { name: 'I', type: 'number', required: false, kind: 'origin' },
@@ -197,7 +197,7 @@ test('object', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -243,7 +243,7 @@ test('array', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',
@@ -270,7 +270,7 @@ test('never', () => {
     },
   });
 
-  const t = reader.parseComponents();
+  const t = reader.readComponents();
   expect(t).toEqual<TypeList>([
     {
       kind: 'origin',

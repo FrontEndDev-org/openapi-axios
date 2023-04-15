@@ -4,10 +4,10 @@ import { methods } from './const';
 import { TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
 
 export class PathsReader extends ComponentsReader {
-  parsingUrl = '';
-  parsingMethod: OpenAPIV3.HttpMethods = OpenAPIV3.HttpMethods.GET;
+  readingUrl = '';
+  readingMethod: OpenAPIV3.HttpMethods = OpenAPIV3.HttpMethods.GET;
 
-  parsePaths(): TypeOperations {
+  readPaths(): TypeOperations {
     const { paths } = this.document;
     const types: TypeOperations = [];
 
@@ -16,15 +16,15 @@ export class PathsReader extends ComponentsReader {
       .forEach(([url, pathItem]) => {
         if (!pathItem) return;
 
-        this.parsingUrl = url;
-        types.push(...this.parsePathItem(pathItem));
+        this.readingUrl = url;
+        types.push(...this.readPathItem(pathItem));
       });
 
     this.named.resolveAlias();
     return types;
   }
 
-  protected parsePathItem(pathItem: OpenAPIV3.PathItemObject) {
+  protected readPathItem(pathItem: OpenAPIV3.PathItemObject) {
     const types: TypeOperations = [];
 
     methods.forEach((method) => {
@@ -32,27 +32,27 @@ export class PathsReader extends ComponentsReader {
 
       if (!operation) return;
 
-      this.parsingMethod = method;
-      types.push(this.parseOperation(operation));
+      this.readingMethod = method;
+      types.push(this.readOperation(operation));
     });
 
     return types;
   }
 
-  parseOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
+  readOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
     const { parameters, requestBody: requestBodySchema } = operation;
-    const { pathTypes, queryTypes } = this.parseOperationParameters(parameters);
-    const name = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
+    const { pathTypes, queryTypes } = this.readOperationParameters(parameters);
+    const name = this.named.nextOperationId(this.readingMethod, this.readingUrl, operation.operationId);
     const requestPathTypeName = this.named.nextTypeName(name + this.options.requestPathTypeName);
     const requestQueryTypeName = this.named.nextTypeName(name + this.options.requestQueryTypeName);
     const requestBodyTypeName = this.named.nextTypeName(name + this.options.requestBodyTypeName);
     const responseBodyTypeName = this.named.nextTypeName(name + this.options.responseBodyTypeName);
-    const requestBody = this.parseOperationRequest(requestBodyTypeName, requestBodySchema);
+    const requestBody = this.readOperationRequest(requestBodyTypeName, requestBodySchema);
 
     return {
       name,
-      method: this.parsingMethod,
-      url: this.parsingUrl,
+      method: this.readingMethod,
+      url: this.readingUrl,
       title: operation.summary,
       description: operation.description,
       deprecated: operation.deprecated,
@@ -62,7 +62,7 @@ export class PathsReader extends ComponentsReader {
         body: requestBody,
       },
       response: {
-        body: this.parseOperationResponse(responseBodyTypeName, operation.responses),
+        body: this.readOperationResponse(responseBodyTypeName, operation.responses),
       },
     };
   }
@@ -80,12 +80,12 @@ export class PathsReader extends ComponentsReader {
     };
   }
 
-  protected parseOperationParameters(parameters: OpenAPIV3.OperationObject['parameters'] = []) {
+  protected readOperationParameters(parameters: OpenAPIV3.OperationObject['parameters'] = []) {
     const pathTypes: TypeList = [];
     const queryTypes: TypeList = [];
 
     parameters.forEach((parameter) => {
-      const t = this.parseOperationParameter(parameter);
+      const t = this.readOperationParameter(parameter);
 
       if (!t) return;
 
@@ -99,16 +99,16 @@ export class PathsReader extends ComponentsReader {
     return { pathTypes, queryTypes };
   }
 
-  protected parseOperationParameter(parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject) {
+  protected readOperationParameter(parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject) {
     if (this.isReference(parameter)) return;
 
     const { schema, name, required = false } = parameter;
     if (!schema) return;
 
-    return this.isReference(schema) ? this.parseReference(name, schema) : this.parseSchema(name, required, schema);
+    return this.isReference(schema) ? this.readReference(name, schema) : this.readSchema(name, required, schema);
   }
 
-  parseOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']) {
+  readOperationRequest(name: string, body: OpenAPIV3.OperationObject['requestBody']) {
     if (!body) return;
     if (this.isReference(body)) return;
 
@@ -116,10 +116,10 @@ export class PathsReader extends ComponentsReader {
     const okMedia = content[this.options.okMediaType];
     if (!okMedia) return;
 
-    return this.parseOperationMedia(name, okMedia);
+    return this.readOperationMedia(name, okMedia);
   }
 
-  protected parseOperationResponse(name: string, responses: NonNullable<OpenAPIV3.ResponsesObject>) {
+  protected readOperationResponse(name: string, responses: NonNullable<OpenAPIV3.ResponsesObject>) {
     const okResponse = responses[this.options.okCode];
 
     if (!okResponse) return;
@@ -131,16 +131,16 @@ export class PathsReader extends ComponentsReader {
     const okMedia = content[this.options.okMediaType];
     if (!okMedia) return;
 
-    return this.parseOperationMedia(name, okMedia);
+    return this.readOperationMedia(name, okMedia);
   }
 
-  protected parseOperationMedia(name: string, media: OpenAPIV3.MediaTypeObject) {
+  protected readOperationMedia(name: string, media: OpenAPIV3.MediaTypeObject) {
     const { schema } = media;
 
-    if (!schema) return this.parseSchemaNever(name, true, {});
+    if (!schema) return this.readSchemaNever(name, true, {});
 
     return this.isReference(schema)
-      ? this.parseReference(name, schema)
-      : this.parseSchema(name, schema.nullable === false, schema);
+      ? this.readReference(name, schema)
+      : this.readSchema(name, schema.nullable === false, schema);
   }
 }

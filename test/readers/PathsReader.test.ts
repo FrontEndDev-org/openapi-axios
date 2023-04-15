@@ -13,7 +13,7 @@ test('empty paths keys', () => {
     paths: {},
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([]);
 });
 
@@ -29,7 +29,7 @@ test('empty path item keys', () => {
     },
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([]);
 });
 
@@ -49,7 +49,7 @@ test('empty path item method responses keys', () => {
     },
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'getPet',
@@ -78,7 +78,7 @@ test('empty path item method responses keys + specify operationId', () => {
     },
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -125,8 +125,8 @@ test('resp ref', () => {
     },
   });
 
-  reader.parseComponents();
-  const t = reader.parsePaths();
+  reader.readComponents();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -176,7 +176,7 @@ test('resp type', () => {
     },
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -226,7 +226,7 @@ test('req body', () => {
     },
   });
 
-  const t = reader.parsePaths();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',
@@ -298,8 +298,8 @@ test('req query + path', () => {
     },
   });
 
-  reader.parseComponents();
-  const t = reader.parsePaths();
+  reader.readComponents();
+  const t = reader.readPaths();
   expect(t).toEqual<TypeOperations>([
     {
       name: 'findPet',

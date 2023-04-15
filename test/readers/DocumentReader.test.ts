@@ -643,7 +643,7 @@ test('DocumentReader', () => {
       },
     },
   });
-  const types = reader.parse();
+  const types = reader.read();
   // console.log(JSON.stringify(types));
   expect(types).toEqual<TypeDocument>({
     info: {
