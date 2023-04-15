@@ -987,12 +987,13 @@ test('DocumentWriter', () => {
       PATCH,
       POST,
       PUT,
+      resolveBaseURL,
     } from 'openapi-axios/helpers';
     import { Axios } from 'axios';
     const axios = new Axios();
 
     const request = axios.request;
-    const BASE_URL = '';
+    const BASE_URL = '/api/v3/';
 
     export type Address = {
       /**
@@ -1151,7 +1152,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<AddPetResData> {
       return request({
-        url: \`/pet\`,
+        url: resolveURL(BASE_URL, \`/pet\`),
         method: POST,
         data,
         ...config,
@@ -1169,7 +1170,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<UpdatePetResData> {
       return request({
-        url: \`/pet\`,
+        url: resolveURL(BASE_URL, \`/pet\`),
         method: PUT,
         data,
         ...config,
@@ -1193,7 +1194,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/pet/\${path.petId}\`,
+        url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
         method: DELETE,
         params,
         ...config,
@@ -1216,7 +1217,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<GetPetByIdResData> {
       return request({
-        url: \`/pet/\${path.petId}\`,
+        url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
         method: GET,
         ...config,
       });
@@ -1239,7 +1240,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/pet/\${path.petId}\`,
+        url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
         method: POST,
         params,
         ...config,
@@ -1264,7 +1265,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<UploadFileResData> {
       return request({
-        url: \`/pet/\${path.petId}/uploadImage\`,
+        url: resolveURL(BASE_URL, \`/pet/\${path.petId}/uploadImage\`),
         method: POST,
         params,
         ...config,
@@ -1287,7 +1288,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<FindPetsByStatusResData> {
       return request({
-        url: \`/pet/findByStatus\`,
+        url: resolveURL(BASE_URL, \`/pet/findByStatus\`),
         method: GET,
         params,
         ...config,
@@ -1305,7 +1306,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<FindPetsByTagsResData> {
       return request({
-        url: \`/pet/findByTags\`,
+        url: resolveURL(BASE_URL, \`/pet/findByTags\`),
         method: GET,
         params,
         ...config,
@@ -1321,7 +1322,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<GetInventoryResData> {
       return request({
-        url: \`/store/inventory\`,
+        url: resolveURL(BASE_URL, \`/store/inventory\`),
         method: GET,
         ...config,
       });
@@ -1338,7 +1339,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<PlaceOrderResData> {
       return request({
-        url: \`/store/order\`,
+        url: resolveURL(BASE_URL, \`/store/order\`),
         method: POST,
         data,
         ...config,
@@ -1360,7 +1361,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/store/order/\${path.orderId}\`,
+        url: resolveURL(BASE_URL, \`/store/order/\${path.orderId}\`),
         method: DELETE,
         ...config,
       });
@@ -1382,7 +1383,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<GetOrderByIdResData> {
       return request({
-        url: \`/store/order/\${path.orderId}\`,
+        url: resolveURL(BASE_URL, \`/store/order/\${path.orderId}\`),
         method: GET,
         ...config,
       });
@@ -1398,7 +1399,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/user\`,
+        url: resolveURL(BASE_URL, \`/user\`),
         method: POST,
         data,
         ...config,
@@ -1415,7 +1416,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/user/\${path.username}\`,
+        url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
         method: DELETE,
         ...config,
       });
@@ -1432,7 +1433,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<GetUserByNameResData> {
       return request({
-        url: \`/user/\${path.username}\`,
+        url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
         method: GET,
         ...config,
       });
@@ -1450,7 +1451,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/user/\${path.username}\`,
+        url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
         method: PUT,
         data,
         ...config,
@@ -1468,7 +1469,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<CreateUsersWithListInputResData> {
       return request({
-        url: \`/user/createWithList\`,
+        url: resolveURL(BASE_URL, \`/user/createWithList\`),
         method: POST,
         data,
         ...config,
@@ -1486,7 +1487,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<LoginUserResData> {
       return request({
-        url: \`/user/login\`,
+        url: resolveURL(BASE_URL, \`/user/login\`),
         method: GET,
         params,
         ...config,
@@ -1501,7 +1502,7 @@ test('DocumentWriter', () => {
       config?: AxiosRequestConfig
     ): AxiosPromise<never> {
       return request({
-        url: \`/user/logout\`,
+        url: resolveURL(BASE_URL, \`/user/logout\`),
         method: GET,
         ...config,
       });

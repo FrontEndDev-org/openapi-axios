@@ -5,7 +5,6 @@ test('empty paths', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [],
@@ -18,7 +17,6 @@ test('empty req && empty res', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -54,7 +52,6 @@ test('req.path', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -113,7 +110,6 @@ test('req.query', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -173,7 +169,6 @@ test('req.body', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -233,7 +228,6 @@ test('res.body', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -289,7 +283,6 @@ test('req.path + res.body', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -361,7 +354,6 @@ test('req.path + req.query + res.body', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [
@@ -450,7 +442,6 @@ test('req.path + req.query + req.body + res.body', () => {
     info: {
       title: 'test',
       version: '1.0.0',
-      baseURL: '/',
     },
     components: [],
     paths: [

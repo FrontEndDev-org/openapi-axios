@@ -10,9 +10,12 @@ export class PathsWriter extends ComponentsWriter {
   init() {
     super.init();
     this.imports.push('import type { AxiosPromise, AxiosRequestConfig } from "axios";');
-    this.imports.push('import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT } from "openapi-axios/helpers";');
+    this.imports.push(
+      'import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, resolveURL } from "openapi-axios/helpers";'
+    );
     this.imports.push(this.options.axiosImport);
     this.helpers.push(`const request = axios.request;`);
+    if (this.document.info.baseURL) this.helpers.push(`const BASE_URL = ${stringify(this.document.info.baseURL)};`);
   }
 
   writePaths() {
@@ -56,8 +59,7 @@ export class PathsWriter extends ComponentsWriter {
       ', '
     );
     const return_ = `${responseTypeName}<${resBody?.name || 'never'}>`;
-
-    const url_ = this.writeAxiosProp('url', stringify(varString(type.url, 'path.')).replace(/"/g, '`'));
+    const url_ = this.writeAxiosProp('url', this.toURL(type, requestPathArgName));
     const method_ = this.writeAxiosProp('method', type.method.toUpperCase());
     const params_ = this.writeAxiosProp('params', query ? requestQueryArgName : '');
     const data_ = this.writeAxiosProp('data', reqBody ? requestBodyArgName : '');
@@ -71,10 +73,10 @@ export class PathsWriter extends ComponentsWriter {
     ]);
 
     return `${comments}export async function ${name}(${args_}):${return_}  {
-          return request({
-            ${props}
-          });
-        }`;
+              return request({
+                ${props}
+              });
+            }`;
   }
 
   protected writeAxiosProp(prop: keyof AxiosRequestConfig, value?: string) {
@@ -88,5 +90,14 @@ export class PathsWriter extends ComponentsWriter {
     const typeName = isString(type) ? type : type.name;
     const equal = optional ? '?:' : ':';
     return `${name}${equal}${typeName}`;
+  }
+
+  protected toURL(type: TypeOperation, requestPathArgName: string) {
+    const leading = `${requestPathArgName}.`;
+    const url = stringify(varString(type.url, leading)).replace(/"/g, '`');
+
+    if (!this.document.info.baseURL) return url;
+
+    return `resolveURL(BASE_URL, ${url})`;
   }
 }
