@@ -1,72 +1,21 @@
-import { isBoolean, isDate, isNumber, isObject, isString } from './utils/type-is';
+// @ref https://github.com/drwpow/openapi-typescript/blob/bc52343c44f9dab4006e04c27411e405fb67a739/src/index.ts#L215
+export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
+export type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+export type OneOf<T extends any[]> = T extends [infer Only]
+  ? Only
+  : T extends [infer A, infer B, ...infer Rest]
+  ? OneOf<[XOR<A, B>, ...Rest]>
+  : never;
 
-export enum ContentKind {
-  JSON = 'JSON',
-  URL_ENCODED = 'URL_ENCODED',
-  FORM_DATA = 'FORM_DATA',
-  TEXT = 'TEXT',
-  OTHER = 'OTHER',
-}
+export const DELETE = 'DELETE';
+export const GET = 'GET';
+export const HEAD = 'HEAD';
+export const OPTIONS = 'OPTIONS';
+export const PATCH = 'PATCH';
+export const POST = 'POST';
+export const PUT = 'PUT';
+export const TRACE = 'TRACE';
 
-/**
- * 格式化请求头
- * @param {ContentKind} contentKind
- * @returns {{"content-type": string} | undefined}
- */
-export function formatHeaders(contentKind: ContentKind) {
-  const contentType = {
-    [ContentKind.JSON]: 'application/json',
-    [ContentKind.URL_ENCODED]: 'application/x-www-form-urlencoded',
-    [ContentKind.FORM_DATA]: 'multipart/form-data',
-    [ContentKind.TEXT]: 'text/plain',
-    [ContentKind.OTHER]: '',
-  }[contentKind];
-  return contentType ? { 'Content-Type': contentType } : undefined;
-}
-
-/**
- * 判断是否为二进制
- * @param value
- * @returns {boolean}
- */
-export function isBlob(value: unknown): value is Blob {
-  if (typeof Blob !== 'undefined' && value instanceof Blob) return true;
-  if (typeof File !== 'undefined' && value instanceof File) return true;
-
-  return false;
-}
-
-export function toFormDataValue(value: unknown): string | Blob {
-  if (isString(value) || isNumber(value) || isBoolean(value)) return String(value);
-  if (isObject(value)) return JSON.stringify(value);
-  if (isDate(value)) return value.toISOString();
-  if (isBlob(value)) return value;
-  return '';
-}
-
-/**
- * 格式化请求体
- * @param {string} contentKind
- * @param body
- * @returns {FormData | string}
- */
-export function formatBody<D>(contentKind: ContentKind, body: D) {
-  switch (contentKind) {
-    case ContentKind.URL_ENCODED:
-      return isObject(body) ? new URLSearchParams(body as Record<string, string>).toString() : '';
-
-    case ContentKind.FORM_DATA: {
-      const fd = new FormData();
-      if (!isObject(body)) return fd;
-
-      return Object.keys(body).reduce((fd, key) => {
-        const val = body[key as keyof D];
-        fd.append(key, toFormDataValue(val));
-        return fd;
-      }, fd);
-    }
-
-    default:
-      return JSON.stringify(body);
-  }
+export function resolveURL(baseURL: string, url: string) {
+  return baseURL.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '');
 }
