@@ -19,10 +19,12 @@ export class BaseReader {
 
   constructor(readonly document: OpenAPIV3.Document, options?: ReaderOptions) {
     this.options = Object.assign({}, BaseReader.defaults, options) as StrictReaderOptions;
+    INTERNAL_TYPE_NAMES.forEach(this.named.internalName.bind(this.named));
+    this.init();
   }
 
   init() {
-    INTERNAL_TYPE_NAMES.forEach(this.named.internalName.bind(this.named));
+    //
   }
 
   protected isReference(

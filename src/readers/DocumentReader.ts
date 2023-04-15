@@ -3,7 +3,6 @@ import { TypeDocument } from './types';
 
 export class DocumentReader extends PathsReader {
   read(): TypeDocument {
-    this.init();
     const components = this.readComponents();
     const paths = this.readPaths();
     return {
