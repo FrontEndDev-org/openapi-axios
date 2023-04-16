@@ -54,7 +54,7 @@ export function resolveConfig(cwd: string): GeneratorOptions {
         .array(
           z.object({
             name: z.string(),
-            document: z.object({}),
+            document: z.union([z.object({}), z.string()]),
           })
         )
         .min(1),
@@ -76,12 +76,13 @@ export function resolveConfig(cwd: string): GeneratorOptions {
   throw new Error(`${configFileName}: #/${firstIssue.path.join('/')} - ${firstIssue.message}`);
 }
 
-export async function run() {
+export async function run(cwd = process.cwd()) {
   const logger = new Logger();
-  const [err, config] = tryFlatten(() => resolveConfig(process.cwd()));
+  const [err, config] = tryFlatten(() => resolveConfig(cwd));
 
   if (err) return logger.pipeConfigError(err);
 
+  config.cwd = config.cwd || cwd;
   const generator = new Generator(config);
 
   generator.on('start', logger.pipeStartEvent);

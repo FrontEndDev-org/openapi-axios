@@ -8,22 +8,16 @@ import { DocumentPrinter } from '../printers/DocumentPrinter';
 import { Reader } from './Reader';
 import {
   GeneratingOptions,
-  GeneratingStep,
+  GeneratingStage,
+  GeneratorEmits,
   GeneratorOptions,
-  OpenAPIGenerating,
+  GeneratingPayload,
   OpenAPIOptions,
   StrictGeneratorOptions,
+  GeneratorPayload,
 } from './types';
 
-export class Generator extends Emitter<{
-  // 所有开始
-  start: [];
-  // 所有结束
-  end: [];
-  // 处理中
-  processing: [OpenAPIGenerating];
-  error: [Error];
-}> {
+export class Generator extends Emitter<GeneratorEmits> {
   static defaults: StrictGeneratorOptions = {
     cwd: process.cwd(),
     dest: '/src/apis',
@@ -37,22 +31,23 @@ export class Generator extends Emitter<{
   }
 
   async generate() {
-    this.emit('start');
+    const count = this.options.openAPIs.length;
+    const payload: GeneratorPayload = { count };
+    this.emit('start', payload);
 
     try {
       let index = 0;
-      const count = this.options.openAPIs.length;
       for (const openAPI of this.options.openAPIs) {
         await this.generateOpenAPI(index, count, openAPI, this.options);
         index++;
       }
     } catch (cause) {
       const err = normalizeError(cause);
-      this.emit('error', err);
+      this.emit('error', err, payload);
       throw err;
     }
 
-    this.emit('end');
+    this.emit('end', payload);
   }
 
   protected async generateOpenAPI(
@@ -70,41 +65,41 @@ export class Generator extends Emitter<{
     const parserOptions = Object.assign({}, globalParser, scopeParser);
     const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
     const options: GeneratingOptions = {
+      ...openAPIOptions,
       cwd,
       dest,
-      ...openAPIOptions,
       parser: parserOptions,
       printer: printerOptions,
     };
-    const makeArg = (step: GeneratingStep): OpenAPIGenerating => ({
+    const makePayload = (step: GeneratingStage): GeneratingPayload => ({
       index,
       count,
-      step,
+      stage: step,
       options,
       filePath,
     });
 
     // 2. 读取
-    this.emit('processing', makeArg('reading'));
+    this.emit('process', makePayload('reading'));
     const reader = new Reader();
     reader.cwd = cwd;
     const openAPIV3Document = await reader.read(document);
 
     // 3. 解析
-    this.emit('processing', makeArg('parsing'));
+    this.emit('process', makePayload('parsing'));
     const parser = new DocumentParser(openAPIV3Document, parserOptions);
     const types = parser.parse();
 
     // 4. 输出
-    this.emit('processing', makeArg('printing'));
+    this.emit('process', makePayload('printing'));
     const printer = new DocumentPrinter(types, printerOptions);
     const text = printer.print();
 
     // 5. 写入
-    this.emit('processing', makeArg('writing'));
+    this.emit('process', makePayload('writing'));
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
     fs.writeFileSync(filePath, text, 'utf8');
 
-    this.emit('processing', makeArg('generated'));
+    this.emit('process', makePayload('generated'));
   }
 }

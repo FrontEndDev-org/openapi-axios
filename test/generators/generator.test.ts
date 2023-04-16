@@ -22,7 +22,7 @@ test('Generator', async () => {
   generator.on('end', fn2);
 
   const fn3 = vi.fn();
-  generator.on('processing', fn3);
+  generator.on('process', fn3);
 
   const fn4 = vi.fn();
   generator.on('error', fn4);

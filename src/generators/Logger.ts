@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import path from 'path';
 import { GeneratorEmits } from './types';
 
 export class Logger {
@@ -14,7 +15,8 @@ export class Logger {
       chalk.cyanBright('▷'),
       chalk.yellowBright(`${step}/${payload.count}`),
       payload.options.name,
-      payload.stage
+      payload.stage,
+      payload.stage === 'generated' ? path.relative(payload.options.cwd, payload.filePath) : ''
     );
   }
 

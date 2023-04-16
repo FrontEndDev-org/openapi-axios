@@ -1,5 +1,6 @@
 import { AcceptDocument, ParserOptions } from '../parsers/types';
 import { PrinterOptions } from '../printers/types';
+import { OpenAPIV3Document } from '../types/openapi';
 
 type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
@@ -53,13 +54,26 @@ export interface GeneratorOptions {
 }
 export type StrictGeneratorOptions = RequiredWith<GeneratorOptions, 'cwd' | 'dest'>;
 
-export type GeneratingStep = 'reading' | 'parsing' | 'printing' | 'writing' | 'generated';
+export type GeneratingStage = 'reading' | 'parsing' | 'printing' | 'writing' | 'generated';
 export type GeneratingOptions = OpenAPIOptions & Pick<StrictGeneratorOptions, 'cwd' | 'dest'>;
 
-export interface OpenAPIGenerating {
+export interface GeneratorPayload {
+  count: number;
+}
+export interface GeneratingPayload {
   index: number;
   count: number;
-  step: GeneratingStep;
+  stage: GeneratingStage;
   options: GeneratingOptions;
   filePath: string;
 }
+
+export type GeneratorEmits = {
+  // 所有开始
+  start: [GeneratorPayload];
+  // 所有结束
+  end: [GeneratorPayload];
+  // 处理中
+  process: [GeneratingPayload];
+  error: [Error, GeneratorPayload];
+};

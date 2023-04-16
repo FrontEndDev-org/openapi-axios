@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { configFileNameOrder, resolveConfig, resolveConfigFile } from '../../src/generators/command';
+import { configFileNameOrder, resolveConfig, resolveConfigFile, run } from '../../src/generators/command';
+import { OpenAPIV3Document } from '../../src/types/openapi';
 import { createTempDirname } from '../helpers';
 
 test('resolveConfigFile', async () => {
@@ -23,12 +24,12 @@ test('resolveConfig', async () => {
 
   expect(() => resolveConfig(cwd)).toThrow('配置文件未找到');
 
-  const file1 = path.join(cwd, configFileNameOrder[0]);
-  fs.writeFileSync(file1, '', 'utf8');
+  const file = path.join(cwd, configFileNameOrder[0]);
+  fs.writeFileSync(file, '', 'utf8');
   expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Required');
 
   fs.writeFileSync(
-    file1,
+    file,
     `module.exports = {
     openAPIs: []
   };`,
@@ -37,13 +38,51 @@ test('resolveConfig', async () => {
   expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Array must contain at least 1 element(s)');
 
   fs.writeFileSync(
-    file1,
+    file,
     `module.exports = {
     openAPIs: [{name: "test"}]
   };`,
     'utf8'
   );
-  expect(() => resolveConfig(cwd)).toThrow('#/openAPIs/0/document - Required');
+  expect(() => resolveConfig(cwd)).toThrow('#/openAPIs/0/document - Invalid input');
+
+  fs.writeFileSync(
+    file,
+    `module.exports = {
+    openAPIs: [{name: "test", "document": "test.openapi.json"}]
+  };`,
+    'utf8'
+  );
+  expect(() => resolveConfig(cwd)).not.toThrow();
+
+  clean();
+});
+
+test('run', async () => {
+  const [cwd, clean] = createTempDirname();
+  const file = path.join(cwd, configFileNameOrder[0]);
+
+  fs.writeFileSync(
+    path.join(cwd, 'test.openapi.json'),
+    JSON.stringify({
+      info: {
+        title: 'test',
+        version: '1.0.0',
+      },
+      openapi: '3.0.0',
+      paths: {},
+    } as OpenAPIV3Document)
+  );
+  fs.writeFileSync(
+    file,
+    `module.exports = {
+    openAPIs: [{name: "test", "document": "test.openapi.json"}]
+  };`,
+    'utf8'
+  );
+
+  await run(cwd);
+  expect(fs.existsSync(path.join(cwd, 'src/apis/test.ts'))).toBe(true);
 
   clean();
 });
