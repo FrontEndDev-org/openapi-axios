@@ -1,4 +1,4 @@
-# 代码格式检查
+# 代码格式、基本质量检查
 
 name: code review
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/node-env
+      - uses: ./.github/actions/setup-nvm
       - run: npm ci
       - run: npm run lint
 
@@ -24,10 +24,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/node-env
+      - uses: ./.github/actions/setup-nvm
       - run: npm ci
       - run: npm run test:coverage
       - uses: codacy/codacy-coverage-reporter-action@v1
+        if: github.actor != 'dependabot[bot]'
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage/lcov.info

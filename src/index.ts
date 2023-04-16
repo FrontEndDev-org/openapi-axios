@@ -1,5 +1,5 @@
 export { pkgName, pkgVersion } from './const';
-export * from './generator';
-export * from './configure';
-export * from './types';
-export * from './commands';
+export { defineConfig, run } from './generators/command';
+export { DocumentPrinter } from './printers/DocumentPrinter';
+export { DocumentParser } from './parsers/DocumentParser';
+export { Generator } from './generators/Generator';

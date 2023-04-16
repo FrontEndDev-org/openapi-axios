@@ -14,7 +14,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "types": ["vitest/globals"]
   },
-  "include": ["./src/**/*.ts", "./test/**/*.ts"]
+  "include": ["src", "test", "openapi-typescript"]
 }
