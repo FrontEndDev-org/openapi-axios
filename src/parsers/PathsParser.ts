@@ -1,7 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types';
-import { BLOB_MIME, JSON_MIME } from '../const';
 import { ComponentsParser } from './ComponentsParser';
-import { methods } from './const';
+import { BLOB_MIME, JSON_MIME, HTTP_METHODS } from './const';
 import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
 
 export class PathsParser extends ComponentsParser {
@@ -28,7 +27,7 @@ export class PathsParser extends ComponentsParser {
   protected parsePathItem(pathItem: OpenAPIV3.PathItemObject) {
     const types: TypeOperations = [];
 
-    methods.forEach((method) => {
+    HTTP_METHODS.forEach((method) => {
       const operation = pathItem[method];
 
       if (!operation) return;

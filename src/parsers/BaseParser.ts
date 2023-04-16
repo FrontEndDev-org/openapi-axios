@@ -1,6 +1,6 @@
 import * as process from 'process';
-import { INTERNAL_TYPE_NAMES, JSON_MIME } from '../const';
 import { OpenAPIV3, OpenAPIV3Document } from '../types/openapi';
+import { INTERNAL_TYPE_NAMES, JSON_MIME } from './const';
 import { Named } from './Named';
 import { ParserOptions, StrictParserOptions, TypeAlias, TypeItem } from './types';
 
