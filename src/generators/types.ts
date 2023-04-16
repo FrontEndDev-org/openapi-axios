@@ -52,3 +52,14 @@ export interface GeneratorOptions {
   openAPIs: OpenAPIOptions[];
 }
 export type StrictGeneratorOptions = RequiredWith<GeneratorOptions, 'cwd' | 'dest'>;
+
+export type GeneratingStep = 'reading' | 'parsing' | 'printing' | 'writing' | 'generated';
+export type GeneratingOptions = OpenAPIOptions & Pick<StrictGeneratorOptions, 'cwd' | 'dest'>;
+
+export interface OpenAPIGenerating {
+  index: number;
+  count: number;
+  step: GeneratingStep;
+  options: GeneratingOptions;
+  filePath: string;
+}
