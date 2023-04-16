@@ -1,0 +1,3 @@
+- [ ] 支持 OneOf AllOf
+- [ ] 支持长度为一的必填参数展开
+- [ ] openapi document validate
