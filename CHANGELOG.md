@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.13.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.12.0...v0.13.0) (2023-04-16)
+
+
+### Features
+
+* **generator:** 事件系统 ([67f14bb](https://github.com/FrontEndDev-org/openapi-axios/commit/67f14bbe1f2bcc89e68a1cb85370f93b96cccd62))
+* **generator:** 命令行支持 ([90366cb](https://github.com/FrontEndDev-org/openapi-axios/commit/90366cb8f738a1f716e79185b0ec15ec13163094))
+* **generator:** 支持配置文件的查找和解析 ([bd365a8](https://github.com/FrontEndDev-org/openapi-axios/commit/bd365a880800060658ba85de0ec5eb9d79f73d4f))
+* **generator:** 日志打印系统 ([2715bb0](https://github.com/FrontEndDev-org/openapi-axios/commit/2715bb0e4127133cc8c61179bda7c3b872333f15))
+* **helpers:** 只保留 resolveURL ([e88cb4b](https://github.com/FrontEndDev-org/openapi-axios/commit/e88cb4bad1b4c917bfdfc6bdcc9cec5f6235c88c))
+* **parser:** components 部分别名解析优化 ([9af433f](https://github.com/FrontEndDev-org/openapi-axios/commit/9af433f4885f91a73630cd06c3deed53a2964e84))
+* **parser:** components 部分解析 ([7a2f5b0](https://github.com/FrontEndDev-org/openapi-axios/commit/7a2f5b078bcc1996e9cbedeb817366466e4b72ea))
+* **parser:** paths 参数解析 ([c6fdd7f](https://github.com/FrontEndDev-org/openapi-axios/commit/c6fdd7fc890fa73940c3efd67b9fe6f7b5257d9c))
+* **parser:** paths 部分解析 ([3f7e379](https://github.com/FrontEndDev-org/openapi-axios/commit/3f7e37922a50663b4fe4b762f8c0e6f77e1fa575))
+* **parser:** type 和 operation 命名规则 ([83b24ef](https://github.com/FrontEndDev-org/openapi-axios/commit/83b24efc3e5efbbfa764bc8bf81dd85ea83f0e9a))
+* **parser:** 基础解析 ([c91ba35](https://github.com/FrontEndDev-org/openapi-axios/commit/c91ba35b8493c6bb4249650134a1f11f0c213af4))
+* **parser:** 增加 DocumentParser ([05de46e](https://github.com/FrontEndDev-org/openapi-axios/commit/05de46e4f7d8b8fd7bfd0074ba3ab277be63b268))
+* **parser:** 类型、常量定义 ([0d0c626](https://github.com/FrontEndDev-org/openapi-axios/commit/0d0c62610d6315d4e03e501c2d465a88fa872229))
+* **reader:** 优化对 operation 参数可选性解读 ([defca29](https://github.com/FrontEndDev-org/openapi-axios/commit/defca291dfea1142858429ccf2a4de9af175fd8e))
+* **reader:** 优化请求的 path/query 的类型结构 ([b70ffd7](https://github.com/FrontEndDev-org/openapi-axios/commit/b70ffd7f53815ff73a326f953cfc398173dac86d))
+* **reader:** 增加请求/响应类型名称定义选项 ([7aa1087](https://github.com/FrontEndDev-org/openapi-axios/commit/7aa1087f0ecb64a2888c4d82f0fd4af4acccf1af))
+* **reader:** 支持 additionalProperties 解读 ([fe4eeb6](https://github.com/FrontEndDev-org/openapi-axios/commit/fe4eeb675afdd18482a8b9bf53b787dc82551e55))
+* **reader:** 支持 Blob 类型解读 ([9d00a15](https://github.com/FrontEndDev-org/openapi-axios/commit/9d00a157267af7f5f4f81315bbf03239f55c3e7f))
+* **reader:** 支持自定义请求/响应类型名称定义选项 ([771c81c](https://github.com/FrontEndDev-org/openapi-axios/commit/771c81c3581870ef8cd56ce8cb1b891d8db6c1d0))
+* ref 路径解析 ([9ecd29f](https://github.com/FrontEndDev-org/openapi-axios/commit/9ecd29f8874526bade70363abbbc84d19ee8d06e))
+* **utils:** 优化 varString ([16b997d](https://github.com/FrontEndDev-org/openapi-axios/commit/16b997dcbb5635a591d312a6defcf383bb680674))
+* **utils:** 优化 varString 变量处理 ([7ef45b0](https://github.com/FrontEndDev-org/openapi-axios/commit/7ef45b0b49dc1b0ea030f7ea86c1f96e04e2d131))
+* **utils:** 新增 joinSlices ([59ac1d8](https://github.com/FrontEndDev-org/openapi-axios/commit/59ac1d8562d09e295760aec439b157491c085a32))
+* **utils:** 新增 nextUniqueName ([f62c3ec](https://github.com/FrontEndDev-org/openapi-axios/commit/f62c3ec300d2ed5f01602e5fbc154039aa728ec7))
+* **writer:** 增加 comments writer ([05fffd2](https://github.com/FrontEndDev-org/openapi-axios/commit/05fffd26ff4684362c168328f913a63797a5e953))
+* **writer:** 增加 components writer ([6ca3a71](https://github.com/FrontEndDev-org/openapi-axios/commit/6ca3a71cc70c73962bef835104cb33d169cd9566))
+* **writer:** 增加 paths writer ([baa365f](https://github.com/FrontEndDev-org/openapi-axios/commit/baa365fa46d1007e30854d693f2f5a1d7d699ba7))
+* **writer:** 支持 baseURL ([328f1aa](https://github.com/FrontEndDev-org/openapi-axios/commit/328f1aa9cb4495e644f1aac1a3992807efa49da6))
+* **writer:** 支持枚举类型 ([58508c7](https://github.com/FrontEndDev-org/openapi-axios/commit/58508c7ba2b5c4f5f302df33dd69aaad61c521c9))
+* **writer:** 新增 axiosImport 选项 ([cf9cb71](https://github.com/FrontEndDev-org/openapi-axios/commit/cf9cb71ea4dd73feeb59f0f3c2128134e2a2cbd0))
+* 命令规则别名解析 ([0e9b1c3](https://github.com/FrontEndDev-org/openapi-axios/commit/0e9b1c3c563f4955df6e35b75da0a9d027109140))
+* 实现 Generator ([f4e0a83](https://github.com/FrontEndDev-org/openapi-axios/commit/f4e0a83733682f2e20bae0b0f2c9cd6e7bd5a2ac))
+* 新增 findOrigin ([a856c07](https://github.com/FrontEndDev-org/openapi-axios/commit/a856c0713591b6ff385500a515250898f018b63f))
+* 新增 toTypePath ([d2009ac](https://github.com/FrontEndDev-org/openapi-axios/commit/d2009ac04a4ddbb82edcbfe4dc6fe722d3ea1cdc))
+* 新增 varString ([5b19cc1](https://github.com/FrontEndDev-org/openapi-axios/commit/5b19cc1edc07ba194c3c0e1f4bba84b30e02263c))
+
+
+### Bug Fixes
+
+* **helpers:** 正则优化 ([01c8bb4](https://github.com/FrontEndDev-org/openapi-axios/commit/01c8bb434042229479794c8763be6f52cedbdb82))
+
 ## [0.12.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.11.0...v0.12.0) (2023-04-01)
 
 
