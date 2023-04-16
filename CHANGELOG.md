@@ -1,5 +1,47 @@
 # Changelog
 
+## [0.12.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.11.0...v0.12.0) (2023-04-01)
+
+
+### Features
+
+* 增加 pkgName, pkgVersion 导出 ([64df5da](https://github.com/FrontEndDev-org/openapi-axios/commit/64df5da808f4af73fa407bbbbfcb6d7dd5dc0055))
+
+
+### Bug Fixes
+
+* 修正相关文案说明 ([c62b0f8](https://github.com/FrontEndDev-org/openapi-axios/commit/c62b0f871a6c22d5fcdafe3d5638d345ba426be0))
+
+## [0.11.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.10.0...v0.11.0) (2023-04-01)
+
+
+### Features
+
+* 优化命令执行 ([02b95f3](https://github.com/FrontEndDev-org/openapi-axios/commit/02b95f32a0bda22440c3112183943419397b2f1b))
+* 优化命令错误捕获 ([87cd829](https://github.com/FrontEndDev-org/openapi-axios/commit/87cd829655f7036497cfe805f2d354db83a2c8d8))
+* 增强过程日志输出 ([2301612](https://github.com/FrontEndDev-org/openapi-axios/commit/230161202f42b276cf0d3ce6f8cce1518df39780))
+
+
+### Bug Fixes
+
+* node 版本要求 &gt;= 14 ([2e7f31c](https://github.com/FrontEndDev-org/openapi-axios/commit/2e7f31c1712c469a4a04c2c54e13fdbcb8af927a))
+* 修复 require 引用未正常捕获错误的问题 ([8880ffa](https://github.com/FrontEndDev-org/openapi-axios/commit/8880ffa0fa7eccbff5496b71d3e7e055dc352cfe))
+* 修复 rollup 构建后文件名不正确的问题 ([e2fa629](https://github.com/FrontEndDev-org/openapi-axios/commit/e2fa62997b070877837b92123406f7e1f2c029c7))
+* 修复查找配置文件路径不完整的问题 ([962966b](https://github.com/FrontEndDev-org/openapi-axios/commit/962966b0951a22a5f4501f8f2415de4db2279d1d))
+* 添加无副作用标记 ([3f27e5b](https://github.com/FrontEndDev-org/openapi-axios/commit/3f27e5bdd918385a9c7129b73e6415363cbbd4d6))
+
+## [0.10.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.9.0...v0.10.0) (2023-03-28)
+
+
+### Features
+
+* 移除对 lodash-es 的引用（node 端运行有问题） ([aaa1cf4](https://github.com/FrontEndDev-org/openapi-axios/commit/aaa1cf4fa7bc802cc337cfd0c9a4bd5da8fc87b5))
+
+
+### Bug Fixes
+
+* 修复构建生成 dts 文件不正确的问题 ([28c35ff](https://github.com/FrontEndDev-org/openapi-axios/commit/28c35ffa4def8f2354c4e47894bdfc07cb2b9116))
+
 ## [0.9.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.8.0...v0.9.0) (2023-03-28)
 
 
