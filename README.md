@@ -10,10 +10,10 @@ OpenAPI ➡️ Axios
 
 将 OpenAPI 规范声明文件转换为类型声明和可执行函数（基于 Axios）。与其他同类工具相比，具有以下特点：
 
-- 😆 支持 openAPI v3（当前仅）
+- 😆 支持 [openAPI](https://www.openapis.org/) v3（当前仅）
 - 😉 每个 API 都是一个函数，用于在构建时轻松进行 tree shaking
-- 😎 与最流行的 HTTP 客户端 axios 进行适配
-- 🤗 轻松与本地请求客户端集成，例如在本地项目中创建的 Axios 实例
+- 😎 与最流行的 HTTP 客户端 [axios](https://axios-http.com/) 进行适配
+- 🤗 轻松与本地请求客户端集成，例如在本地项目中创建的 Axios 实例（通常我们在本地都是需要自定义一些拦截器什么的）
 - 😁 易于使用，易于学习，类型安全
 
 # 安装
