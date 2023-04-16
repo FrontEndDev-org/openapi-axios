@@ -17,5 +17,6 @@ export const PUT = 'PUT';
 export const TRACE = 'TRACE';
 
 export function resolveURL(baseURL: string, url: string) {
-  return baseURL.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '');
+  // @ref https://github.com/FrontEndDev-org/openapi-axios/security/code-scanning/1
+  return baseURL.replace(/(?<!\/)\/+$/, '') + '/' + url.replace(/^\/+/, '');
 }
