@@ -8,5 +8,5 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals"]
   },
-  "include": ["test/**/*.ts", "vite.config.ts"]
+  "include": ["vite.config.ts"]
 }

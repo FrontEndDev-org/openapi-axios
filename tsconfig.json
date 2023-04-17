@@ -11,9 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
+    "baseUrl": "./",
+    "types": ["vitest/globals"],
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "include": ["src", "test", "openapi-typescript"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

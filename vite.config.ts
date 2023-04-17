@@ -37,6 +37,10 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    env: {
+      PKG_NAME: 'pkg-name-for-test',
+      PKG_VERSION: 'pkg-version-for-test',
+    },
     coverage: {
       reporter: ['lcov', 'text'],
       // 包含所有源文件的覆盖率，而不是仅被单测的部分
