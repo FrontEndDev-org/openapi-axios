@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "target": "ESNext",
-    "useDefineForClassFields": false,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "declaration": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "baseUrl": "./",
-    "types": ["vitest/globals"],
-    "skipLibCheck": true,
-    "noEmit": true
+    "lib": ["ESNext"],
+    "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "openapi-typescript"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "test", "vite.config.ts", "package.json"]
 }
