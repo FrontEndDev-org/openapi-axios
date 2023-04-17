@@ -4,32 +4,28 @@
   "description": "OpenAPI ➡️ Axios",
   "scripts": {
     "prepare": "husky install",
-    "lint": "eslint --ext=.cjs,.mjs,.ts,.tsx src/ test/ && tsc --project tsconfig.json --noEmit",
+    "dev": "vite build --watch",
+    "build": "vite build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "build:types": "rm -rf dist-dts && tsc --project tsconfig.types.json",
-    "build:files": "rm -rf dist-cjs dist-mjs && rollup --config",
-    "build": "npm run build:types && npm run build:files"
+    "lint": "eslint . --ext=.cjs,.js,.ts,.tsx --fix && npm run type-check",
+    "fmt": "prettier . --loglevel=warn -w",
+    "type-check": "tsc --noEmit"
   },
-  "engines": {
-    "node": ">=16"
-  },
-  "engineStrict": true,
-  "sideEffects": false,
   "type": "module",
-  "module": "dist-mjs/index.mjs",
-  "main": "dist-cjs/index.cjs",
-  "types": "dist-dts/index.d.ts",
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist-mjs/index.mjs",
-      "require": "./dist-cjs/index.cjs",
-      "types": "./dist-dts/index.d.ts"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./helpers": {
-      "import": "./dist-mjs/helpers.mjs",
-      "require": "./dist-cjs/helpers.cjs",
-      "types": "./dist-dts/helpers.d.ts"
+      "import": "./dist/helpers.js",
+      "require": "./dist/helpers.cjs",
+      "types": "./dist/helpers.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -37,10 +33,7 @@
     "openapi-axios": "bin/index.cjs"
   },
   "files": [
-    "dist-cjs",
-    "dist-dts",
-    "dist-mjs",
-    "templates"
+    "dist"
   ],
   "keywords": [
     "cloudcome",
@@ -51,10 +44,6 @@
     "OAS",
     "axios"
   ],
-  "author": "云淡然 <hi@ydr.me> (https://ydr.me)",
-  "homepage": "https://github.com/FrontEndDev-org/openapi-axios",
-  "repository": "https://github.com/FrontEndDev-org/openapi-axios",
-  "license": "MIT",
   "dependencies": {
     "axios": "^1.3.5",
     "chalk": "^4.1.2",
@@ -69,9 +58,6 @@
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
     "@commitlint/types": "^17.4.4",
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@rollup/plugin-typescript": "^11.1.0",
     "@types/lodash": "^4.14.194",
     "@types/node": "^16.18.23",
     "@types/prettier": "^2.7.2",
@@ -84,9 +70,18 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
-    "prettier": "^2.8.7",
-    "rollup": "^3.20.3",
+    "rollup-plugin-node-externals": "^5.1.2",
     "typescript": "^5.0.4",
+    "vite": "^4.2.1",
+    "vite-plugin-dts": "^2.2.0",
     "vitest": "^0.30.1"
-  }
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=14"
+  },
+  "author": "云淡然 <hi@ydr.me> (https://ydr.me)",
+  "homepage": "https://github.com/FrontEndDev-org/openapi-axios",
+  "repository": "https://github.com/FrontEndDev-org/openapi-axios",
+  "license": "MIT"
 }
