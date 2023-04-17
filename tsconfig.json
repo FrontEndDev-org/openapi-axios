@@ -14,8 +14,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "baseUrl": "./",
+    "lib": ["ESNext"],
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "openapi-typescript"]
+  "include": ["src", "test", "vite.config.ts", "package.json"]
 }
