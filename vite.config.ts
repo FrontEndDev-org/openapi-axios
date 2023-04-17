@@ -1,24 +1,16 @@
-import { createRequire } from 'node:module';
-import externals from 'rollup-plugin-node-externals';
-
+import path from 'path';
+import nodeExternals from 'vite-plugin-node-externals';
 import dts from 'vite-plugin-dts';
-// https://cn.vitest.dev/config/
 import { defineConfig } from 'vitest/config';
-
-const require = createRequire(import.meta.url);
-
-const pkg = require('./package.json');
+import pkg from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    nodeExternals(),
     dts({
       insertTypesEntry: true,
     }),
-    {
-      ...externals(),
-      enforce: 'pre',
-    },
   ],
   define: {
     'process.env.PKG_NAME': JSON.stringify(pkg.name),
@@ -28,9 +20,14 @@ export default defineConfig({
     lib: {
       entry: ['src/index.ts', 'src/helpers.ts'],
       formats: ['es', 'cjs'],
+      fileName(format, entryName) {
+        const ext = format === 'es' ? '.mjs' : '.cjs';
+        const basename = path.basename(entryName, '.ts');
+        return `${basename}${ext}`;
+      },
     },
     modulePreload: false,
-    sourcemap: false,
+    sourcemap: true,
     minify: false,
     copyPublicDir: false,
     outDir: 'dist',
