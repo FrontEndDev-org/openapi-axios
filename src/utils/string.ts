@@ -19,7 +19,7 @@ export interface RefInfo {
 
 export function refToType(ref: string): RefInfo {
   const segs = ref.split('/').slice(3);
-  const type = segs.at(0)!;
+  const type = segs[0]!;
 
   return {
     type,

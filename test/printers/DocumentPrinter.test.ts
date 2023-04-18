@@ -1,7 +1,7 @@
 import { TypeDocument } from '../../src/parsers/types';
 import { DocumentPrinter } from '../../src/printers/DocumentPrinter';
 
-import petStore3 from '../files/petStore3.types.json' assert { type: 'json' };
+import petStore3 from '../files/petStore3.types.json';
 import { writeFile } from '../helpers';
 
 test('DocumentPrinter', () => {

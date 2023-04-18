@@ -69,7 +69,7 @@ export function resolveConfig(cwd: string): GeneratorOptions {
 
   if (result.error.isEmpty) return config;
 
-  const firstIssue = result.error.issues.at(0);
+  const firstIssue = result.error.issues[0];
 
   if (!firstIssue) return config;
 

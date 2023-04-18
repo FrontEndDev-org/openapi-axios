@@ -2,7 +2,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { doc } from 'prettier';
 import { DocumentParser } from '../../src/parsers/DocumentParser';
 import { TypeDocument } from '../../src/parsers/types';
-import document from '../files/petStore3.openapi.json' assert { type: 'json' };
+import document from '../files/petStore3.openapi.json';
 import { writeFile } from '../helpers';
 
 test('DocumentParser', () => {
