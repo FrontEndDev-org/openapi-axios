@@ -6,7 +6,7 @@ export class DocumentParser extends PathsParser {
     const components = this.parseComponents();
     const paths = this.parsePaths();
     const { info, servers } = this.document;
-    const firstServer = servers?.at(0);
+    const firstServer = servers?.[0];
     const baseURL = firstServer && firstServer.url;
     const { title, description, version } = info;
 

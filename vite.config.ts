@@ -1,5 +1,4 @@
-import path from 'path';
-import nodeExternals from 'vite-plugin-node-externals';
+import { externalizeDeps } from 'vite-plugin-externalize-deps';
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
@@ -7,7 +6,7 @@ import pkg from './package.json';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    nodeExternals(),
+    externalizeDeps(),
     dts({
       insertTypesEntry: true,
     }),
@@ -18,12 +17,13 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: ['src/index.ts', 'src/helpers.ts'],
+      entry: {
+        index: 'src/index.ts',
+        helpers: 'src/helpers.ts',
+      },
       formats: ['es', 'cjs'],
       fileName(format, entryName) {
-        const ext = format === 'es' ? '.mjs' : '.cjs';
-        const basename = path.basename(entryName, '.ts');
-        return `${basename}${ext}`;
+        return entryName + (format === 'es' ? '.mjs' : '.cjs');
       },
     },
     modulePreload: false,
