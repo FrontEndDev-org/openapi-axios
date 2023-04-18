@@ -49,6 +49,9 @@
     "axios"
   ],
   "author": "云淡然 <hi@ydr.me> (https://ydr.me)",
+  "maintainers": [
+    "阿森 <zhenxs2018@foxmail.com>"
+  ],
   "homepage": "https://github.com/FrontEndDev-org/openapi-axios",
   "repository": "https://github.com/FrontEndDev-org/openapi-axios",
   "license": "MIT",
