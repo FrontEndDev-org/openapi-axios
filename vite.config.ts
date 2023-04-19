@@ -3,7 +3,12 @@ import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
 
-// https://vitejs.dev/config/
+/**
+ * vite confifg
+ * @ref https://vitejs.dev/
+ * vitest config
+ * @ref https://vitest.dev/
+ */
 export default defineConfig({
   plugins: [
     externalizeDeps(),

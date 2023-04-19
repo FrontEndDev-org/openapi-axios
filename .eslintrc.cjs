@@ -1,5 +1,9 @@
 const { defineConfig } = require('eslint-define-config');
 
+/**
+ * eslint config
+ * @ref https://eslint.org/
+ */
 module.exports = defineConfig({
   root: true,
 
