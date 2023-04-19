@@ -16,6 +16,7 @@ export default defineConfig({
     'process.env.PKG_VERSION': JSON.stringify(pkg.version),
   },
   build: {
+    sourcemap: true,
     lib: {
       entry: {
         index: 'src/index.ts',
@@ -26,11 +27,6 @@ export default defineConfig({
         return entryName + (format === 'es' ? '.mjs' : '.cjs');
       },
     },
-    modulePreload: false,
-    sourcemap: true,
-    minify: false,
-    copyPublicDir: false,
-    outDir: 'dist',
   },
   test: {
     globals: true,
