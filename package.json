@@ -17,10 +17,10 @@
     "node": ">=14.21"
   },
   "sideEffects": false,
-  "type": "module",
-  "module": "dist/index.mjs",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
+  "type": "module",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -34,12 +34,12 @@
     },
     "./package.json": "./package.json"
   },
-  "bin": {
-    "openapi-axios": "bin/index.cjs"
-  },
   "files": [
     "dist"
   ],
+  "bin": {
+    "openapi-axios": "bin/index.cjs"
+  },
   "keywords": [
     "cloudcome",
     "ydr.me",
