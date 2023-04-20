@@ -53,7 +53,7 @@ npx openapi-axios
 ```
 
 <details>
-<summary>生成的文件将导出为一个函数和一个操作，如下所示</summary>
+<summary>【点击展开】生成的文件将导出为一个函数和一个操作，如下所示</summary>
 
 ```ts
 // src/apis/swagger/petStore3.ts
