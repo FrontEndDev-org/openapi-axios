@@ -23,6 +23,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     reportCompressedSize: false,
+    copyPublicDir: false,
     lib: {
       entry: {
         index: 'src/index.ts',
