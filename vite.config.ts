@@ -22,6 +22,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    reportCompressedSize: false,
     lib: {
       entry: {
         index: 'src/index.ts',
