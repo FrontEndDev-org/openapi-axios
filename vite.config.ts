@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
 
 /**
- * vite confifg
+ * vite config
  * @ref https://vitejs.dev/
  * vitest config
  * @ref https://vitest.dev/
