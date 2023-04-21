@@ -5,11 +5,11 @@
   "scripts": {
     "prepare": "husky install",
     "build": "vite build",
-    "lint:es": "eslint --ext=.cjs,.mjs,.ts,.tsx src/ test/",
-    "lint:es:fix": "eslint --ext=.cjs,.mjs,.ts,.tsx src/ test/ --fix",
+    "lint:js": "eslint --ext=.cjs,.mjs,.ts,.tsx src test",
+    "lint:js:fix": "eslint --ext=.cjs,.mjs,.ts,.tsx src test --fix",
     "lint:type": " tsc --project tsconfig.json",
-    "lint": "npm run lint:es && npm run lint:type",
-    "lint:fix": "npm run lint:es:fix && npm run lint:type",
+    "lint": "npm run lint:js && npm run lint:type",
+    "lint:fix": "npm run lint:js:fix && npm run lint:type",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
