@@ -1,3 +1,5 @@
+// @ref https://bobbyhadz.com/blog/typescript-process-env-type
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
