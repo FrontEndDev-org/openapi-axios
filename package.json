@@ -35,7 +35,9 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist-cjs",
+    "dist-esm",
+    "dist-types"
   ],
   "bin": {
     "openapi-axios": "bin/index.cjs"
