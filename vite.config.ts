@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [
     externalizeDeps(),
     dts({
-      insertTypesEntry: true,
+      outputDir: 'dist-types',
     }),
   ],
   define: {
@@ -25,14 +25,23 @@ export default defineConfig({
     reportCompressedSize: false,
     copyPublicDir: false,
     lib: {
-      entry: {
-        index: 'src/index.ts',
-        helpers: 'src/helpers.ts',
-      },
-      formats: ['es', 'cjs'],
-      fileName(format, entryName) {
-        return entryName + (format === 'es' ? '.mjs' : '.cjs');
-      },
+      entry: ['src/index.ts', 'src/helpers.ts'],
+    },
+    rollupOptions: {
+      output: [
+        {
+          format: 'esm',
+          dir: 'dist-esm',
+          entryFileNames: '[name].mjs',
+          chunkFileNames: '[name].mjs',
+        },
+        {
+          format: 'cjs',
+          dir: 'dist-cjs',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: '[name].cjs',
+        },
+      ],
     },
   },
   test: {

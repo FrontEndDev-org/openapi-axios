@@ -17,20 +17,20 @@
     "node": ">=14.21"
   },
   "sideEffects": false,
-  "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
+  "main": "dist-cjs/index.cjs",
+  "types": "dist-types/index.d.ts",
   "type": "module",
-  "module": "dist/index.mjs",
+  "module": "dist-esm/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist-esm/index.mjs",
+      "require": "./dist-cjs/index.cjs",
+      "types": "./dist-types/index.d.ts"
     },
     "./helpers": {
-      "import": "./dist/helpers.mjs",
-      "require": "./dist/helpers.cjs",
-      "types": "./dist/helpers.d.ts"
+      "import": "./dist-esm/helpers.mjs",
+      "require": "./dist-cjs/helpers.cjs",
+      "types": "./dist-types/helpers.d.ts"
     },
     "./package.json": "./package.json"
   },
