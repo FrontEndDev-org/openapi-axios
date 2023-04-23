@@ -17,22 +17,25 @@
     "node": ">=14.21"
   },
   "sideEffects": false,
-  "main": "dist-cjs/index.cjs",
-  "types": "dist-types/index.d.ts",
+  "main": "./dist-cjs/index.cjs",
+  "module": "./dist-esm/index.mjs",
   "type": "module",
-  "module": "dist-esm/index.mjs",
   "exports": {
     ".": {
       "import": "./dist-esm/index.mjs",
       "require": "./dist-cjs/index.cjs",
       "types": "./dist-types/index.d.ts"
     },
-    "./helpers": {
-      "import": "./dist-esm/helpers.mjs",
-      "require": "./dist-cjs/helpers.cjs",
-      "types": "./dist-types/helpers.d.ts"
-    },
     "./package.json": "./package.json"
+  },
+  "types": "./dist-types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist-types/index.d.ts",
+        "./dist-types/*"
+      ]
+    }
   },
   "files": [
     "dist-cjs",
