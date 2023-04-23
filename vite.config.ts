@@ -22,8 +22,8 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
-    reportCompressedSize: false,
     copyPublicDir: false,
+    reportCompressedSize: false,
     lib: {
       entry: ['src/index.ts', 'src/helpers.ts'],
     },
