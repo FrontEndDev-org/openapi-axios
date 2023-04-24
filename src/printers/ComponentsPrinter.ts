@@ -1,4 +1,4 @@
-import { TypeItem, TypeOrigin } from '../parsers/types';
+import type { TypeItem, TypeOrigin } from '../parsers/types';
 import { joinSlices, toTypePath } from '../utils/string';
 import { BasePrinter } from './BasePrinter';
 import { CommentsPrinter } from './CommentsPrinter';

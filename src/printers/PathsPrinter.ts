@@ -1,6 +1,6 @@
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { groupBy } from 'lodash';
-import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from '../parsers/types';
+import type { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from '../parsers/types';
 import { joinSlices, nextUniqueName, varString } from '../utils/string';
 import { isBoolean, isString } from '../utils/type-is';
 import { ComponentsPrinter } from './ComponentsPrinter';

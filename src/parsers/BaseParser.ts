@@ -1,8 +1,8 @@
 import * as process from 'process';
-import { OpenAPIV3, OpenAPIV3Document } from '../types/openapi';
+import type { OpenAPIV3, OpenAPIV3Document } from '../types/openapi';
 import { INTERNAL_TYPE_NAMES, JSON_MIME } from './const';
 import { Named } from './Named';
-import { ParserOptions, StrictParserOptions, TypeAlias, TypeItem } from './types';
+import type { ParserOptions, StrictParserOptions, TypeAlias, TypeItem } from './types';
 
 export class BaseParser {
   named = new Named();

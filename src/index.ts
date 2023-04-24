@@ -1,4 +1,4 @@
-export { pkgName, pkgVersion } from './const';
+export * from './const';
 export { defineConfig, run } from './generators/command';
 export { DocumentPrinter } from './printers/DocumentPrinter';
 export { DocumentParser } from './parsers/DocumentParser';

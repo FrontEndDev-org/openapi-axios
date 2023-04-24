@@ -1,5 +1,9 @@
 - [ ] 支持 OneOf AllOf
-- [ ] 支持长度为一的必填参数展开
+- [ ] 支持长度为一的必填参数展开 `type XXReqPath = { name: string }` -> `name: string`
 - [ ] openapi document validate
 - [ ] 接口 mock
 - [ ] 接口运行期类型检查
+- [ ] unplugin
+- [ ] vue hook
+- [ ] react hook
+- [ ] 自定义 printer

@@ -1,4 +1,6 @@
 /**
+ * prettier.config
+ * @ref https://prettier.io/
  * @type {import('prettier').Config}
  */
 module.exports = {

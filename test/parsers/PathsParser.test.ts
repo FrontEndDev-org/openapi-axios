@@ -1,6 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { PathsParser } from '../../src/parsers/PathsParser';
-import { TypeOperations } from '../../src/parsers/types';
+import type { TypeOperations } from '../../src/parsers/types';
 import HttpMethods = OpenAPIV3.HttpMethods;
 
 test('empty paths keys', async () => {

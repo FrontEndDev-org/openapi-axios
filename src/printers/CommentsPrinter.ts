@@ -1,4 +1,4 @@
-import { TypeComments, TypeItem } from '../parsers/types';
+import type { TypeComments, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
 import { isUndefined } from '../utils/type-is';
 import { BasePrinter } from './BasePrinter';

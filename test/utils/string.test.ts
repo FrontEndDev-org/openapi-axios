@@ -3,7 +3,7 @@ import {
   findOrigin,
   joinSlices,
   nextUniqueName,
-  RefInfo,
+  type RefInfo,
   refToType,
   toTypePath,
   varString,

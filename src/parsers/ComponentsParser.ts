@@ -1,7 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { isBoolean } from '../utils/type-is';
 import { BaseParser } from './BaseParser';
-import { TypeAlias, TypeItem, TypeList, TypeOrigin, TypeUnit } from './types';
+import type { TypeAlias, TypeItem, TypeList, TypeOrigin, TypeUnit } from './types';
 
 export class ComponentsParser extends BaseParser {
   parseComponents(): TypeList {

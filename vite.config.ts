@@ -3,12 +3,17 @@ import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
 
-// https://vitejs.dev/config/
+/**
+ * vite config
+ * @ref https://vitejs.dev/
+ * vitest config
+ * @ref https://vitest.dev/
+ */
 export default defineConfig({
   plugins: [
     externalizeDeps(),
     dts({
-      insertTypesEntry: true,
+      outputDir: 'dist-types',
     }),
   ],
   define: {
@@ -16,21 +21,28 @@ export default defineConfig({
     'process.env.PKG_VERSION': JSON.stringify(pkg.version),
   },
   build: {
-    lib: {
-      entry: {
-        index: 'src/index.ts',
-        helpers: 'src/helpers.ts',
-      },
-      formats: ['es', 'cjs'],
-      fileName(format, entryName) {
-        return entryName + (format === 'es' ? '.mjs' : '.cjs');
-      },
-    },
-    modulePreload: false,
     sourcemap: true,
-    minify: false,
     copyPublicDir: false,
-    outDir: 'dist',
+    reportCompressedSize: false,
+    lib: {
+      entry: ['src/index.ts', 'src/helpers.ts'],
+    },
+    rollupOptions: {
+      output: [
+        {
+          format: 'esm',
+          dir: 'dist-esm',
+          entryFileNames: '[name].mjs',
+          chunkFileNames: '[name].mjs',
+        },
+        {
+          format: 'cjs',
+          dir: 'dist-cjs',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: '[name].cjs',
+        },
+      ],
+    },
   },
   test: {
     globals: true,
@@ -39,9 +51,9 @@ export default defineConfig({
       PKG_VERSION: 'pkg-version-for-test',
     },
     coverage: {
-      reporter: ['lcov', 'text'],
-      // 包含所有源文件的覆盖率，而不是仅被单测的部分
       all: true,
+      include: ['src/**/*.ts'],
+      reporter: ['lcov', 'text'],
     },
   },
 });

@@ -1,5 +1,5 @@
 import { buildName, findOrigin, nextUniqueName, refToType } from '../utils/string';
-import { TypeAlias } from './types';
+import type { TypeAlias } from './types';
 
 export class Named {
   private aliasRelationMap = new Map<string /*source*/, string /*target*/>();

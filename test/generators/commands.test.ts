@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { configFileNameOrder, resolveConfig, resolveConfigFile, run } from '../../src/generators/command';
-import { OpenAPIV3Document } from '../../src/types/openapi';
+import type { OpenAPIV3Document } from '../../src/types/openapi';
 import { createTempDirname } from '../helpers';
 
 test('resolveConfigFile', async () => {
