@@ -26,7 +26,12 @@
       "require": "./dist-cjs/index.cjs",
       "types": "./dist-types/index.d.ts"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./helpers": {
+      "import": "./dist-esm/helpers.mjs",
+      "require": "./dist-cjs/helpers.cjs",
+      "types": "./dist-types/helpers.d.ts"
+    }
   },
   "types": "./dist-types/index.d.ts",
   "typesVersions": {
