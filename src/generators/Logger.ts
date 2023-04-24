@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import path from 'path';
-import { GeneratorEmits } from './types';
+import type { GeneratorEmits } from './types';
 
 export class Logger {
   pipeStartEvent(...[payload]: GeneratorEmits['start']) {

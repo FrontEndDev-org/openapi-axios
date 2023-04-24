@@ -1,5 +1,5 @@
 import { PathsParser } from './PathsParser';
-import { TypeDocument } from './types';
+import type { TypeDocument } from './types';
 
 export class DocumentParser extends PathsParser {
   parse(): TypeDocument {

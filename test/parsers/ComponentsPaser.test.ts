@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 import { ComponentsParser } from '../../src/parsers/ComponentsParser';
-import { TypeAlias, TypeList } from '../../src/parsers/types';
+import type { TypeAlias, TypeList } from '../../src/parsers/types';
 
 test('empty components', async () => {
   const parser = new ComponentsParser({

@@ -1,4 +1,4 @@
-import { OpenAPIV3Document } from '../types/openapi';
+import type { OpenAPIV3Document } from '../types/openapi';
 
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array' | 'any';
 

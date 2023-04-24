@@ -1,7 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { ComponentsParser } from './ComponentsParser';
 import { BLOB_MIME, JSON_MIME, HTTP_METHODS } from './const';
-import { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
+import type { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
 
 export class PathsParser extends ComponentsParser {
   parsingUrl = '';

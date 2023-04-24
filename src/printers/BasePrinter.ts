@@ -1,6 +1,6 @@
-import { TypeAlias, TypeDocument, TypeItem } from '../parsers/types';
+import type { TypeAlias, TypeDocument, TypeItem } from '../parsers/types';
 import { joinSlices } from '../utils/string';
-import { StrictPrinterOptions, PrinterOptions } from './types';
+import type { StrictPrinterOptions, PrinterOptions } from './types';
 import prettier from 'prettier';
 
 export class BasePrinter {

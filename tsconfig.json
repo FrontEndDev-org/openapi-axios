@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
     "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,5 +18,5 @@
     "lib": ["Es2020"],
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "vite.config.ts", "package.json"]
+  "include": ["src", "test", "package.json", "vite.config.ts"]
 }

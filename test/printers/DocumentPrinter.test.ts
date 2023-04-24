@@ -1,5 +1,5 @@
-import { TypeDocument } from '../../src/parsers/types';
-import { DocumentPrinter } from '../../src/printers/DocumentPrinter';
+import type { TypeDocument } from '../../src/parsers/types';
+import { DocumentPrinter } from '../../src';
 
 import petStore3 from '../files/petStore3.types.json';
 import { writeFile } from '../helpers';

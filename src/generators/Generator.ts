@@ -6,7 +6,7 @@ import { normalizeError } from 'try-flatten';
 import { DocumentParser } from '../parsers/DocumentParser';
 import { DocumentPrinter } from '../printers/DocumentPrinter';
 import { Reader } from './Reader';
-import {
+import type {
   GeneratingOptions,
   GeneratingStage,
   GeneratorEmits,

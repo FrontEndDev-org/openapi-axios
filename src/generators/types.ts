@@ -1,6 +1,6 @@
-import { AcceptDocument, ParserOptions } from '../parsers/types';
-import { PrinterOptions } from '../printers/types';
-import { OpenAPIV3Document } from '../types/openapi';
+import type { AcceptDocument, ParserOptions } from '../parsers/types';
+import type { PrinterOptions } from '../printers/types';
+import type { OpenAPIV3Document } from '../types/openapi';
 
 type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 

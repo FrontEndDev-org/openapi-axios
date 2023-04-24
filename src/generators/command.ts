@@ -5,7 +5,7 @@ import { tryFlatten } from 'try-flatten';
 import { z } from 'zod';
 import { Generator } from './Generator';
 import { Logger } from './Logger';
-import { GeneratorOptions } from './types';
+import type { GeneratorOptions } from './types';
 
 export function defineConfig(options: GeneratorOptions): GeneratorOptions {
   return options;
