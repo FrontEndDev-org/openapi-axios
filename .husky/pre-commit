@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+echo "node version = $(node -v)"
+echo "npm version = $(npm -v)"
 npx lint-staged --allow-empty
 npx tsc --noEmit
