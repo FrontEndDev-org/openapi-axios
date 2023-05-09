@@ -18,5 +18,5 @@
     "lib": ["Es2020"],
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "package.json", "vite.config.ts"]
+  "include": ["src", "test", "*.ts"]
 }

@@ -5,8 +5,7 @@ import prettier from 'prettier';
 
 export class BasePrinter {
   static defaults: StrictPrinterOptions = {
-    axiosImport: `import { Axios } from 'axios';
-const axios = new Axios();`,
+    axiosImport: `import axios from 'axios';`,
     prettier: {
       singleQuote: true,
     },
