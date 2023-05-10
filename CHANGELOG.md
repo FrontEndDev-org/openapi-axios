@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.0...v0.15.1) (2023-05-10)
+
+
+### Bug Fixes
+
+* **printer:** 修正 axios 的导入 ([61c5b17](https://github.com/FrontEndDev-org/openapi-axios/commit/61c5b17cae8531375e7ab7a520824ed6bb282b0b))
+
 ## [0.15.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.14.0...v0.15.0) (2023-04-24)
 
 
