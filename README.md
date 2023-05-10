@@ -70,8 +70,7 @@ import {
   PUT,
   resolveURL,
 } from 'openapi-axios/helpers';
-import { Axios } from 'axios';
-const axios = new Axios();
+import axios from 'axios';
 
 const request = axios.request;
 const BASE_URL = '/api/v3';
