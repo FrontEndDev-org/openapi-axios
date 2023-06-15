@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.3](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.2...v0.15.3) (2023-06-15)
+
+
+### Bug Fixes
+
+* 修复未对 JS 保留字的命名保护 ([64d9c36](https://github.com/FrontEndDev-org/openapi-axios/commit/64d9c3662a913af60316eccd23e9ec6ac42ac94f))
+
 ## [0.15.2](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.1...v0.15.2) (2023-06-15)
 
 
