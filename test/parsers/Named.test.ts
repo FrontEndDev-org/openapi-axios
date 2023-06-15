@@ -22,6 +22,13 @@ test('named', () => {
   expect(named.nextOperationId('get', '/path/to/foo', 'foo')).toEqual('foo2');
   expect(named.nextOperationId('get', '/path/to/foo')).toEqual('getFoo3');
 
+  expect(named.nextOperationId('', '', 'xx')).toEqual('xx');
+  expect(named.nextOperationId('', '', 'xx')).toEqual('xx2');
+
+  named.internalName('export');
+  expect(named.nextOperationId('', '', 'export')).toEqual('export2');
+  expect(named.nextOperationId('', '', 'export')).toEqual('export3');
+
   // A -> A!(A2) -> aa!!/1/2 == A -> aa!!/1/2(Aa3)
   const a1 = named.addAlias({
     kind: 'alias',
