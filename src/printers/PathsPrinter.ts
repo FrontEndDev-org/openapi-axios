@@ -81,7 +81,7 @@ export class PathsPrinter extends ComponentsPrinter {
       `...${configArgName}`,
     ]);
 
-    return `${comments}export async function ${name}(${args_}):${return_}  {
+    return `${comments}export async function ${name}(${args_}): ${return_}  {
               return request({
                 ${props}
               });
