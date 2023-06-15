@@ -45,6 +45,13 @@ module.exports = defineConfig({
 });
 ```
 
+<details>
+<summary>【点击展开】url在swagger页面标题的下方，如下图所示：</summary>
+
+![swagger-url-position.png](swagger-url-position.png)
+
+</details>
+
 ```shell
 # 根据配置文件生成typescript文件
 npx openapi-axios
