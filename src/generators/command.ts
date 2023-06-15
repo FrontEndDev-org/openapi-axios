@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import * as process from 'process';
+import process from 'process';
 import { tryFlatten } from 'try-flatten';
 import { z } from 'zod';
 import { Generator } from './Generator';
