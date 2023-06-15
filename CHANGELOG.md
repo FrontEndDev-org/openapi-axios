@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.2](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.1...v0.15.2) (2023-06-15)
+
+
+### Bug Fixes
+
+* 修复 process 模块的 cjs 与 esm 互操作错误的问题 ([cdc0990](https://github.com/FrontEndDev-org/openapi-axios/commit/cdc099091275c640d7df2b4ab4b7375e1c61dfdd)), closes [#238](https://github.com/FrontEndDev-org/openapi-axios/issues/238)
+
 ## [0.15.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.0...v0.15.1) (2023-05-10)
 
 
