@@ -1,7 +1,7 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
-import * as process from 'process';
+import process from 'process';
 import type { AcceptDocument } from '../parsers/types';
 import type { OpenAPIV3Document } from '../types/openapi';
 import { isString } from '../utils/type-is';

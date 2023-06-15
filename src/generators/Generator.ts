@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import * as process from 'process';
+import process from 'process';
 import { Emitter } from 'strict-event-emitter';
 import { normalizeError } from 'try-flatten';
 import { DocumentParser } from '../parsers/DocumentParser';
