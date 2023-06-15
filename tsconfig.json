@@ -6,7 +6,6 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "useDefineForClassFields": true,
