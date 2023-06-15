@@ -1,6 +1,6 @@
 import process from 'process';
 import type { OpenAPIV3, OpenAPIV3Document } from '../types/openapi';
-import { INTERNAL_TYPE_NAMES, JSON_MIME } from './const';
+import { INTERNAL_NAMES, JS_RESERVED_NAMES, JSON_MIME } from './const';
 import { Named } from './Named';
 import type { ParserOptions, StrictParserOptions, TypeAlias, TypeItem } from './types';
 
@@ -21,7 +21,8 @@ export class BaseParser {
 
   constructor(protected document: OpenAPIV3Document, options?: ParserOptions) {
     this.options = Object.assign({}, BaseParser.defaults, options) as StrictParserOptions;
-    INTERNAL_TYPE_NAMES.forEach(this.named.internalName.bind(this.named));
+    INTERNAL_NAMES.forEach(this.named.internalName.bind(this.named));
+    JS_RESERVED_NAMES.forEach(this.named.internalName.bind(this.named));
     this.init();
   }
 

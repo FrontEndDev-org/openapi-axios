@@ -90,6 +90,35 @@ test('empty path item method responses keys + specify operationId', async () => 
   ]);
 });
 
+test('operationId is reserved', async () => {
+  const parser = new PathsParser({
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    openapi: '3.0.0',
+    paths: {
+      '/pet': {
+        get: {
+          operationId: 'export',
+          responses: {},
+        },
+      },
+    },
+  });
+
+  const t = parser.parsePaths();
+  expect(t).toEqual<TypeOperations>([
+    {
+      name: 'export2',
+      method: OpenAPIV3.HttpMethods.GET,
+      url: '/pet',
+      request: {},
+      response: {},
+    },
+  ]);
+});
+
 test('resp ref', async () => {
   const parser = new PathsParser({
     info: {
