@@ -21,6 +21,7 @@ export default defineConfig({
     'process.env.PKG_VERSION': JSON.stringify(pkg.version),
   },
   build: {
+    minify: false,
     sourcemap: true,
     copyPublicDir: false,
     reportCompressedSize: false,
