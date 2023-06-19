@@ -2,7 +2,6 @@ import { OpenAPIV3 } from 'openapi-types';
 import { ComponentsParser } from './ComponentsParser';
 import { BLOB_MIME, JSON_MIME, HTTP_METHODS } from './const';
 import type { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from './types';
-import type { Named } from './Named';
 
 export class PathsParser extends ComponentsParser {
   parsingUrl = '';
@@ -43,12 +42,13 @@ export class PathsParser extends ComponentsParser {
   parseOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
     const { parameters, requestBody: requestBodySchema } = operation;
     const { pathTypes, queryTypes } = this.parseOperationParameters(parameters);
-    const nameParams: Parameters<Named['nextOperationId']> = [
-      this.parsingMethod,
-      this.parsingUrl,
-      operation.operationId,
-    ];
-    const name = this.options.nameFormatter(this.named.nextOperationId(...nameParams), ...nameParams);
+    const initialName = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
+    const name = this.options.nameFormatter({
+      name: initialName,
+      method: this.parsingMethod,
+      url: this.parsingUrl,
+      operationId: operation.operationId,
+    });
     const requestPathTypeName = this.named.nextTypeName(name + this.options.requestPathTypeName);
     const requestQueryTypeName = this.named.nextTypeName(name + this.options.requestQueryTypeName);
     const requestBodyTypeName = this.named.nextTypeName(name + this.options.requestBodyTypeName);

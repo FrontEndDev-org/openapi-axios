@@ -1,5 +1,4 @@
 import type { OpenAPIV3Document } from '../types/openapi';
-import type { Named } from './Named';
 
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array' | 'any';
 
@@ -35,6 +34,13 @@ export interface TypeAlias extends TypeComments {
 export type TypeItem = TypeOrigin | TypeAlias;
 export type TypeList = TypeItem[];
 
+export interface NameFormatterProps {
+  name: string;
+  method: string;
+  url: string;
+  operationId?: string;
+}
+
 export interface ParserOptions {
   cwd?: string;
 
@@ -50,10 +56,7 @@ export interface ParserOptions {
    */
   okMediaType?: string;
 
-  nameFormatter?: (
-    name: ReturnType<Named['nextOperationId']>,
-    ...params: Parameters<Named['nextOperationId']>
-  ) => string;
+  nameFormatter?: (props: NameFormatterProps) => string;
   requestPathTypeName?: string;
   requestQueryTypeName?: string;
   requestBodyTypeName?: string;

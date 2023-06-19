@@ -154,16 +154,29 @@ console.log(pet);
 | `openAPIs`    | `OpenAPIOptions[]` | `true`  | OpenAPIOptions 列表，至少需要配置一个 | 无                           |
 
 ## `ParserOptions` 签名：
-| 参数名                    | 类型         | 可选性     | 描述                                                                                           | 默认值                  |
-|------------------------|------------|---------|----------------------------------------------------------------------------------------------|----------------------|
-| `cwd`                  | `string`   | `false` | 当前工作路径                                                                                       | `process.cwd()`      |
-| `okCode`               | `number`   | `false` | ok 的响应码                                                                                      | `200`                |
-| `okMediaType`          | `number`   | `false` | ok 的响应类型                                                                                     | `application/json`   |
-| `nameFormatter`        | `function` | `false` | 自定义name解析格式化方法，函数签名 ```(name:string,method:string,url:string,operationId?:string)=>string``` | ```(name) => name``` |
-| `requestPathTypeName`  | `string`   | `false` | 请求路径参数类型名称                                                                                   | `ReqPath`            |
-| `requestQueryTypeName` | `string`   | `false` | 请求查询参数类型名称                                                                                   | `ReqParams`          |
-| `requestBodyTypeName`  | `string`   | `false` | 请求体参数类型名称                                                                                    | `ReqData`            |
-| `responseBodyTypeName` | `string`   | `false` | 响应体参数类型名称                                                                                    | `ResData`            |
+| 参数名                    | 类型         | 可选性     | 描述                                                             | 默认值                    |
+|------------------------|------------|---------|----------------------------------------------------------------|------------------------|
+| `cwd`                  | `string`   | `false` | 当前工作路径                                                         | `process.cwd()`        |
+| `okCode`               | `number`   | `false` | ok 的响应码                                                        | `200`                  |
+| `okMediaType`          | `number`   | `false` | ok 的响应类型                                                       | `application/json`     |
+| `nameFormatter`        | `function` | `false` | 自定义name格式化方法，函数签名 ```(props: NameFormatterProps) => string;``` | ```({name}) => name``` |
+| `requestPathTypeName`  | `string`   | `false` | 请求路径参数类型名称                                                     | `ReqPath`              |
+| `requestQueryTypeName` | `string`   | `false` | 请求查询参数类型名称                                                     | `ReqParams`            |
+| `requestBodyTypeName`  | `string`   | `false` | 请求体参数类型名称                                                      | `ReqData`              |
+| `responseBodyTypeName` | `string`   | `false` | 响应体参数类型名称                                                      | `ResData`              |
+
+<details>
+<summary>【点击展开】查看 NameFormatterProps 签名</summary>
+
+## `NameFormatterProps` 签名：
+| 参数名                   | 类型       | 可选性     | 描述                 | 默认值                         |
+|-----------------------|----------|---------|--------------------|-----------------------------|
+| `name`                | `string` | `true`  | 原始名称（经过内部处理，能保证唯一） | 无                           |
+| `method`              | `string` | `true`  | 方法                 | 无                           |
+| `path`                | `string` | `true`  | 路径                 | 无                           |
+| `operationId`         | `string` | `false` | operationId        | 无                           |
+
+</details>
 
 ## `PrinterOptions` 签名：
 | 参数名                   | 类型       | 可选性     | 描述                                  | 默认值                         |

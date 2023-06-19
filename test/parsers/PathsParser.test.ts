@@ -113,7 +113,7 @@ test('custom name formatter', async () => {
       },
     },
     {
-      nameFormatter: (name, method, url, operationId) => {
+      nameFormatter: ({ name /*, method, url, operationId*/ }) => {
         return `custom_${name}`;
       },
     }

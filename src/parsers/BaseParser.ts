@@ -11,7 +11,7 @@ export class BaseParser {
     cwd: process.cwd(),
     okCode: 200,
     okMediaType: JSON_MIME,
-    nameFormatter: (name) => name,
+    nameFormatter: ({ name }) => name,
     requestPathTypeName: 'ReqPath',
     requestQueryTypeName: 'ReqParams',
     requestBodyTypeName: 'ReqData',
