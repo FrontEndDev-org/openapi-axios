@@ -1,4 +1,5 @@
 import type { OpenAPIV3Document } from '../types/openapi';
+import type { Named } from './Named';
 
 export type TypeUnit = 'number' | 'string' | 'boolean' | 'never' | 'object' | 'array' | 'any';
 
@@ -49,6 +50,10 @@ export interface ParserOptions {
    */
   okMediaType?: string;
 
+  nameFormatter?: (
+    name: ReturnType<Named['nextOperationId']>,
+    ...params: Parameters<Named['nextOperationId']>
+  ) => string;
   requestPathTypeName?: string;
   requestQueryTypeName?: string;
   requestBodyTypeName?: string;
