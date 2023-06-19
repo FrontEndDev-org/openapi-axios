@@ -34,6 +34,13 @@ export interface TypeAlias extends TypeComments {
 export type TypeItem = TypeOrigin | TypeAlias;
 export type TypeList = TypeItem[];
 
+export interface NameFormatterProps {
+  name: string;
+  method: string;
+  url: string;
+  operationId?: string;
+}
+
 export interface ParserOptions {
   cwd?: string;
 
@@ -49,6 +56,7 @@ export interface ParserOptions {
    */
   okMediaType?: string;
 
+  nameFormatter?: (props: NameFormatterProps) => string;
   requestPathTypeName?: string;
   requestQueryTypeName?: string;
   requestBodyTypeName?: string;

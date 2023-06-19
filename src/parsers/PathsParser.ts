@@ -42,7 +42,13 @@ export class PathsParser extends ComponentsParser {
   parseOperation(operation: OpenAPIV3.OperationObject): TypeOperation {
     const { parameters, requestBody: requestBodySchema } = operation;
     const { pathTypes, queryTypes } = this.parseOperationParameters(parameters);
-    const name = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
+    const initialName = this.named.nextOperationId(this.parsingMethod, this.parsingUrl, operation.operationId);
+    const name = this.options.nameFormatter({
+      name: initialName,
+      method: this.parsingMethod,
+      url: this.parsingUrl,
+      operationId: operation.operationId,
+    });
     const requestPathTypeName = this.named.nextTypeName(name + this.options.requestPathTypeName);
     const requestQueryTypeName = this.named.nextTypeName(name + this.options.requestQueryTypeName);
     const requestBodyTypeName = this.named.nextTypeName(name + this.options.requestBodyTypeName);

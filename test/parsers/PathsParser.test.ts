@@ -90,6 +90,54 @@ test('empty path item method responses keys + specify operationId', async () => 
   ]);
 });
 
+test('custom name formatter', async () => {
+  const parser = new PathsParser(
+    {
+      info: {
+        title: 'test',
+        version: '1.0.0',
+      },
+      openapi: '3.0.0',
+      paths: {
+        '/pet': {
+          get: {
+            operationId: 'findPet',
+            responses: {},
+          },
+        },
+        '/cat': {
+          get: {
+            responses: {},
+          },
+        },
+      },
+    },
+    {
+      nameFormatter: ({ name /*, method, url, operationId*/ }) => {
+        return `custom_${name}`;
+      },
+    }
+  );
+
+  const t = parser.parsePaths();
+  expect(t).toEqual<TypeOperations>([
+    {
+      name: `custom_getCat`,
+      method: OpenAPIV3.HttpMethods.GET,
+      url: '/cat',
+      request: {},
+      response: {},
+    },
+    {
+      name: `custom_findPet`,
+      method: OpenAPIV3.HttpMethods.GET,
+      url: '/pet',
+      request: {},
+      response: {},
+    },
+  ]);
+});
+
 test('operationId is reserved', async () => {
   const parser = new PathsParser({
     info: {
