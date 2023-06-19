@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.16.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.3...v0.16.0) (2023-06-19)
+
+
+### Features
+
+* **parser:** 新增nameFormatter支持自定义方法名 Implement [#247](https://github.com/FrontEndDev-org/openapi-axios/issues/247) ([28e64d7](https://github.com/FrontEndDev-org/openapi-axios/commit/28e64d716f19ff810ccecae705bccb3f8b1fcdfd))
+
+
+### Bug Fixes
+
+* **parser:** nameFormatter 入参改为对象 ([9eab1e3](https://github.com/FrontEndDev-org/openapi-axios/commit/9eab1e37d98048786f1d2c380d0ad55f8915d522))
+
 ## [0.15.3](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.2...v0.15.3) (2023-06-15)
 
 

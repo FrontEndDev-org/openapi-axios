@@ -1,6 +1,6 @@
 {
   "name": "openapi-axios",
-  "version": "0.15.3",
+  "version": "0.16.0",
   "description": "OpenAPI ➡️ Axios",
   "scripts": {
     "prepare": "husky install",
