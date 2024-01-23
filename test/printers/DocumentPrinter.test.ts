@@ -9,11 +9,10 @@ test('DocumentPrinter', () => {
     const text = printer.print();
     writeFile('petStore3.types.txt', text);
     expect(text).toMatchInlineSnapshot(`
-      "import type { OneOf } from "openapi-axios/helpers"
-      import type { AxiosPromise, AxiosRequestConfig } from "axios";
-      import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, resolveURL } from "openapi-axios/helpers";
-      import axios from 'axios';
-      const request = axios.request;
+      "import type { OneOf } from "pkg-name-for-test/client"
+      import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, resolveURL } from "pkg-name-for-test/client";
+      import type {AxiosRequestConfig, AxiosPromise} from "axios";
+      import axios from "axios";
       const BASE_URL = "/api/v3";
       export type Address = {/**
        * @example Palo Alto
@@ -151,7 +150,7 @@ test('DocumentPrinter', () => {
        * @description Add a new pet to the store
        */
       export async function addPet(data:AddPetReqData, config?:AxiosRequestConfig): AxiosPromise<AddPetResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet\`),
       method: POST,
       data,
@@ -166,7 +165,7 @@ test('DocumentPrinter', () => {
        * @description Update an existing pet by Id
        */
       export async function updatePet(data:UpdatePetReqData, config?:AxiosRequestConfig): AxiosPromise<UpdatePetResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet\`),
       method: PUT,
       data,
@@ -184,7 +183,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function deletePet(path:DeletePetReqPath, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
       method: DELETE,
       ...config
@@ -202,7 +201,7 @@ test('DocumentPrinter', () => {
        * @description Returns a single pet
        */
       export async function getPetById(path:GetPetByIdReqPath, config?:AxiosRequestConfig): AxiosPromise<GetPetByIdResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
       method: GET,
       ...config
@@ -227,7 +226,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function updatePetWithForm(path:UpdatePetWithFormReqPath, params?:UpdatePetWithFormReqParams, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/\${path.petId}\`),
       method: POST,
       params,
@@ -251,7 +250,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function uploadFile(path:UploadFileReqPath, data:UploadFileReqData, params?:UploadFileReqParams, config?:AxiosRequestConfig): AxiosPromise<UploadFileResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/\${path.petId}/uploadImage\`),
       method: POST,
       params,
@@ -271,7 +270,7 @@ test('DocumentPrinter', () => {
        * @description Multiple status values can be provided with comma separated strings
        */
       export async function findPetsByStatus(params?:FindPetsByStatusReqParams, config?:AxiosRequestConfig): AxiosPromise<FindPetsByStatusResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/findByStatus\`),
       method: GET,
       params,
@@ -289,7 +288,7 @@ test('DocumentPrinter', () => {
        * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
        */
       export async function findPetsByTags(params?:FindPetsByTagsReqParams, config?:AxiosRequestConfig): AxiosPromise<FindPetsByTagsResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/pet/findByTags\`),
       method: GET,
       params,
@@ -306,7 +305,7 @@ test('DocumentPrinter', () => {
        * @description Returns a map of status codes to quantities
        */
       export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<GetInventoryResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/store/inventory\`),
       method: GET,
       ...config
@@ -320,7 +319,7 @@ test('DocumentPrinter', () => {
        * @description Place a new order in the store
        */
       export async function placeOrder(data:PlaceOrderReqData, config?:AxiosRequestConfig): AxiosPromise<PlaceOrderResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/store/order\`),
       method: POST,
       data,
@@ -338,7 +337,7 @@ test('DocumentPrinter', () => {
        * @description For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
        */
       export async function deleteOrder(path:DeleteOrderReqPath, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/store/order/\${path.orderId}\`),
       method: DELETE,
       ...config
@@ -356,7 +355,7 @@ test('DocumentPrinter', () => {
        * @description For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
        */
       export async function getOrderById(path:GetOrderByIdReqPath, config?:AxiosRequestConfig): AxiosPromise<GetOrderByIdResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/store/order/\${path.orderId}\`),
       method: GET,
       ...config
@@ -369,7 +368,7 @@ test('DocumentPrinter', () => {
        * @description This can only be done by the logged in user.
        */
       export async function createUser(data:CreateUserReqData, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user\`),
       method: POST,
       data,
@@ -386,7 +385,7 @@ test('DocumentPrinter', () => {
        * @description This can only be done by the logged in user.
        */
       export async function deleteUser(path:DeleteUserReqPath, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
       method: DELETE,
       ...config
@@ -403,7 +402,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function getUserByName(path:GetUserByNameReqPath, config?:AxiosRequestConfig): AxiosPromise<GetUserByNameResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
       method: GET,
       ...config
@@ -420,7 +419,7 @@ test('DocumentPrinter', () => {
        * @description This can only be done by the logged in user.
        */
       export async function updateUser(path:UpdateUserReqPath, data:UpdateUserReqData, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/\${path.username}\`),
       method: PUT,
       data,
@@ -435,7 +434,7 @@ test('DocumentPrinter', () => {
        * @description Creates list of users with given input array
        */
       export async function createUsersWithListInput(data?:CreateUsersWithListInputReqData, config?:AxiosRequestConfig): AxiosPromise<CreateUsersWithListInputResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/createWithList\`),
       method: POST,
       data,
@@ -457,7 +456,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function loginUser(params?:LoginUserReqParams, config?:AxiosRequestConfig): AxiosPromise<LoginUserResData>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/login\`),
       method: GET,
       params,
@@ -470,7 +469,7 @@ test('DocumentPrinter', () => {
        * @description 
        */
       export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: resolveURL(BASE_URL, \`/user/logout\`),
       method: GET,
       ...config

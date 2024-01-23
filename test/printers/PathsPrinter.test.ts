@@ -35,7 +35,7 @@ test('empty req && empty res', () => {
        * @description ddd
        */
       export async function getName(config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: \`/\`,
       method: GET,
       ...config
@@ -90,7 +90,7 @@ test('req.path', () => {
        * @description ddd
        */
       export async function getName(path:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: \`/api/name/\${path.name}/age/\${path.age}\`,
       method: GET,
       ...config
@@ -145,7 +145,7 @@ test('req.query', () => {
        * @description ddd
        */
       export async function getName(params:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: \`/\`,
       method: GET,
       params,
@@ -201,7 +201,7 @@ test('req.body', () => {
        * @description ddd
        */
       export async function getName(data:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
-                    return request({
+                    return axios({
                       url: \`/\`,
       method: GET,
       data,
@@ -257,7 +257,7 @@ test('res.body', () => {
        * @description ddd
        */
       export async function getName(config?:AxiosRequestConfig): AxiosPromise<T>  {
-                    return request({
+                    return axios({
                       url: \`/\`,
       method: GET,
       ...config
@@ -323,7 +323,7 @@ test('req.path + res.body', () => {
        * @description Returns a single pet
        */
       export async function getPetById(path:GetPetByIdRequestPath, config?:AxiosRequestConfig): AxiosPromise<GetPetByIdResponseBody>  {
-                    return request({
+                    return axios({
                       url: \`/pet/\${path.petId}\`,
       method: GET,
       ...config
@@ -404,7 +404,7 @@ test('req.path + req.query + res.body', () => {
        * @description 
        */
       export async function uploadFile(path:UploadFileRequestPath, params?:UploadFileRequestQuery, config?:AxiosRequestConfig): AxiosPromise<UploadFileResponseBody>  {
-                    return request({
+                    return axios({
                       url: \`/pet/\${path.petId}/uploadImage\`,
       method: POST,
       params,
@@ -511,7 +511,7 @@ test('req.path + req.query + req.body + res.body', () => {
        * @description 
        */
       export async function uploadFile(path:UploadFileRequestPath, data:UploadFileRequestBody, params?:UploadFileRequestQuery, config?:AxiosRequestConfig): AxiosPromise<UploadFileResponseBody>  {
-                    return request({
+                    return axios({
                       url: \`/pet/\${path.petId}/uploadImage\`,
       method: POST,
       params,
