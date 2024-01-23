@@ -1,4 +1,4 @@
-import { resolveURL } from '../src/helpers';
+import { resolveURL } from '../src/client';
 
 test('resolveBaseURL', () => {
     expect(resolveURL('/', '/a/b')).toEqual('/a/b');

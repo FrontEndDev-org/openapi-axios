@@ -4,11 +4,11 @@ import type { StrictPrinterOptions, PrinterOptions } from './types';
 
 export class BasePrinter {
     static defaults: StrictPrinterOptions = {
-        axiosImport: `import axios from 'axios';`,
+        axiosImportPath: 'axios',
         requestPathArgName: 'path',
         requestQueryArgName: 'params',
         requestBodyArgName: 'data',
-        responseTypeName: 'AxiosPromise',
+        requestConfigArgName: 'config',
     };
 
     options: StrictPrinterOptions;

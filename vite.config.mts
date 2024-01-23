@@ -28,7 +28,7 @@ export default defineConfig({
         lib: {
             entry: {
                 index: 'src/index.ts',
-                helpers: 'src/helpers.ts',
+                client: 'src/client.ts',
             },
         },
         rollupOptions: {

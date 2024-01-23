@@ -25,16 +25,16 @@
             "require": "./dist/index.cjs"
         },
         "./package.json": "./package.json",
-        "./helpers": {
-            "import": "./dist/helpers.mjs",
-            "require": "./dist/helpers.cjs"
+        "./client": {
+            "import": "./dist/client.mjs",
+            "require": "./dist/client.cjs"
         }
     },
     "types": "./dist/index.d.ts",
     "typesVersions": {
         "*": {
-            "helpers": [
-                "./dist/helpers.d.ts"
+            "client": [
+                "./dist/client.d.ts"
             ]
         }
     },

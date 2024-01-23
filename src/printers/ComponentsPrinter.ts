@@ -1,3 +1,4 @@
+import { pkgName } from '../const';
 import type { TypeItem, TypeOrigin } from '../parsers/types';
 import { joinSlices, toTypePath } from '../utils/string';
 import { BasePrinter } from './BasePrinter';
@@ -6,7 +7,7 @@ import { CommentsPrinter } from './CommentsPrinter';
 export class ComponentsPrinter extends CommentsPrinter {
     protected init() {
         super.init();
-        this.imports.push('import type { OneOf } from "openapi-axios/helpers"');
+        this.imports.push(`import type { OneOf } from "${pkgName}/client"`);
     }
 
     printComponents() {

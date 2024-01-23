@@ -1,9 +1,13 @@
 export interface PrinterOptions {
     /**
-     * axios 导入，必须有名称 axios，且 axios.request 是一个请求方法
-     * @default import axios from 'axios';
+     * axios 导入，必须有 axios 默认方法和 AxiosRequestConfig、AxiosPromise 两个类型
+     * 可以修改为当前工程的 axios 实例，或其他类 axios 方法，类型导出不要忘记了
+     * @example
+     * import type {AxiosRequestConfig, AxiosPromise} from 'axios';
+     * import axios from 'axios';
+     * @default axios
      */
-    axiosImport?: string;
+    axiosImportPath?: string;
 
     /**
      * 请求路径的参数名称
@@ -24,9 +28,9 @@ export interface PrinterOptions {
     requestBodyArgName?: string;
 
     /**
-     * 自定义响应包装类型
-     * @default AxiosPromise
+     * 请求配置的参数名称
+     * @default config
      */
-    responseTypeName?: 'Promise' | 'AxiosPromise' | string;
+    requestConfigArgName?: string;
 }
 export type StrictPrinterOptions = Required<PrinterOptions>;

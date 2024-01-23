@@ -1,5 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 import { groupBy } from 'lodash';
+import { pkgName } from '../const';
+import { AXIOS_PROMISE_TYPE_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME } from '../parsers/const';
 import type { TypeItem, TypeList, TypeOperation, TypeOperations, TypeOrigin } from '../parsers/types';
 import { joinSlices, nextUniqueName, varString } from '../utils/string';
 import { isBoolean, isString } from '../utils/type-is';
@@ -10,10 +12,9 @@ const { stringify } = JSON;
 export class PathsPrinter extends ComponentsPrinter {
     protected init() {
         super.init();
-        this.imports.push('import type { AxiosPromise, AxiosRequestConfig } from "axios";');
-        this.imports.push('import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, resolveURL } from "openapi-axios/helpers";');
-        this.imports.push(this.options.axiosImport);
-        this.helpers.push(`const request = axios.request;`);
+        this.imports.push(`import { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, resolveURL } from "${pkgName}/client";`);
+        this.imports.push(`import type {AxiosRequestConfig, AxiosPromise} from "${this.options.axiosImportPath}";`);
+        this.imports.push(`import axios from "${this.options.axiosImportPath}";`);
         if (this.document.info.baseURL) this.helpers.push(`const BASE_URL = ${stringify(this.document.info.baseURL)};`);
     }
 
@@ -40,32 +41,30 @@ export class PathsPrinter extends ComponentsPrinter {
             request: { path, query, body: reqBody },
             response: { body: resBody },
         } = type;
-        const { responseTypeName } = this.options;
         const argNameCountMap = new Map<string, number>();
         const requestPathArgName = nextUniqueName(this.options.requestPathArgName, argNameCountMap);
         const requestQueryArgName = nextUniqueName(this.options.requestQueryArgName, argNameCountMap);
         const requestBodyArgName = nextUniqueName(this.options.requestBodyArgName, argNameCountMap);
-        const configArgName = nextUniqueName('config', argNameCountMap);
+        const requestConfigArgName = nextUniqueName(this.options.requestConfigArgName, argNameCountMap);
         const comments = this.printComments(type, true);
-        const argsGroup = groupBy(
-            [
-                this.printArg(requestPathArgName, path),
-                this.printArg(requestQueryArgName, query),
-                this.printArg(requestBodyArgName, reqBody),
-                this.printArg(configArgName, 'AxiosRequestConfig', false),
-            ],
-            (item) => item?.required,
-        );
-        const args_ = joinSlices(
+        const args = [
+            //
+            this.printArg(requestPathArgName, path),
+            this.printArg(requestQueryArgName, query),
+            this.printArg(requestBodyArgName, reqBody),
+            this.printArg(requestConfigArgName, AXIOS_QUEST_CONFIG_TYPE_NAME, false),
+        ];
+        const argsGroup = groupBy(args, (item) => item?.required);
+        const argStr = joinSlices(
             [
                 // 可能没有任何必填参数
                 ...(argsGroup['true'] || []),
-                // 至少有一个 config 可选参数
-                ...argsGroup['false'],
+                // 可能没有任何可选参数
+                ...(argsGroup['false'] || []),
             ].map((desc) => desc?.text),
             ', ',
         );
-        const return_ = `${responseTypeName}<${resBody?.name || 'never'}>`;
+        const return_ = `${AXIOS_PROMISE_TYPE_NAME}<${resBody?.name || 'never'}>`;
         const url_ = this.printAxiosProp('url', this.toURL(type, requestPathArgName));
         const method_ = this.printAxiosProp('method', type.method.toUpperCase());
         const params_ = this.printAxiosProp('params', query ? requestQueryArgName : '');
@@ -76,11 +75,11 @@ export class PathsPrinter extends ComponentsPrinter {
             method_,
             params_,
             data_,
-            `...${configArgName}`,
+            `...${requestConfigArgName}`,
         ]);
 
-        return `${comments}export async function ${name}(${args_}): ${return_}  {
-              return request({
+        return `${comments}export async function ${name}(${argStr}): ${return_}  {
+              return axios({
                 ${props}
               });
             }`;

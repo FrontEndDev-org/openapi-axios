@@ -14,6 +14,9 @@ export const HTTP_METHODS: OpenAPIV3.HttpMethods[] = [
 export const JSON_MIME = 'application/json';
 export const BLOB_MIME = 'application/octet-stream';
 
+export const AXIOS_QUEST_CONFIG_TYPE_NAME = 'AxiosRequestConfig';
+export const AXIOS_PROMISE_TYPE_NAME = 'AxiosPromise';
+
 // 内部名称，文档里如果重复了会生成新的唯一值
 export const INTERNAL_NAMES = [
     // native
@@ -22,7 +25,6 @@ export const INTERNAL_NAMES = [
     'OneOf',
     // @ref PathsWriter
     'axios',
-    'request',
     'DELETE',
     'GET',
     'HEAD',
@@ -33,8 +35,8 @@ export const INTERNAL_NAMES = [
     'TRACE',
     'resolveURL',
     'BASE_URL',
-    'AxiosPromise',
-    'AxiosRequestConfig',
+    AXIOS_QUEST_CONFIG_TYPE_NAME,
+    AXIOS_PROMISE_TYPE_NAME,
 ];
 
 // @ref https://www.w3schools.com/js/js_reserved.asp
