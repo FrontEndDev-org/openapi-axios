@@ -47,17 +47,16 @@ test('alias', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description d1
-     */
-    export type O = Q;
+      "/**
+       * @description d1
+       */
+      export type O = Q;
 
-    /**
-     * @description d2
-     */
-    export type O = Q['q1']['q2'];
-    "
-  `);
+      /**
+       * @description d2
+       */
+      export type O = Q["q1"]["q2"];"
+    `);
 });
 
 test('origin primitive', () => {
@@ -99,21 +98,20 @@ test('origin primitive', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type N1 = number;
+      "/**
+       * @description ddd1
+       */
+      export type N1 = number;
 
-    /**
-     * @description ddd2
-     */
-    export type S1 = string;
+      /**
+       * @description ddd2
+       */
+      export type S1 = string;
 
-    export type B1 = boolean;
+      export type B1 = boolean;
 
-    export type N2 = never;
-    "
-  `);
+      export type N2 = never;"
+    `);
 });
 
 test('origin enum', () => {
@@ -137,12 +135,11 @@ test('origin enum', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type N1 = 'aaa' | 'bbb' | 'ccc';
-    "
-  `);
+      "/**
+       * @description ddd1
+       */
+      export type N1 = "aaa"|"bbb"|"ccc";"
+    `);
 });
 
 test('origin object', () => {
@@ -207,22 +204,20 @@ test('origin object', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type O1 = {
-      /**
+      "/**
+       * @description ddd1
+       */
+      export type O1 = {/**
        * @description ddd2
        */
-      sss: string;
+      sss:string;
       /**
        * @description ddd3
        */
-      ooo?: Q['q1']['q2'];
-      ppp: { nnn: number; qqq?: X };
-    };
-    "
-  `);
+      ooo?:Q["q1"]["q2"];
+      ppp:{nnn:number;
+      qqq?:X;};};"
+    `);
 });
 
 test('origin object additional', () => {
@@ -294,29 +289,24 @@ test('origin object additional', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type O1 = {
-      /**
+      "/**
+       * @description ddd1
+       */
+      export type O1 = {/**
        * @description ddd2
        */
-      sss: string;
+      sss:string;
       /**
        * @description ddd3
        */
-      ooo?: Q['q1']['q2'];
-      ppp: {
-        nnn: number;
-        qqq?: X;
-        /**
-         * @format int32
-         */
-        [key: string]: number;
-      };
-    };
-    "
-  `);
+      ooo?:Q["q1"]["q2"];
+      ppp:{nnn:number;
+      qqq?:X;
+      /**
+       * @format int32
+       */
+      [key: string]:number;};};"
+    `);
 });
 
 test('origin array', () => {
@@ -348,15 +338,14 @@ test('origin array', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type A = Array</**
-     * @description ddd2
-     */
-    string>;
-    "
-  `);
+      "/**
+       * @description ddd1
+       */
+      export type A = Array</**
+       * @description ddd2
+       */
+      string>;"
+    `);
 });
 
 test('origin array additional', () => {
@@ -399,19 +388,15 @@ test('origin array additional', () => {
     });
     const text = printer.printComponents();
     expect(text).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd1
-     */
-    export type A = Array<
-      /**
+      "/**
+       * @description ddd1
+       */
+      export type A = Array</**
        * @description ddd2
        */
-      | string
-      /**
+      string|/**
        * @description ddd3
        */
-      | T
-    >;
-    "
-  `);
+      T>;"
+    `);
 });

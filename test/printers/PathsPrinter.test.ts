@@ -31,20 +31,17 @@ test('empty req && empty res', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "/**
-     * @description ddd
-     */
-    export async function getName(
-      config?: AxiosRequestConfig
-    ): AxiosPromise<never> {
-      return request({
-        url: \`/\`,
-        method: GET,
-        ...config,
-      });
-    }
-    "
-  `);
+      "/**
+       * @description ddd
+       */
+      export async function getName(config?:AxiosRequestConfig): AxiosPromise<never>  {
+                    return request({
+                      url: \`/\`,
+      method: GET,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.path', () => {
@@ -87,22 +84,19 @@ test('req.path', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type T = { name: string; age: number };
-    /**
-     * @description ddd
-     */
-    export async function getName(
-      path: T,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<never> {
-      return request({
-        url: \`/api/name/\${path.name}/age/\${path.age}\`,
-        method: GET,
-        ...config,
-      });
-    }
-    "
-  `);
+      "export type T = {name:string;
+      age:number;};
+      /**
+       * @description ddd
+       */
+      export async function getName(path:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
+                    return request({
+                      url: \`/api/name/\${path.name}/age/\${path.age}\`,
+      method: GET,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.query', () => {
@@ -145,23 +139,20 @@ test('req.query', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type T = { name: string; age: number };
-    /**
-     * @description ddd
-     */
-    export async function getName(
-      params: T,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<never> {
-      return request({
-        url: \`/\`,
-        method: GET,
-        params,
-        ...config,
-      });
-    }
-    "
-  `);
+      "export type T = {name:string;
+      age:number;};
+      /**
+       * @description ddd
+       */
+      export async function getName(params:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
+                    return request({
+                      url: \`/\`,
+      method: GET,
+      params,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.body', () => {
@@ -204,23 +195,20 @@ test('req.body', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type T = { name: string; age: number };
-    /**
-     * @description ddd
-     */
-    export async function getName(
-      data: T,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<never> {
-      return request({
-        url: \`/\`,
-        method: GET,
-        data,
-        ...config,
-      });
-    }
-    "
-  `);
+      "export type T = {name:string;
+      age:number;};
+      /**
+       * @description ddd
+       */
+      export async function getName(data:T, config?:AxiosRequestConfig): AxiosPromise<never>  {
+                    return request({
+                      url: \`/\`,
+      method: GET,
+      data,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('res.body', () => {
@@ -263,19 +251,19 @@ test('res.body', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type T = { name: string; age: number };
-    /**
-     * @description ddd
-     */
-    export async function getName(config?: AxiosRequestConfig): AxiosPromise<T> {
-      return request({
-        url: \`/\`,
-        method: GET,
-        ...config,
-      });
-    }
-    "
-  `);
+      "export type T = {name:string;
+      age:number;};
+      /**
+       * @description ddd
+       */
+      export async function getName(config?:AxiosRequestConfig): AxiosPromise<T>  {
+                    return request({
+                      url: \`/\`,
+      method: GET,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.path + res.body', () => {
@@ -325,29 +313,23 @@ test('req.path + res.body', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type GetPetByIdRequestPath = {
-      /**
+      "export type GetPetByIdRequestPath = {/**
        * @format int64
        */
-      petId: number;
-    };
-    export type GetPetByIdResponseBody = Pet;
-    /**
-     * @title Find pet by ID
-     * @description Returns a single pet
-     */
-    export async function getPetById(
-      path: GetPetByIdRequestPath,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<GetPetByIdResponseBody> {
-      return request({
-        url: \`/pet/\${path.petId}\`,
-        method: GET,
-        ...config,
-      });
-    }
-    "
-  `);
+      petId:number;};
+      export type GetPetByIdResponseBody = Pet;
+      /**
+       * @title Find pet by ID
+       * @description Returns a single pet
+       */
+      export async function getPetById(path:GetPetByIdRequestPath, config?:AxiosRequestConfig): AxiosPromise<GetPetByIdResponseBody>  {
+                    return request({
+                      url: \`/pet/\${path.petId}\`,
+      method: GET,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.path + req.query + res.body', () => {
@@ -411,32 +393,25 @@ test('req.path + req.query + res.body', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type UploadFileRequestPath = {
-      /**
+      "export type UploadFileRequestPath = {/**
        * @format int64
        */
-      petId: number;
-    };
-    export type UploadFileRequestQuery = { additionalMetadata?: string };
-    export type UploadFileResponseBody = ApiResponse;
-    /**
-     * @title uploads an image
-     * @description
-     */
-    export async function uploadFile(
-      path: UploadFileRequestPath,
-      params?: UploadFileRequestQuery,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<UploadFileResponseBody> {
-      return request({
-        url: \`/pet/\${path.petId}/uploadImage\`,
-        method: POST,
-        params,
-        ...config,
-      });
-    }
-    "
-  `);
+      petId:number;};
+      export type UploadFileRequestQuery = {additionalMetadata?:string;};
+      export type UploadFileResponseBody = ApiResponse;
+      /**
+       * @title uploads an image
+       * @description 
+       */
+      export async function uploadFile(path:UploadFileRequestPath, params?:UploadFileRequestQuery, config?:AxiosRequestConfig): AxiosPromise<UploadFileResponseBody>  {
+                    return request({
+                      url: \`/pet/\${path.petId}/uploadImage\`,
+      method: POST,
+      params,
+      ...config
+                    });
+                  }"
+    `);
 });
 
 test('req.path + req.query + req.body + res.body', () => {
@@ -521,39 +496,28 @@ test('req.path + req.query + req.body + res.body', () => {
         ],
     });
     expect(printer.printPaths()).toMatchInlineSnapshot(`
-    "export type UploadFileRequestPath = {
-      /**
+      "export type UploadFileRequestPath = {/**
        * @format int64
        */
-      petId: number;
-    };
-    export type UploadFileRequestQuery = { additionalMetadata?: string };
-    export type UploadFileRequestBody = Array<
-      | string
-      /**
+      petId:number;};
+      export type UploadFileRequestQuery = {additionalMetadata?:string;};
+      export type UploadFileRequestBody = Array<string|/**
        * @format int32
        */
-      | number
-    >;
-    export type UploadFileResponseBody = ApiResponse;
-    /**
-     * @title uploads an image
-     * @description
-     */
-    export async function uploadFile(
-      path: UploadFileRequestPath,
-      data: UploadFileRequestBody,
-      params?: UploadFileRequestQuery,
-      config?: AxiosRequestConfig
-    ): AxiosPromise<UploadFileResponseBody> {
-      return request({
-        url: \`/pet/\${path.petId}/uploadImage\`,
-        method: POST,
-        params,
-        data,
-        ...config,
-      });
-    }
-    "
-  `);
+      number>;
+      export type UploadFileResponseBody = ApiResponse;
+      /**
+       * @title uploads an image
+       * @description 
+       */
+      export async function uploadFile(path:UploadFileRequestPath, data:UploadFileRequestBody, params?:UploadFileRequestQuery, config?:AxiosRequestConfig): AxiosPromise<UploadFileResponseBody>  {
+                    return request({
+                      url: \`/pet/\${path.petId}/uploadImage\`,
+      method: POST,
+      params,
+      data,
+      ...config
+                    });
+                  }"
+    `);
 });
