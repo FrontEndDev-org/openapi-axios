@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.17.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.16.0...v0.17.0) (2024-01-23)
+
+
+### Features
+
+* axiosImport 修改为 axiosImportPath ([710e968](https://github.com/FrontEndDev-org/openapi-axios/commit/710e9687371f96f77334320eef56970dd2e571e9))
+* 去除 prettier 相关配置，由外置应用工程自行格式化 ([506383f](https://github.com/FrontEndDev-org/openapi-axios/commit/506383f6a9f27ca390e9155836f881a464a49a77))
+
+
+### Bug Fixes
+
+* 修正在 webstorm 里导入二级目录报错的问题 ([d35e8a4](https://github.com/FrontEndDev-org/openapi-axios/commit/d35e8a4c09e3fe5de74841a128b511a2bc09d52a))
+
 ## [0.16.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.15.3...v0.16.0) (2023-06-19)
 
 
