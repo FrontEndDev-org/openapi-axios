@@ -5,10 +5,10 @@ import petStore3 from '../files/petStore3.types.json';
 import { writeFile } from '../helpers';
 
 test('DocumentPrinter', () => {
-  const printer = new DocumentPrinter(petStore3 as TypeDocument);
-  const text = printer.print();
-  writeFile('petStore3.types.txt', text);
-  expect(text).toMatchInlineSnapshot(`
+    const printer = new DocumentPrinter(petStore3 as TypeDocument);
+    const text = printer.print();
+    writeFile('petStore3.types.txt', text);
+    expect(text).toMatchInlineSnapshot(`
     "import type { OneOf } from 'openapi-axios/helpers';
     import type { AxiosPromise, AxiosRequestConfig } from 'axios';
     import {

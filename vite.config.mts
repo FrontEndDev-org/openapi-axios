@@ -10,50 +10,52 @@ import pkg from './package.json';
  * @ref https://vitest.dev/
  */
 export default defineConfig({
-  plugins: [
-    externalizeDeps(),
-    dts(),
-  ],
-  define: {
-    'process.env.PKG_NAME': JSON.stringify(pkg.name),
-    'process.env.PKG_VERSION': JSON.stringify(pkg.version),
-  },
-  build: {
-    minify: false,
-    sourcemap: true,
-    copyPublicDir: false,
-    reportCompressedSize: false,
-    lib: {
-        entry: {
-          index: 'src/index.ts',
-            helpers: 'src/helpers.ts'
-        }
+    plugins: [
+        externalizeDeps(),
+        dts({
+            include: 'src',
+        }),
+    ],
+    define: {
+        'process.env.PKG_NAME': JSON.stringify(pkg.name),
+        'process.env.PKG_VERSION': JSON.stringify(pkg.version),
     },
-    rollupOptions: {
-      output: [
-        {
-          format: 'esm',
-          entryFileNames: '[name].mjs',
-          chunkFileNames: '[name].mjs',
+    build: {
+        minify: false,
+        sourcemap: true,
+        copyPublicDir: false,
+        reportCompressedSize: false,
+        lib: {
+            entry: {
+                index: 'src/index.ts',
+                helpers: 'src/helpers.ts',
+            },
         },
-        {
-          format: 'cjs',
-          entryFileNames: '[name].cjs',
-          chunkFileNames: '[name].cjs',
+        rollupOptions: {
+            output: [
+                {
+                    format: 'esm',
+                    entryFileNames: '[name].mjs',
+                    chunkFileNames: '[name].mjs',
+                },
+                {
+                    format: 'cjs',
+                    entryFileNames: '[name].cjs',
+                    chunkFileNames: '[name].cjs',
+                },
+            ],
         },
-      ],
     },
-  },
-  test: {
-    globals: true,
-    env: {
-      PKG_NAME: 'pkg-name-for-test',
-      PKG_VERSION: 'pkg-version-for-test',
+    test: {
+        globals: true,
+        env: {
+            PKG_NAME: 'pkg-name-for-test',
+            PKG_VERSION: 'pkg-version-for-test',
+        },
+        coverage: {
+            all: true,
+            include: ['src/**/*.ts'],
+            reporter: ['lcov', 'text'],
+        },
     },
-    coverage: {
-      all: true,
-      include: ['src/**/*.ts'],
-      reporter: ['lcov', 'text'],
-    },
-  },
 });

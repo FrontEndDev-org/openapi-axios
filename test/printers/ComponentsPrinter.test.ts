@@ -1,52 +1,52 @@
 import { ComponentsPrinter } from '../../src/printers/ComponentsPrinter';
 
 test('empty components', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toEqual('');
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [],
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toEqual('');
 });
 
 test('alias', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'alias',
-        name: 'O',
-        target: 'P',
-        origin: 'Q',
-        props: [],
-        refAble: true,
-        required: true,
-        description: 'd1',
-      },
-      {
-        kind: 'alias',
-        name: 'O',
-        target: 'P',
-        origin: 'Q',
-        props: ['q1', 'q2'],
-        refAble: true,
-        required: true,
-        description: 'd2',
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
+                kind: 'alias',
+                name: 'O',
+                target: 'P',
+                origin: 'Q',
+                props: [],
+                refAble: true,
+                required: true,
+                description: 'd1',
+            },
+            {
+                kind: 'alias',
+                name: 'O',
+                target: 'P',
+                origin: 'Q',
+                props: ['q1', 'q2'],
+                refAble: true,
+                required: true,
+                description: 'd2',
+            },
+        ],
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description d1
      */
@@ -61,44 +61,44 @@ test('alias', () => {
 });
 
 test('origin primitive', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'number',
-        name: 'N1',
-        required: true,
-        description: 'ddd1',
-      },
-      {
-        kind: 'origin',
-        type: 'string',
-        name: 'S1',
-        required: true,
-        description: 'ddd2',
-      },
-      {
-        kind: 'origin',
-        type: 'boolean',
-        name: 'B1',
-        required: true,
-      },
-      {
-        kind: 'origin',
-        type: 'never',
-        name: 'N2',
-        required: true,
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
+                kind: 'origin',
+                type: 'number',
+                name: 'N1',
+                required: true,
+                description: 'ddd1',
+            },
+            {
+                kind: 'origin',
+                type: 'string',
+                name: 'S1',
+                required: true,
+                description: 'ddd2',
+            },
+            {
+                kind: 'origin',
+                type: 'boolean',
+                name: 'B1',
+                required: true,
+            },
+            {
+                kind: 'origin',
+                type: 'never',
+                name: 'N2',
+                required: true,
+            },
+        ],
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */
@@ -117,26 +117,26 @@ test('origin primitive', () => {
 });
 
 test('origin enum', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'string',
-        name: 'N1',
-        required: true,
-        description: 'ddd1',
-        enum: ['aaa', 'bbb', 'ccc'],
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
+                kind: 'origin',
+                type: 'string',
+                name: 'N1',
+                required: true,
+                description: 'ddd1',
+                enum: ['aaa', 'bbb', 'ccc'],
+            },
+        ],
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */
@@ -146,67 +146,67 @@ test('origin enum', () => {
 });
 
 test('origin object', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'object',
-        name: 'O1',
-        required: true,
-        description: 'ddd1',
-        children: [
-          {
-            kind: 'origin',
-            type: 'string',
-            name: 'sss',
-            required: true,
-            description: 'ddd2',
-          },
-          {
-            kind: 'alias',
-            name: 'ooo',
-            target: 'P',
-            origin: 'Q',
-            props: ['q1', 'q2'],
-            refAble: false,
-            required: false,
-            description: 'ddd3',
-          },
-          {
-            kind: 'origin',
-            type: 'object',
-            name: 'ppp',
-            required: true,
-            children: [
-              {
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
                 kind: 'origin',
-                type: 'number',
-                name: 'nnn',
+                type: 'object',
+                name: 'O1',
                 required: true,
-              },
-              {
-                kind: 'alias',
-                name: 'qqq',
-                target: 'X',
-                origin: 'X',
-                props: [],
-                refAble: false,
-                required: false,
-              },
-            ],
-          },
+                description: 'ddd1',
+                children: [
+                    {
+                        kind: 'origin',
+                        type: 'string',
+                        name: 'sss',
+                        required: true,
+                        description: 'ddd2',
+                    },
+                    {
+                        kind: 'alias',
+                        name: 'ooo',
+                        target: 'P',
+                        origin: 'Q',
+                        props: ['q1', 'q2'],
+                        refAble: false,
+                        required: false,
+                        description: 'ddd3',
+                    },
+                    {
+                        kind: 'origin',
+                        type: 'object',
+                        name: 'ppp',
+                        required: true,
+                        children: [
+                            {
+                                kind: 'origin',
+                                type: 'number',
+                                name: 'nnn',
+                                required: true,
+                            },
+                            {
+                                kind: 'alias',
+                                name: 'qqq',
+                                target: 'X',
+                                origin: 'X',
+                                props: [],
+                                refAble: false,
+                                required: false,
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */
@@ -226,74 +226,74 @@ test('origin object', () => {
 });
 
 test('origin object additional', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'object',
-        name: 'O1',
-        required: true,
-        description: 'ddd1',
-        children: [
-          {
-            kind: 'origin',
-            type: 'string',
-            name: 'sss',
-            required: true,
-            description: 'ddd2',
-          },
-          {
-            kind: 'alias',
-            name: 'ooo',
-            target: 'P',
-            origin: 'Q',
-            props: ['q1', 'q2'],
-            refAble: false,
-            required: false,
-            description: 'ddd3',
-          },
-          {
-            kind: 'origin',
-            type: 'object',
-            name: 'ppp',
-            required: true,
-            children: [
-              {
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
                 kind: 'origin',
-                type: 'number',
-                name: 'nnn',
+                type: 'object',
+                name: 'O1',
                 required: true,
-              },
-              {
-                kind: 'alias',
-                name: 'qqq',
-                target: 'X',
-                origin: 'X',
-                props: [],
-                refAble: false,
-                required: false,
-              },
-              {
-                format: 'int32',
-                name: '[key: string]',
-                type: 'number',
-                required: true,
-                kind: 'origin',
-              },
-            ],
-          },
+                description: 'ddd1',
+                children: [
+                    {
+                        kind: 'origin',
+                        type: 'string',
+                        name: 'sss',
+                        required: true,
+                        description: 'ddd2',
+                    },
+                    {
+                        kind: 'alias',
+                        name: 'ooo',
+                        target: 'P',
+                        origin: 'Q',
+                        props: ['q1', 'q2'],
+                        refAble: false,
+                        required: false,
+                        description: 'ddd3',
+                    },
+                    {
+                        kind: 'origin',
+                        type: 'object',
+                        name: 'ppp',
+                        required: true,
+                        children: [
+                            {
+                                kind: 'origin',
+                                type: 'number',
+                                name: 'nnn',
+                                required: true,
+                            },
+                            {
+                                kind: 'alias',
+                                name: 'qqq',
+                                target: 'X',
+                                origin: 'X',
+                                props: [],
+                                refAble: false,
+                                required: false,
+                            },
+                            {
+                                format: 'int32',
+                                name: '[key: string]',
+                                type: 'number',
+                                required: true,
+                                kind: 'origin',
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */
@@ -320,34 +320,34 @@ test('origin object additional', () => {
 });
 
 test('origin array', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'array',
-        name: 'A',
-        required: true,
-        description: 'ddd1',
-        children: [
-          {
-            kind: 'origin',
-            name: 'A[]',
-            type: 'string',
-            required: false,
-            description: 'ddd2',
-          },
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
+                kind: 'origin',
+                type: 'array',
+                name: 'A',
+                required: true,
+                description: 'ddd1',
+                children: [
+                    {
+                        kind: 'origin',
+                        name: 'A[]',
+                        type: 'string',
+                        required: false,
+                        description: 'ddd2',
+                    },
+                ],
+            },
         ],
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */
@@ -360,45 +360,45 @@ test('origin array', () => {
 });
 
 test('origin array additional', () => {
-  const printer = new ComponentsPrinter({
-    info: {
-      title: 'test',
-      version: '1.0.0',
-      baseURL: '/',
-    },
-    components: [
-      {
-        kind: 'origin',
-        type: 'array',
-        name: 'A',
-        required: true,
-        description: 'ddd1',
-        children: [
-          {
-            kind: 'origin',
-            name: 'A[]',
-            type: 'string',
-            required: false,
-            description: 'ddd2',
-          },
-          {
-            kind: 'alias',
-            name: '[key: string]',
-            target: 'T',
-            origin: 'T',
-            props: [],
-            refAble: false,
-            required: false,
-            ref: '#/components/schema/T',
-            description: 'ddd3',
-          },
+    const printer = new ComponentsPrinter({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+            baseURL: '/',
+        },
+        components: [
+            {
+                kind: 'origin',
+                type: 'array',
+                name: 'A',
+                required: true,
+                description: 'ddd1',
+                children: [
+                    {
+                        kind: 'origin',
+                        name: 'A[]',
+                        type: 'string',
+                        required: false,
+                        description: 'ddd2',
+                    },
+                    {
+                        kind: 'alias',
+                        name: '[key: string]',
+                        target: 'T',
+                        origin: 'T',
+                        props: [],
+                        refAble: false,
+                        required: false,
+                        ref: '#/components/schema/T',
+                        description: 'ddd3',
+                    },
+                ],
+            },
         ],
-      },
-    ],
-    paths: [],
-  });
-  const text = printer.printComponents();
-  expect(text).toMatchInlineSnapshot(`
+        paths: [],
+    });
+    const text = printer.printComponents();
+    expect(text).toMatchInlineSnapshot(`
     "/**
      * @description ddd1
      */

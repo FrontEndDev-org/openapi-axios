@@ -1,15 +1,15 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { doc } from 'prettier';
-import { DocumentParser } from '../../src/parsers/DocumentParser';
+import { DocumentParser } from '../../src';
 import type { TypeDocument } from '../../src/parsers/types';
 import document from '../files/petStore3.openapi.json';
 import { writeFile } from '../helpers';
 
 test('DocumentParser', () => {
-  const parser = new DocumentParser(document as unknown as OpenAPIV3.Document);
-  const types = parser.parse();
-  writeFile('petStore3.types.json', types);
-  expect(types).toMatchInlineSnapshot(`
+    const parser = new DocumentParser(document as unknown as OpenAPIV3.Document);
+    const types = parser.parse();
+    writeFile('petStore3.types.json', types);
+    expect(types).toMatchInlineSnapshot(`
     {
       "components": [
         {

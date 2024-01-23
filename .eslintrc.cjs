@@ -38,7 +38,7 @@ module.exports = defineConfig({
             },
         },
         {
-            files: ['*.ts'],
+            files: ['*.ts', '*.mts'],
             parser: '@typescript-eslint/parser',
             extends: [
                 //
@@ -48,6 +48,7 @@ module.exports = defineConfig({
             ],
             rules: {
                 'prettier/prettier': 'error',
+                '@typescript-eslint/no-unused-vars': 'off',
             },
         },
     ],

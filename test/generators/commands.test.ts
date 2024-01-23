@@ -5,84 +5,84 @@ import type { OpenAPIV3Document } from '../../src/types/openapi';
 import { createTempDirname } from '../helpers';
 
 test('resolveConfigFile', async () => {
-  const [cwd, clean] = createTempDirname();
+    const [cwd, clean] = createTempDirname();
 
-  expect(resolveConfigFile(cwd)).toBeUndefined();
+    expect(resolveConfigFile(cwd)).toBeUndefined();
 
-  [...configFileNameOrder].reverse().forEach((name, index) => {
-    const file1 = path.join(cwd, name);
-    const file2 = path.join(cwd, configFileNameOrder[configFileNameOrder.length - 1 - index]);
-    fs.writeFileSync(file1, '', 'utf8');
-    expect(resolveConfigFile(cwd)).toBe(file2);
-  });
+    [...configFileNameOrder].reverse().forEach((name, index) => {
+        const file1 = path.join(cwd, name);
+        const file2 = path.join(cwd, configFileNameOrder[configFileNameOrder.length - 1 - index]);
+        fs.writeFileSync(file1, '', 'utf8');
+        expect(resolveConfigFile(cwd)).toBe(file2);
+    });
 
-  clean();
+    clean();
 });
 
 test('resolveConfig', async () => {
-  const [cwd, clean] = createTempDirname();
+    const [cwd, clean] = createTempDirname();
 
-  expect(() => resolveConfig(cwd)).toThrow('配置文件未找到');
+    expect(() => resolveConfig(cwd)).toThrow('配置文件未找到');
 
-  const file = path.join(cwd, configFileNameOrder[0]);
-  fs.writeFileSync(file, '', 'utf8');
-  expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Required');
+    const file = path.join(cwd, configFileNameOrder[0]);
+    fs.writeFileSync(file, '', 'utf8');
+    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Required');
 
-  fs.writeFileSync(
-    file,
-    `module.exports = {
+    fs.writeFileSync(
+        file,
+        `module.exports = {
     openAPIs: []
   };`,
-    'utf8'
-  );
-  expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Array must contain at least 1 element(s)');
+        'utf8',
+    );
+    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Array must contain at least 1 element(s)');
 
-  fs.writeFileSync(
-    file,
-    `module.exports = {
+    fs.writeFileSync(
+        file,
+        `module.exports = {
     openAPIs: [{name: "test"}]
   };`,
-    'utf8'
-  );
-  expect(() => resolveConfig(cwd)).toThrow('#/openAPIs/0/document - Invalid input');
+        'utf8',
+    );
+    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs/0/document - Invalid input');
 
-  fs.writeFileSync(
-    file,
-    `module.exports = {
+    fs.writeFileSync(
+        file,
+        `module.exports = {
     openAPIs: [{name: "test", "document": "test.openapi.json"}]
   };`,
-    'utf8'
-  );
-  expect(() => resolveConfig(cwd)).not.toThrow();
+        'utf8',
+    );
+    expect(() => resolveConfig(cwd)).not.toThrow();
 
-  clean();
+    clean();
 });
 
 test('run', async () => {
-  const [cwd, clean] = createTempDirname();
-  const file = path.join(cwd, configFileNameOrder[0]);
+    const [cwd, clean] = createTempDirname();
+    const file = path.join(cwd, configFileNameOrder[0]);
 
-  fs.writeFileSync(
-    path.join(cwd, 'test.openapi.json'),
-    JSON.stringify({
-      info: {
-        title: 'test',
-        version: '1.0.0',
-      },
-      openapi: '3.0.0',
-      paths: {},
-    } as OpenAPIV3Document)
-  );
-  fs.writeFileSync(
-    file,
-    `module.exports = {
+    fs.writeFileSync(
+        path.join(cwd, 'test.openapi.json'),
+        JSON.stringify({
+            info: {
+                title: 'test',
+                version: '1.0.0',
+            },
+            openapi: '3.0.0',
+            paths: {},
+        } as OpenAPIV3Document),
+    );
+    fs.writeFileSync(
+        file,
+        `module.exports = {
     openAPIs: [{name: "test", "document": "test.openapi.json"}]
   };`,
-    'utf8'
-  );
+        'utf8',
+    );
 
-  await run(cwd);
-  expect(fs.existsSync(path.join(cwd, 'src/apis/test.ts'))).toBe(true);
+    await run(cwd);
+    expect(fs.existsSync(path.join(cwd, 'src/apis/test.ts'))).toBe(true);
 
-  clean();
+    clean();
 });
