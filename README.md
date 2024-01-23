@@ -179,13 +179,12 @@ console.log(pet);
 </details>
 
 ## `PrinterOptions` 签名：
-| 参数名                   | 类型       | 可选性     | 描述                                  | 默认值                         |
-|-----------------------|----------|---------|-------------------------------------|-----------------------------|
-| `axiosImport`         | `string` | `false` | axios 导入内容                          | 默认从官方 Axios 导入，可以使用自己实现的客户端 |
-| `requestPathArgName`  | `string` | `false` | 请求路径参数入参名称                          | `path`                      |
-| `requestQueryArgName` | `string` | `false` | 请求查询参数入参名称                          | `params`                    |
-| `requestBodyArgName`  | `string` | `false` | 请求体参数入参名称                           | `data`                      |
-| `responseTypeName`    | `string` | `false` | 响应类型名称                              | `AxiosPromise`              |
+| 参数名                   | 类型       | 可选性     | 描述              | 默认值                                                                                       |
+|-----------------------|----------|---------|-----------------|-------------------------------------------------------------------------------------------|
+| `axiosImportPath`         | `string` | `false` | axios 及其类型的导入路径 | `import type {AxiosRequestConfig, AxiosPromise} from "axios"; import axios from "axios";` |
+| `requestPathArgName`  | `string` | `false` | 请求路径参数入参名称      | `path`                                                                                    |
+| `requestQueryArgName` | `string` | `false` | 请求查询参数入参名称      | `params`                                                                                  |
+| `requestBodyArgName`  | `string` | `false` | 请求体参数入参名称       | `data`                                                                                    |
 
 ## `OpenAPIOptions` 签名:
 
