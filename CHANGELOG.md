@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.0...v0.17.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* 修复发布 npm 包 provenance 的问题 ([9175e80](https://github.com/FrontEndDev-org/openapi-axios/commit/9175e802cb0582713bbd47280a09eddfc811c016))
+
 ## [0.17.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.16.0...v0.17.0) (2024-01-23)
 
 
