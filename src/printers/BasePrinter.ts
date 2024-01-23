@@ -5,9 +5,6 @@ import type { StrictPrinterOptions, PrinterOptions } from './types';
 export class BasePrinter {
     static defaults: StrictPrinterOptions = {
         axiosImport: `import axios from 'axios';`,
-        prettier: {
-            singleQuote: true,
-        },
         requestPathArgName: 'path',
         requestQueryArgName: 'params',
         requestBodyArgName: 'data',

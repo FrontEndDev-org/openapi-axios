@@ -56,10 +56,35 @@ export interface ParserOptions {
      */
     okMediaType?: string;
 
+    /**
+     * 自定义名称格式化
+     * @param {NameFormatterProps} props
+     * @returns {string}
+     */
     nameFormatter?: (props: NameFormatterProps) => string;
+
+    /**
+     * 请求路径参数类型名称
+     * @default ReqPath
+     */
     requestPathTypeName?: string;
+
+    /**
+     * 请求查询参数类型名称
+     * @default ReqParams
+     */
     requestQueryTypeName?: string;
+
+    /**
+     * 请求体参数类型名称
+     * @default ReqData
+     */
     requestBodyTypeName?: string;
+
+    /**
+     * 响应体类型名称
+     * @default ResData
+     */
     responseBodyTypeName?: string;
 }
 
