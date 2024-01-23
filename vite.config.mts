@@ -12,9 +12,7 @@ import pkg from './package.json';
 export default defineConfig({
   plugins: [
     externalizeDeps(),
-    dts({
-      outputDir: 'dist-types',
-    }),
+    dts(),
   ],
   define: {
     'process.env.PKG_NAME': JSON.stringify(pkg.name),
@@ -26,19 +24,20 @@ export default defineConfig({
     copyPublicDir: false,
     reportCompressedSize: false,
     lib: {
-      entry: ['src/index.ts', 'src/helpers.ts'],
+        entry: {
+          index: 'src/index.ts',
+            helpers: 'src/helpers.ts'
+        }
     },
     rollupOptions: {
       output: [
         {
           format: 'esm',
-          dir: 'dist-esm',
           entryFileNames: '[name].mjs',
           chunkFileNames: '[name].mjs',
         },
         {
           format: 'cjs',
-          dir: 'dist-cjs',
           entryFileNames: '[name].cjs',
           chunkFileNames: '[name].cjs',
         },
