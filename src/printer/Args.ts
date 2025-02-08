@@ -39,8 +39,7 @@ export class Args {
       .filter(fixArg => fixArg.typeValue !== '' && fixArg.kind !== 'config')
       .map((fixArg) => {
         return `export type ${fixArg.typeName} = ${fixArg.typeValue};`;
-      })
-      .join('\n');
+      });
   }
 
   printActualParams() {

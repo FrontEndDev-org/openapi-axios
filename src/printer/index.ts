@@ -548,6 +548,7 @@ export class Printer {
       config.parse(),
     ]);
     const responseArgs = new Args([resp.parse()]);
+
     const jsDoc = new JsDoc(this.document.tags);
     const comments = JsDoc.fromOperation(operation);
     const { module } = this.configs;
@@ -558,17 +559,27 @@ export class Printer {
     jsDoc.addComments(requestArgs.toComments());
     jsDoc.addComments(responseArgs.toComments());
 
-    return [
-      requestArgs.printSchemaTypes(),
-      responseArgs.printSchemaTypes(),
+    const formalParams = requestArgs.printFormalParams();
+    const returnType = responseArgs.fixedArgs.at(0)?.typeName ?? 'unknown';
+
+    const lines = [
+      ...requestArgs.printSchemaTypes(),
+      ...responseArgs.printSchemaTypes(),
+      '',
       jsDoc.print(),
-      `export async function ${operationName}(${requestArgs.printFormalParams()}): ${AXIOS_RESPONSE_TYPE_NAME}<${responseArgs.fixedArgs[0].typeName}> {
+      `export async function ${operationName}(${formalParams}): ${AXIOS_RESPONSE_TYPE_NAME}<${returnType}> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method.toUpperCase())},
         ${requestArgs.printActualParams()}
     });
 }`,
-    ].join('\n');
+    ];
+
+    if (lines.at(0) === '') {
+      lines.shift();
+    }
+
+    return lines.join('\n');
   }
 
   #parseContents(
