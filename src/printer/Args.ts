@@ -24,7 +24,7 @@ export class Args {
     );
   }
 
-  toArgs() {
+  printFormalParams() {
     return this.fixedArgs
       .filter(fixArg => fixArg.type !== '')
       .map((fixArg) => {
@@ -33,11 +33,11 @@ export class Args {
       .join(',');
   }
 
-  toType(index: number) {
+  printType(index: number) {
     return this.fixedArgs[index]?.type || 'unknown';
   }
 
-  toValues() {
+  printActualParams() {
     return this.fixedArgs
       .map((fixedArg) => {
         const { originName, varName, propName, kind, props, url, isSingle } = fixedArg;

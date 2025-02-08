@@ -545,7 +545,6 @@ export class Printer {
       config.parse(),
     ]);
     const responseArgs = new Args([resp.parse()]);
-    const respType = responseArgs.toType(0);
     const jsDoc = new JsDoc(this.document.tags);
     const comments = JsDoc.fromOperation(operation);
     const { module } = this.configs;
@@ -557,10 +556,10 @@ export class Printer {
     jsDoc.addComments(responseArgs.toComments());
 
     return `${jsDoc.print()}
-export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYPE_NAME}<${respType}> {
+export async function ${funcName}(${requestArgs.printFormalParams()}): ${AXIOS_RESPONSE_TYPE_NAME}<${responseArgs.printType(0)}> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method.toUpperCase())},
-        ${requestArgs.toValues()}
+        ${requestArgs.printActualParams()}
     });
 }`;
   }
