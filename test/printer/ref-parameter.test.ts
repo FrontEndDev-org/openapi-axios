@@ -51,7 +51,7 @@ it('ref parameter', () => {
      * @param userId request path "userId"
      * @param [config] request config
      */
-    export async function postTest(userId:PostTestPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function postTest(userId:PostTestPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "POST",
             url: \`/test/\${userId}\`,

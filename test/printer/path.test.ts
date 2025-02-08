@@ -26,7 +26,7 @@ it('1路径 + 1请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -68,7 +68,7 @@ it('1路径 + 1请求 * module', () => {
      * @module TTT
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -105,7 +105,7 @@ it('1路径 + 2请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -116,7 +116,7 @@ it('1路径 + 2请求', () => {
     /**
      * @param [config] request config
      */
-    export async function postApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function postApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "POST",
             url: \`/api/abc\`,
@@ -177,7 +177,7 @@ it('1路径 + 1请求 + 1query', () => {
      * @param [var_2] description 1
      * @param [config] request config
      */
-    export async function getApiAbc(var_2?:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(var_2?:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -232,7 +232,7 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
      * @param [config] request params "config"
      * @param [config_2] request config
      */
-    export async function getApiAbc(config?:GetApiAbcParams,config_2?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(config?:GetApiAbcParams,config_2?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -288,7 +288,7 @@ it('1路径 + 1请求 + 1path', () => {
      * @param var_2 request path "var"
      * @param [config] request config
      */
-    export async function getApiAbc(var_2:GetApiAbcPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(var_2:GetApiAbcPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${var_2}\`,
@@ -356,7 +356,7 @@ it('1路径 + 1请求 + 2path', () => {
      * @param path request path
      * @param [config] request config
      */
-    export async function getApiAbcDef(path:GetApiAbcDefPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbcDef(path:GetApiAbcDefPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
@@ -430,7 +430,7 @@ it('1路径 + 1请求 + 2query', () => {
      * @param params request params
      * @param [config] request config
      */
-    export async function getApiAbc(params:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(params:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -522,7 +522,7 @@ it('1路径 + 1请求 + 2query + 1path', () => {
      * @param params request params
      * @param [config] request config
      */
-    export async function getApiAbc(params:GetApiAbcPath,params_2:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(params:GetApiAbcPath,params_2:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${params}\`,
@@ -626,7 +626,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
      * @param data aaa
      * @param [config] request config
      */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -738,7 +738,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
      * @param data request--data--description
      * @param [config] request config
      */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -858,7 +858,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
      * @param [config] request config
      * @returns success
      */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<GetApiAbcResponse> {
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<GetApiAbcResponse>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -1014,7 +1014,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      * @param [config] request config
      * @returns success
      */
-    export async function getApiAbcDef(data:GetApiAbcDefPath,params:GetApiAbcDefParams,data_2:GetApiAbcDefData,config?:AxiosRequestConfig): AxiosResponse<GetApiAbcDefResponse> {
+    export async function getApiAbcDef(data:GetApiAbcDefPath,params:GetApiAbcDefParams,data_2:GetApiAbcDefData,config?:AxiosRequestConfig): Promise<AxiosResponse<GetApiAbcDefResponse>> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${data}/def\`,

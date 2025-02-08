@@ -131,7 +131,7 @@ Pet
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): AxiosResponse<UpdatePetResponse> {
+export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): Promise<AxiosResponse<UpdatePetResponse>> {
     return axios({
         method: "PUT",
         url: `/pet`,
@@ -161,7 +161,7 @@ Pet
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:AddPetData,config?:AxiosRequestConfig): AxiosResponse<AddPetResponse> {
+export async function addPet(data:AddPetData,config?:AxiosRequestConfig): Promise<AxiosResponse<AddPetResponse>> {
     return axios({
         method: "POST",
         url: `/pet`,
@@ -184,7 +184,7 @@ number
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
     return axios({
         method: "GET",
         url: `/pet/${petId}`,

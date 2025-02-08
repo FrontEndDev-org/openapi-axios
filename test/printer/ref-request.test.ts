@@ -76,7 +76,7 @@ it('ref request', () => {
      * @param data 用户列表
      * @param [config] request config
      */
-    export async function postTest(data:PostTestData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function postTest(data:PostTestData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "POST",
             url: \`/test\`,

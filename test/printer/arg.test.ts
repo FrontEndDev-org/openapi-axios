@@ -84,7 +84,7 @@ it('1*path + 1*query + 1*header', () => {
      * @param [config] request config
      * @returns pet name
      */
-    export async function getPet(petId:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<GetPetResponse> {
+    export async function getPet(petId:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<GetPetResponse>> {
         return axios({
             method: "GET",
             url: \`/pets/\${petId}\`,
@@ -177,7 +177,7 @@ it('n*path + 1*query + 1*header', () => {
      * @param [categoryId] request params "category-id"
      * @param [config] request config
      */
-    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -280,7 +280,7 @@ it('n*path + n*query + 1*header', () => {
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -393,7 +393,7 @@ it('n*path + n*query + n*header', () => {
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:GetPetPath,data:GetPetData,headers?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,headers?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -447,7 +447,7 @@ it('path name unique', () => {
      * @param type request path "type"
      * @param [config] request config
      */
-    export async function getPet(type:GetPetPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(type:GetPetPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
         return axios({
             method: "GET",
             url: \`/pets/\${type}\`,

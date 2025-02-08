@@ -58,7 +58,7 @@ it('unique vars', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(config?:AxiosRequestConfig): AxiosResponse<GetTestResponse> {
+    export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<GetTestResponse>> {
         return axios({
             method: "GET",
             url: \`/test\`,
@@ -169,7 +169,7 @@ it('unique types', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(axios_2:GetTestPath,unknownObject?:GetTestParams,config?:AxiosRequestConfig): AxiosResponse<GetTestResponse> {
+    export async function getTest(axios_2:GetTestPath,unknownObject?:GetTestParams,config?:AxiosRequestConfig): Promise<AxiosResponse<GetTestResponse>> {
         return axios({
             method: "GET",
             url: \`/test/\${axios_2}\`,
