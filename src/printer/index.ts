@@ -301,6 +301,7 @@ export class Printer {
       ` * Please do not edit it manually.`,
       ` * If you use the following tools, you can refer to the corresponding documentation`,
       ` * and ignore the check of this file.`,
+      ` *`,
       ` * - [ESLint](https://eslint.org/docs/latest/use/configure/ignore)`,
       ` * - [Prettier](https://prettier.io/docs/en/ignore.html)`,
       ` * - [Biome](https://biomejs.dev/guides/configure-biome/#ignore-files)`,
