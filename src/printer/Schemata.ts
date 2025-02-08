@@ -43,6 +43,9 @@ export class Schemata {
       };
     }
 
+    // TODO 不是精确的 oneof
+    // https://arif.thedev.id/blogs/typescript/the-oneof-type
+    // 但为了能够将类型转换为 zod，暂时保持模糊
     if (oneOf && oneOf.length > 0) {
       return {
         comments,
@@ -59,9 +62,7 @@ export class Schemata {
         comments,
         type: withGroup(
           anyOf.map(s => this.toString(s)),
-          ',',
-          'AnyOf<[',
-          ']>',
+          '|',
         ),
         required: false,
       };
