@@ -567,7 +567,7 @@ export class Printer {
       ...responseArgs.printSchemaTypes(),
       '',
       jsDoc.print(),
-      `export async function ${operationName}(${formalParams}): ${AXIOS_RESPONSE_TYPE_NAME}<${returnType}> {
+      `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${returnType}>> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method.toUpperCase())},
         ${requestArgs.printActualParams()}
