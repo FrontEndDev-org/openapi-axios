@@ -123,6 +123,8 @@ export type ApiResponse = {
 "message"?:string;
 };
 
+export type AddPetData = Pet;
+
 /**
  * @description 
  * @summary Add a new pet to the store
@@ -130,7 +132,7 @@ export type ApiResponse = {
  * @param data Pet object that needs to be added to the store
  * @param [config] request config
  */
-export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function addPet(data:AddPetData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/pet`,
@@ -139,6 +141,8 @@ data: data,
     });
 }
 
+export type UpdatePetData = Pet;
+
 /**
  * @description 
  * @summary Update an existing pet
@@ -146,7 +150,7 @@ data: data,
  * @param data Pet object that needs to be added to the store
  * @param [config] request config
  */
-export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "PUT",
         url: `/pet`,
@@ -154,6 +158,14 @@ data: data,
 ...config
     });
 }
+
+export type FindPetsByStatusParams = Array<
+/**
+ * @default available
+ */
+("available"|"pending"|"sold")
+>;
+export type FindPetsByStatusResponse = Array<Pet>;
 
 /**
  * @description Multiple status values can be provided with comma separated strings
@@ -163,12 +175,7 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByStatus(status:Array<
-/**
- * @default available
- */
-("available"|"pending"|"sold")
->,config?:AxiosRequestConfig): AxiosResponse<Array<Pet>> {
+export async function findPetsByStatus(status:FindPetsByStatusParams,config?:AxiosRequestConfig): AxiosResponse<FindPetsByStatusResponse> {
     return axios({
         method: "GET",
         url: `/pet/findByStatus`,
@@ -176,6 +183,9 @@ params: {"status": status},
 ...config
     });
 }
+
+export type FindPetsByTagsParams = Array<string>;
+export type FindPetsByTagsResponse = Array<Pet>;
 
 /**
  * @deprecated
@@ -186,7 +196,7 @@ params: {"status": status},
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags:Array<string>,config?:AxiosRequestConfig): AxiosResponse<Array<Pet>> {
+export async function findPetsByTags(tags:FindPetsByTagsParams,config?:AxiosRequestConfig): AxiosResponse<FindPetsByTagsResponse> {
     return axios({
         method: "GET",
         url: `/pet/findByTags`,
@@ -194,6 +204,14 @@ params: {"tags": tags},
 ...config
     });
 }
+
+export type GetPetByIdPath = 
+/**
+ * @format int64
+ */
+number
+;
+export type GetPetByIdResponse = Pet;
 
 /**
  * @description Returns a single pet
@@ -203,18 +221,30 @@ params: {"tags": tags},
  * @param [config] request config
  * @returns successful operation
  */
-export async function getPetById(petId:
-/**
- * @format int64
- */
-number
-,config?:AxiosRequestConfig): AxiosResponse<Pet> {
+export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): AxiosResponse<GetPetByIdResponse> {
     return axios({
         method: "GET",
         url: `/pet/${petId}`,
 ...config
     });
 }
+
+export type UpdatePetWithFormPath = 
+/**
+ * @format int64
+ */
+number
+;
+export type UpdatePetWithFormData = {
+/**
+ * @description Updated name of the pet
+ */
+"name"?:string;
+/**
+ * @description Updated status of the pet
+ */
+"status"?:string;
+};
 
 /**
  * @description 
@@ -224,21 +254,7 @@ number
  * @param data request data
  * @param [config] request config
  */
-export async function updatePetWithForm(petId:
-/**
- * @format int64
- */
-number
-,data:{
-/**
- * @description Updated name of the pet
- */
-"name"?:string;
-/**
- * @description Updated status of the pet
- */
-"status"?:string;
-},config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function updatePetWithForm(petId:UpdatePetWithFormPath,data:UpdatePetWithFormData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/pet/${petId}`,
@@ -246,6 +262,14 @@ data: data,
 ...config
     });
 }
+
+export type DeletePetPath = 
+/**
+ * @format int64
+ */
+number
+;
+export type DeletePetHeaders = string;
 
 /**
  * @description 
@@ -255,12 +279,7 @@ data: data,
  * @param [apiKey] request headers "api_key"
  * @param [config] request config
  */
-export async function deletePet(petId:
-/**
- * @format int64
- */
-number
-,apiKey?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function deletePet(petId:DeletePetPath,apiKey?:DeletePetHeaders,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/pet/${petId}`,
@@ -268,6 +287,25 @@ headers: {"api_key": apiKey},
 ...config
     });
 }
+
+export type UploadFilePath = 
+/**
+ * @format int64
+ */
+number
+;
+export type UploadFileData = {
+/**
+ * @description Additional data to pass to server
+ */
+"additionalMetadata"?:string;
+/**
+ * @description file to upload
+ * @format binary
+ */
+"file"?:Blob;
+};
+export type UploadFileResponse = ApiResponse;
 
 /**
  * @description 
@@ -278,22 +316,7 @@ headers: {"api_key": apiKey},
  * @param [config] request config
  * @returns successful operation
  */
-export async function uploadFile(petId:
-/**
- * @format int64
- */
-number
-,data:{
-/**
- * @description Additional data to pass to server
- */
-"additionalMetadata"?:string;
-/**
- * @description file to upload
- * @format binary
- */
-"file"?:Blob;
-},config?:AxiosRequestConfig): AxiosResponse<ApiResponse> {
+export async function uploadFile(petId:UploadFilePath,data:UploadFileData,config?:AxiosRequestConfig): AxiosResponse<UploadFileResponse> {
     return axios({
         method: "POST",
         url: `/pet/${petId}/uploadImage`,
@@ -302,6 +325,13 @@ data: data,
     });
 }
 
+export type GetInventoryResponse = {
+/**
+ * @format int32
+ */
+[key: string]:number;
+};
+
 /**
  * @description Returns a map of status codes to quantities
  * @summary Returns pet inventories by status
@@ -309,18 +339,16 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function getInventory(config?:AxiosRequestConfig): AxiosResponse<{
-/**
- * @format int32
- */
-[key: string]:number;
-}> {
+export async function getInventory(config?:AxiosRequestConfig): AxiosResponse<GetInventoryResponse> {
     return axios({
         method: "GET",
         url: `/store/inventory`,
 ...config
     });
 }
+
+export type PlaceOrderData = Order;
+export type PlaceOrderResponse = Order;
 
 /**
  * @description 
@@ -330,7 +358,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosResponse<{
  * @param [config] request config
  * @returns successful operation
  */
-export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosResponse<Order> {
+export async function placeOrder(data:PlaceOrderData,config?:AxiosRequestConfig): AxiosResponse<PlaceOrderResponse> {
     return axios({
         method: "POST",
         url: `/store/order`,
@@ -338,6 +366,16 @@ data: data,
 ...config
     });
 }
+
+export type GetOrderByIdPath = 
+/**
+ * @format int64
+ * @minimum 1
+ * @maximum 10
+ */
+number
+;
+export type GetOrderByIdResponse = Order;
 
 /**
  * @description For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
@@ -347,20 +385,21 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function getOrderById(orderId:
-/**
- * @format int64
- * @minimum 1
- * @maximum 10
- */
-number
-,config?:AxiosRequestConfig): AxiosResponse<Order> {
+export async function getOrderById(orderId:GetOrderByIdPath,config?:AxiosRequestConfig): AxiosResponse<GetOrderByIdResponse> {
     return axios({
         method: "GET",
         url: `/store/order/${orderId}`,
 ...config
     });
 }
+
+export type DeleteOrderPath = 
+/**
+ * @format int64
+ * @minimum 1
+ */
+number
+;
 
 /**
  * @description For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
@@ -369,19 +408,15 @@ number
  * @param orderId ID of the order that needs to be deleted
  * @param [config] request config
  */
-export async function deleteOrder(orderId:
-/**
- * @format int64
- * @minimum 1
- */
-number
-,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function deleteOrder(orderId:DeleteOrderPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/store/order/${orderId}`,
 ...config
     });
 }
+
+export type CreateUserData = User;
 
 /**
  * @description This can only be done by the logged in user.
@@ -390,7 +425,7 @@ number
  * @param data Created user object
  * @param [config] request config
  */
-export async function createUser(data:User,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function createUser(data:CreateUserData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/user`,
@@ -399,21 +434,7 @@ data: data,
     });
 }
 
-/**
- * @description 
- * @summary Creates list of users with given input array
- * @see user Operations about user {@link http://swagger.io Find out more about our store}
- * @param data List of user object
- * @param [config] request config
- */
-export async function createUsersWithArrayInput(data:Array<User>,config?:AxiosRequestConfig): AxiosResponse<unknown> {
-    return axios({
-        method: "POST",
-        url: `/user/createWithArray`,
-data: data,
-...config
-    });
-}
+export type CreateUsersWithArrayInputData = Array<User>;
 
 /**
  * @description 
@@ -422,7 +443,25 @@ data: data,
  * @param data List of user object
  * @param [config] request config
  */
-export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function createUsersWithArrayInput(data:CreateUsersWithArrayInputData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    return axios({
+        method: "POST",
+        url: `/user/createWithArray`,
+data: data,
+...config
+    });
+}
+
+export type CreateUsersWithListInputData = Array<User>;
+
+/**
+ * @description 
+ * @summary Creates list of users with given input array
+ * @see user Operations about user {@link http://swagger.io Find out more about our store}
+ * @param data List of user object
+ * @param [config] request config
+ */
+export async function createUsersWithListInput(data:CreateUsersWithListInputData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/user/createWithList`,
@@ -430,6 +469,18 @@ data: data,
 ...config
     });
 }
+
+export type LoginUserParams = {
+/**
+ * @description The user name for login
+ */
+"username":string;
+/**
+ * @description The password for login in clear text
+ */
+"password":string;
+};
+export type LoginUserResponse = string;
 
 /**
  * @description 
@@ -439,16 +490,7 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function loginUser(params:{
-/**
- * @description The user name for login
- */
-"username":string;
-/**
- * @description The password for login in clear text
- */
-"password":string;
-},config?:AxiosRequestConfig): AxiosResponse<string> {
+export async function loginUser(params:LoginUserParams,config?:AxiosRequestConfig): AxiosResponse<LoginUserResponse> {
     return axios({
         method: "GET",
         url: `/user/login`,
@@ -471,6 +513,9 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosResponse<unkn
     });
 }
 
+export type GetUserByNamePath = string;
+export type GetUserByNameResponse = User;
+
 /**
  * @description 
  * @summary Get user by user name
@@ -479,13 +524,15 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosResponse<unkn
  * @param [config] request config
  * @returns successful operation
  */
-export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosResponse<User> {
+export async function getUserByName(username:GetUserByNamePath,config?:AxiosRequestConfig): AxiosResponse<GetUserByNameResponse> {
     return axios({
         method: "GET",
         url: `/user/${username}`,
 ...config
     });
 }
+
+export type DeleteUserPath = string;
 
 /**
  * @description This can only be done by the logged in user.
@@ -494,13 +541,16 @@ export async function getUserByName(username:string,config?:AxiosRequestConfig):
  * @param username The name that needs to be deleted
  * @param [config] request config
  */
-export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function deleteUser(username:DeleteUserPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/user/${username}`,
 ...config
     });
 }
+
+export type UpdateUserPath = string;
+export type UpdateUserData = User;
 
 /**
  * @description This can only be done by the logged in user.
@@ -510,7 +560,7 @@ export async function deleteUser(username:string,config?:AxiosRequestConfig): Ax
  * @param data Updated user object
  * @param [config] request config
  */
-export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function updateUser(username:UpdateUserPath,data:UpdateUserData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "PUT",
         url: `/user/${username}`,

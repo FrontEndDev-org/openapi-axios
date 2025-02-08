@@ -67,10 +67,12 @@ it('ref response', () => {
     "password"?:string;
     };
 
+    export type PostTestResponse = Array<User>;
+
     /**
      * @param [config] request config
      */
-    export async function postTest(config?:AxiosRequestConfig): AxiosResponse<Array<User>> {
+    export async function postTest(config?:AxiosRequestConfig): AxiosResponse<PostTestResponse> {
         return axios({
             method: "POST",
             url: \`/test\`,

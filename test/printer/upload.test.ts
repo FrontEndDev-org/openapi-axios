@@ -41,19 +41,21 @@ it('upload root', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-    "/**
-     * @description upload
-     * @summary upload
-     * @param data A file
-     * @param [config] request config
-     */
-    export async function upload(data:
+    "export type UploadData = 
     /**
      * @description A file
      * @format binary
      */
     Blob
-    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    ;
+
+    /**
+     * @description upload
+     * @summary upload
+     * @param data A file
+     * @param [config] request config
+     */
+    export async function upload(data:UploadData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,
@@ -127,14 +129,8 @@ it('upload single', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-    "/**
-     * @description upload
-     * @summary upload
-     * @param category request param
-     * @param data request data
-     * @param [config] request config
-     */
-    export async function upload(category:("a"|"b"),data:{
+    "export type UploadParams = ("a"|"b");
+    export type UploadData = {
     /**
      * @description A file
      * @format binary
@@ -144,7 +140,16 @@ it('upload single', () => {
      * @description A name
      */
     "name"?:string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @description upload
+     * @summary upload
+     * @param category request param
+     * @param data request data
+     * @param [config] request config
+     */
+    export async function upload(category:UploadParams,data:UploadData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,
@@ -222,14 +227,8 @@ it('upload multiple', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-    "/**
-     * @description upload
-     * @summary upload
-     * @param category request param
-     * @param data request data
-     * @param [config] request config
-     */
-    export async function upload(category:("a"|"b"),data:{
+    "export type UploadParams = ("a"|"b");
+    export type UploadData = {
     "file"?:Array<
     /**
      * @description A file
@@ -241,7 +240,16 @@ it('upload multiple', () => {
      * @description A name
      */
     "name"?:string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @description upload
+     * @summary upload
+     * @param category request param
+     * @param data request data
+     * @param [config] request config
+     */
+    export async function upload(category:UploadParams,data:UploadData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,

@@ -110,6 +110,19 @@ export type Tag = {
 "name"?:string;
 };
 
+export type UpdatePetData = 
+/**
+ * @description A Pet in JSON Format
+ */
+Pet
+;
+export type UpdatePetResponse = 
+/**
+ * @description A Pet in XML Format
+ */
+Pet
+;
+
 /**
  * @description Update an existing pet by Id
  * @summary Update an existing pet
@@ -118,17 +131,7 @@ export type Tag = {
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:
-/**
- * @description A Pet in JSON Format
- */
-Pet
-,config?:AxiosRequestConfig): AxiosResponse<
-/**
- * @description A Pet in XML Format
- */
-Pet
-> {
+export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): AxiosResponse<UpdatePetResponse> {
     return axios({
         method: "PUT",
         url: `/pet`,
@@ -136,6 +139,19 @@ data: data,
 ...config
     });
 }
+
+export type AddPetData = 
+/**
+ * @description A Pet in JSON Format
+ */
+Pet
+;
+export type AddPetResponse = 
+/**
+ * @description A Pet in XML Format
+ */
+Pet
+;
 
 /**
  * @description Add a new pet to the store
@@ -145,17 +161,7 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:
-/**
- * @description A Pet in JSON Format
- */
-Pet
-,config?:AxiosRequestConfig): AxiosResponse<
-/**
- * @description A Pet in XML Format
- */
-Pet
-> {
+export async function addPet(data:AddPetData,config?:AxiosRequestConfig): AxiosResponse<AddPetResponse> {
     return axios({
         method: "POST",
         url: `/pet`,
@@ -164,19 +170,21 @@ data: data,
     });
 }
 
+export type GetPetByIdPath = 
+/**
+ * @description param ID of pet that needs to be fetched
+ * @format int64
+ */
+number
+;
+
 /**
  * @description Returns a pet when 0 < ID <= 10.  ID > 10 or nonintegers will simulate API error conditions
  * @summary Find pet by ID
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-export async function getPetById(petId:
-/**
- * @description param ID of pet that needs to be fetched
- * @format int64
- */
-number
-,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "GET",
         url: `/pet/${petId}`,

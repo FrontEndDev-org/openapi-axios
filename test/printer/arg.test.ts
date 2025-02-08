@@ -43,6 +43,18 @@ it('1*path + 1*query + 1*header', () => {
               },
             },
           },
+          responses: {
+            200: {
+              description: 'pet name',
+              content: {
+                '*': {
+                  schema: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -58,14 +70,21 @@ it('1*path + 1*query + 1*header', () => {
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetPetPath = string;
+    export type GetPetData = string;
+    export type GetPetHeaders = string;
+    export type GetPetParams = string;
+    export type GetPetResponse = string;
+
+    /**
      * @param petId request path "pet-id"
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
      * @param [categoryId] request params "category-id"
      * @param [config] request config
+     * @returns pet name
      */
-    export async function getPet(petId:string,data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(petId:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<GetPetResponse> {
         return axios({
             method: "GET",
             url: \`/pets/\${petId}\`,
@@ -143,17 +162,22 @@ it('n*path + 1*query + 1*header', () => {
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetPetPath = {
+    "pet-id":string;
+    "zoo-id":string;
+    };
+    export type GetPetData = string;
+    export type GetPetHeaders = string;
+    export type GetPetParams = string;
+
+    /**
      * @param path request path
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
      * @param [categoryId] request params "category-id"
      * @param [config] request config
      */
-    export async function getPet(path:{
-    "pet-id":string;
-    "zoo-id":string;
-    },data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,categoryId?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -238,20 +262,25 @@ it('n*path + n*query + 1*header', () => {
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetPetPath = {
+    "pet-id":string;
+    "zoo-id":string;
+    };
+    export type GetPetData = string;
+    export type GetPetHeaders = string;
+    export type GetPetParams = {
+    "category-id"?:string;
+    "kind-id"?:string;
+    };
+
+    /**
      * @param path request path
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:{
-    "pet-id":string;
-    "zoo-id":string;
-    },data:string,xAuthKey?:string,params?:{
-    "category-id"?:string;
-    "kind-id"?:string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,xAuthKey?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -343,23 +372,28 @@ it('n*path + n*query + n*header', () => {
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetPetPath = {
+    "pet-id":string;
+    "zoo-id":string;
+    };
+    export type GetPetData = string;
+    export type GetPetHeaders = {
+    "x-auth-key"?:string;
+    "x-auth-ver"?:string;
+    };
+    export type GetPetParams = {
+    "category-id"?:string;
+    "kind-id"?:string;
+    };
+
+    /**
      * @param path request path
      * @param data request data
      * @param [headers] request headers
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:{
-    "pet-id":string;
-    "zoo-id":string;
-    },data:string,headers?:{
-    "x-auth-key"?:string;
-    "x-auth-ver"?:string;
-    },params?:{
-    "category-id"?:string;
-    "kind-id"?:string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(path:GetPetPath,data:GetPetData,headers?:GetPetHeaders,params?:GetPetParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -407,11 +441,13 @@ it('path name unique', () => {
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetPetPath = string;
+
+    /**
      * @param type request path "type"
      * @param [config] request config
      */
-    export async function getPet(type:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getPet(type:GetPetPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/pets/\${type}\`,

@@ -52,11 +52,13 @@ it('unique vars', () => {
     "name"?:string;
     };
 
+    export type GetTestResponse = TestAa;
+
     /**
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(config?:AxiosRequestConfig): AxiosResponse<TestAa> {
+    export async function getTest(config?:AxiosRequestConfig): AxiosResponse<GetTestResponse> {
         return axios({
             method: "GET",
             url: \`/test\`,
@@ -154,20 +156,24 @@ it('unique types', () => {
     "name"?:number;
     };
 
+    export type GetTestPath = string;
+    export type GetTestParams = UnknownObject_2;
+    export type GetTestResponse = {
+    "AxiosResponse"?:AxiosResponse_2;
+    "UnknownObject"?:UnknownObject_2;
+    };
+
     /**
      * @param axios_2 request path "axios"
-     * @param [UnknownObject] request params "UnknownObject"
+     * @param [unknownObject] request params "UnknownObject"
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(axios_2:string,UnknownObject?:UnknownObject_2,config?:AxiosRequestConfig): AxiosResponse<{
-    "AxiosResponse"?:AxiosResponse_2;
-    "UnknownObject"?:UnknownObject_2;
-    }> {
+    export async function getTest(axios_2:GetTestPath,unknownObject?:GetTestParams,config?:AxiosRequestConfig): AxiosResponse<GetTestResponse> {
         return axios({
             method: "GET",
             url: \`/test/\${axios_2}\`,
-    params: {"UnknownObject": UnknownObject},
+    params: {"UnknownObject": unknownObject},
     ...config
         });
     }"

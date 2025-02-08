@@ -65,16 +65,18 @@ it('ref request', () => {
     "password"?:string;
     };
 
-    /**
-     * @param data 用户列表
-     * @param [config] request config
-     */
-    export async function postTest(data:
+    export type PostTestData = 
     /**
      * @description 用户列表
      */
     Array<User>
-    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    ;
+
+    /**
+     * @param data 用户列表
+     * @param [config] request config
+     */
+    export async function postTest(data:PostTestData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/test\`,

@@ -166,16 +166,18 @@ it('1路径 + 1请求 + 1query', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param [var_2] description 1
-     * @param [config] request config
-     */
-    export async function getApiAbc(var_2?:
+    "export type GetApiAbcParams = 
     /**
      * @description description 2
      */
     number
-    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    ;
+
+    /**
+     * @param [var_2] description 1
+     * @param [config] request config
+     */
+    export async function getApiAbc(var_2?:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -224,11 +226,13 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetApiAbcParams = string;
+
+    /**
      * @param [config] request params "config"
      * @param [config_2] request config
      */
-    export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(config?:GetApiAbcParams,config_2?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -278,11 +282,13 @@ it('1路径 + 1请求 + 1path', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetApiAbcPath = string;
+
+    /**
      * @param var_2 request path "var"
      * @param [config] request config
      */
-    export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    export async function getApiAbc(var_2:GetApiAbcPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${var_2}\`,
@@ -338,17 +344,19 @@ it('1路径 + 1请求 + 2path', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param path request path
-     * @param [config] request config
-     */
-    export async function getApiAbcDef(path:{
+    "export type GetApiAbcDefPath = {
     "var":string;
     /**
      * @format integer
      */
     "xyz":number;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @param path request path
+     * @param [config] request config
+     */
+    export async function getApiAbcDef(path:GetApiAbcDefPath,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
@@ -407,11 +415,7 @@ it('1路径 + 1请求 + 2query', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param params request params
-     * @param [config] request config
-     */
-    export async function getApiAbc(params:{
+    "export type GetApiAbcParams = {
     /**
      * @description description 1
      */
@@ -420,7 +424,13 @@ it('1路径 + 1请求 + 2query', () => {
      * @description description 3
      */
     "b":string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @param params request params
+     * @param [config] request config
+     */
+    export async function getApiAbc(params:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -490,16 +500,13 @@ it('1路径 + 1请求 + 2query + 1path', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param params request params
-     * @param [config] request config
-     */
-    export async function getApiAbc(params:
+    "export type GetApiAbcPath = 
     /**
      * @description xxx
      */
     string
-    ,params_2:{
+    ;
+    export type GetApiAbcParams = {
     /**
      * @description test--
      * @deprecated
@@ -509,7 +516,13 @@ it('1路径 + 1请求 + 2query + 1path', () => {
      * @description xxx
      */
     "b":string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @param params request params
+     * @param [config] request config
+     */
+    export async function getApiAbc(params:GetApiAbcPath,params_2:GetApiAbcParams,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${params}\`,
@@ -587,29 +600,33 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param c xxx
-     * @param params request params
-     * @param data aaa
-     * @param [config] request config
-     */
-    export async function getApiAbc(c:
+    "export type GetApiAbcPath = 
     /**
      * @description xxx
      */
     string
-    ,params:{
+    ;
+    export type GetApiAbcParams = {
     "a":string;
     /**
      * @description xxx
      */
     "b":string;
-    },data:
+    };
+    export type GetApiAbcData = 
     /**
      * @description aaa
      */
     string
-    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    ;
+
+    /**
+     * @param c xxx
+     * @param params request params
+     * @param data aaa
+     * @param [config] request config
+     */
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -695,29 +712,33 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param c xxx
-     * @param params request params
-     * @param data request--data--description
-     * @param [config] request config
-     */
-    export async function getApiAbc(c:
+    "export type GetApiAbcPath = 
     /**
      * @description xxx
      */
     string
-    ,params:{
+    ;
+    export type GetApiAbcParams = {
     "a":string;
     /**
      * @description xxx
      */
     "b":string;
-    },data:{
+    };
+    export type GetApiAbcData = {
     /**
      * @description yyy
      */
     "name":string;
-    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
+    };
+
+    /**
+     * @param c xxx
+     * @param params request params
+     * @param data request--data--description
+     * @param [config] request config
+     */
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -809,30 +830,35 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
+    "export type GetApiAbcPath = 
+    /**
+     * @description xxx
+     */
+    string
+    ;
+    export type GetApiAbcParams = {
+    "a":string;
+    /**
+     * @description xxx
+     */
+    "b":string;
+    };
+    export type GetApiAbcData = {
+    /**
+     * @description yyy
+     */
+    "name":string;
+    };
+    export type GetApiAbcResponse = string;
+
+    /**
      * @param c xxx
      * @param params request params
      * @param data request data
      * @param [config] request config
      * @returns success
      */
-    export async function getApiAbc(c:
-    /**
-     * @description xxx
-     */
-    string
-    ,params:{
-    "a":string;
-    /**
-     * @description xxx
-     */
-    "b":string;
-    },data:{
-    /**
-     * @description yyy
-     */
-    "name":string;
-    },config?:AxiosRequestConfig): AxiosResponse<string> {
+    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): AxiosResponse<GetApiAbcResponse> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -941,30 +967,26 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "/**
-     * @param data xxx
-     * @param params request params
-     * @param data_2 request data
-     * @param [config] request config
-     * @returns success
-     */
-    export async function getApiAbcDef(data:
+    "export type GetApiAbcDefPath = 
     /**
      * @description xxx
      */
     string
-    ,params:{
+    ;
+    export type GetApiAbcDefParams = {
     "config":string;
     /**
      * @description xxx
      */
     "path":string;
-    },data_2:{
+    };
+    export type GetApiAbcDefData = {
     /**
      * @description yyy
      */
     "name":string;
-    },config?:AxiosRequestConfig): AxiosResponse<
+    };
+    export type GetApiAbcDefResponse = 
     /**
      * @description resp---123
      */
@@ -983,7 +1005,16 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
     "name"?:string;
     };
     }
-    > {
+    ;
+
+    /**
+     * @param data xxx
+     * @param params request params
+     * @param data_2 request data
+     * @param [config] request config
+     * @returns success
+     */
+    export async function getApiAbcDef(data:GetApiAbcDefPath,params:GetApiAbcDefParams,data_2:GetApiAbcDefData,config?:AxiosRequestConfig): AxiosResponse<GetApiAbcDefResponse> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${data}/def\`,
