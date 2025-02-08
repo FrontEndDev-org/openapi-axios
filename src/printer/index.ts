@@ -271,7 +271,6 @@ export class Printer {
     Object.assign(this.configs, configs);
     const {
       hideHeaders,
-      hideHelpers,
       hideFooters,
       hideAlert,
       hideInfo,
@@ -287,7 +286,6 @@ export class Printer {
       !hideAlert && this.#printAlert(),
       !hideInfo && this.#printInfo(),
       !hideImports && this.#printImports(),
-      !hideHelpers && Printer.helpersCode,
       !hideComponents && this.#printComponents(),
       !hidePaths && this.#printPaths(),
       !hideFooters && footer,
@@ -713,60 +711,4 @@ export class Printer {
     this.#parseContents(arg, content, response, (contentType, content) =>
       contentMatch(contentType, content, response));
   }
-
-  static helpersCode = `
-// helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
-type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-type UnknownObject = Record<string, unknown>;
-type DeepGet<O, K> = K extends [infer P, ...infer R]
-  ? O extends Record<string, any> | Array<any>
-    ? P extends keyof O
-      ? R['length'] extends 0
-        ? O[P]
-        : DeepGet<NonNullable<O[P]>, R>
-      : never
-    : never
-  : never;
-// helpers --- end
-    `;
 }
-
-// helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B]
-  ? A | OneOf<B>
-  : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B]
-  ? A & AllOf<B>
-  : unknown;
-type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B]
-  ? A | AnyOf<B> | (A & AnyOf<B>)
-  : never;
-type UnknownObject = Record<string, unknown>;
-type DeepGet<O, K> = K extends [infer P, ...infer R]
-  ? O extends Record<string, any> | Array<any>
-    ? P extends keyof O
-      ? R['length'] extends 0
-        ? O[P]
-        : DeepGet<NonNullable<O[P]>, R>
-      : never
-    : never
-  : never;
-// helpers --- end
-
-interface T0 {
-  aa?: string;
-  bb?: {
-    cc?: T0['aa'];
-    dd?: number;
-  }[];
-}
-interface T1 {
-  aa?: DeepGet<T0, ['aa']>;
-  dd?: DeepGet<T0, ['bb', number, 'dd']>;
-}
-const t1: T1 = {
-  aa: 'aa',
-  dd: 1,
-};

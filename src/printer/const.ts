@@ -97,14 +97,7 @@ export const INTERNAL_TYPES = [
   'bigint',
   'Record',
   'NonNullable',
-  // printer helpers
-  'OneOf',
-  'AllOf',
-  'AnyOf',
-  'UnknownObject',
-  'UnknownArray',
-  'DeepGet',
-  // config
+  // axios
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
 ];

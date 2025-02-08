@@ -129,7 +129,6 @@ export interface PrinterConfigs {
   file?: string;
 
   hideHeaders?: boolean;
-  hideHelpers?: boolean;
   hideFooters?: boolean;
   hideAlert?: boolean;
   hideInfo?: boolean;
