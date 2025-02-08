@@ -5,26 +5,7 @@ import type { PrinterOptions } from './types';
 import { isRefParameter, requiredKeyStringify } from './helpers';
 import { Schemata } from './Schemata';
 
-export type ArgKind = 'path' | 'header' | 'cookie' | 'param' | 'data' | 'config' | 'response';
-
-const kindAxiosPropNames: Record<ArgKind, string> = {
-  path: 'url',
-  header: 'headers',
-  cookie: 'cookies',
-  param: 'params',
-  data: 'data',
-  config: 'config',
-  response: 'response',
-};
-const kindAxiosDocNames: Record<ArgKind, string> = {
-  path: 'path',
-  header: 'headers',
-  cookie: 'cookies',
-  param: 'params',
-  data: 'data',
-  config: 'config',
-  response: 'response',
-};
+export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
 
 export interface ArgProp {
   name: string;
@@ -51,17 +32,23 @@ export class Arg {
   /**
    * 是否必填
    */
-  required: boolean = false;
+  required = false;
   /**
-   * 类型
+   * 类型名称
    */
-  type: string = '';
+  typeName = '';
+  /**
+   * 类型值
+   */
+  typeValue = '';
   comments: Record<string, unknown> = {};
   props: ArgProp[] = [];
 
   constructor(
-    readonly named: Named,
     readonly kind: ArgKind,
+    readonly operationName: string,
+    readonly docNamed: Named,
+    readonly argNamed: Named,
     readonly schemata: Schemata,
     readonly printOptions: PrinterOptions,
     /**
@@ -69,10 +56,11 @@ export class Arg {
      */
     readonly isSingle: boolean = false,
   ) {
-    this.originName = this.kind;
-    this.propName = kindAxiosPropNames[this.kind];
-    this.docName = kindAxiosDocNames[this.kind];
+    this.originName = kind;
+    this.propName = kind === 'path' ? 'url' : kind;
+    this.docName = kind;
     this.varName = '';
+    this.typeName = docNamed.nextTypeName(`${operationName}-${kind}`);
   }
 
   url: string = '';
@@ -129,13 +117,13 @@ export class Arg {
         switch (this.kind) {
           case 'path':
             this.required = true;
-            this.type = this.defaultType;
-            this.varName = this.named.nextVarName(this.docName);
+            this.typeValue = this.defaultType;
+            this.varName = this.argNamed.nextVarName(this.docName);
             return this;
 
           case 'config':
-            this.type = this.defaultType;
-            this.varName = this.named.nextVarName(this.docName);
+            this.typeValue = this.defaultType;
+            this.varName = this.argNamed.nextVarName(this.docName);
             this.comments = {
               [`param [${this.varName}]`]: `request ${this.propName}`,
             };
@@ -153,9 +141,9 @@ export class Arg {
         const required = parameter.required || result.required || false;
 
         this.originName = firstArg.name;
-        this.varName = this.named.nextVarName(firstArg.name);
+        this.varName = this.argNamed.nextVarName(firstArg.name);
         this.required = required;
-        this.type = Schemata.toString(result);
+        this.typeValue = Schemata.toString(result);
         this.comments = isResponse
           ? {
               returns: parameter.description || schema.description || false,
@@ -189,8 +177,8 @@ export class Arg {
         const required = requiredNames.length > 0;
 
         this.required = required;
-        this.type = Schemata.toString(result);
-        this.varName = this.named.nextVarName(this.docName);
+        this.typeValue = Schemata.toString(result);
+        this.varName = this.argNamed.nextVarName(this.docName);
         this.comments = this.kind === 'response'
           ? {
               returns: result.comments.description,

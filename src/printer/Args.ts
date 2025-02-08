@@ -26,15 +26,21 @@ export class Args {
 
   printFormalParams() {
     return this.fixedArgs
-      .filter(fixArg => fixArg.type !== '')
+      .filter(fixArg => fixArg.typeValue !== '')
       .map((fixArg) => {
-        return `${fixArg.varName}${requiredTypeStringify(fixArg.required)}${fixArg.type}`;
+        const typeValue = fixArg.kind === 'config' ? fixArg.typeValue : fixArg.typeName;
+        return `${fixArg.varName}${requiredTypeStringify(fixArg.required)}${typeValue}`;
       })
       .join(',');
   }
 
-  printType(index: number) {
-    return this.fixedArgs[index]?.type || 'unknown';
+  printSchemaTypes() {
+    return this.fixedArgs
+      .filter(fixArg => fixArg.typeValue !== '' && fixArg.kind !== 'config')
+      .map((fixArg) => {
+        return `export type ${fixArg.typeName} = ${fixArg.typeValue};`;
+      })
+      .join('\n');
   }
 
   printActualParams() {

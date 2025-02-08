@@ -457,21 +457,25 @@ export class Printer {
 
     const options = this.options || {};
     const { responseStatusCode, responseContentType, requestContentType } = options;
+    const { parameters, requestBody, responses, operationId } = operation;
+
     const argNamed = new Named({
       keywordVars: true,
       internalVars: true,
       internalTypes: true,
     });
-    const header = new Arg(argNamed, 'header', this.schemata, options);
-    const cookie = new Arg(argNamed, 'cookie', this.schemata, options);
-    const query = new Arg(argNamed, 'param', this.schemata, options);
-    const path = new Arg(argNamed, 'path', this.schemata, options);
+    const operationName = this.named.nextOperationId(method, url, operationId);
+
+    const header = new Arg('headers', operationName, this.named, argNamed, this.schemata, options);
+    const cookie = new Arg('cookies', operationName, this.named, argNamed, this.schemata, options);
+    const query = new Arg('params', operationName, this.named, argNamed, this.schemata, options);
+    const path = new Arg('path', operationName, this.named, argNamed, this.schemata, options);
+    const data = new Arg('data', operationName, this.named, argNamed, this.schemata, options, true);
+    const config = new Arg('config', operationName, this.named, argNamed, this.schemata, options, true);
+    const resp = new Arg('response', operationName, this.named, argNamed, this.schemata, options, true);
+
     path.setUrl(url); // 设置 url，用于解析 path 参数
-    const data = new Arg(argNamed, 'data', this.schemata, options, true);
-    const config = new Arg(argNamed, 'config', this.schemata, options, true);
     config.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
-    const resp = new Arg(argNamed, 'response', this.schemata, options, true);
-    const { parameters, requestBody, responses, operationId } = operation;
 
     if (parameters) {
       for (const parameter of parameters) {
@@ -536,7 +540,6 @@ export class Printer {
       );
     }
 
-    const funcName = this.named.nextOperationId(method, url, operationId);
     const requestArgs = new Args([
       header.parse(),
       path.parse(),
@@ -555,13 +558,17 @@ export class Printer {
     jsDoc.addComments(requestArgs.toComments());
     jsDoc.addComments(responseArgs.toComments());
 
-    return `${jsDoc.print()}
-export async function ${funcName}(${requestArgs.printFormalParams()}): ${AXIOS_RESPONSE_TYPE_NAME}<${responseArgs.printType(0)}> {
+    return [
+      requestArgs.printSchemaTypes(),
+      responseArgs.printSchemaTypes(),
+      jsDoc.print(),
+      `export async function ${operationName}(${requestArgs.printFormalParams()}): ${AXIOS_RESPONSE_TYPE_NAME}<${responseArgs.fixedArgs[0].typeName}> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method.toUpperCase())},
         ${requestArgs.printActualParams()}
     });
-}`;
+}`,
+    ].join('\n');
   }
 
   #parseContents(
