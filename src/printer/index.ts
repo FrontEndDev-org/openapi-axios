@@ -549,6 +549,7 @@ export class Printer {
     const jsDoc = new JsDoc(this.document.tags);
     const comments = JsDoc.fromOperation(operation);
     const { module } = this.configs;
+
     if (module)
       jsDoc.addComments({ module });
     jsDoc.addComments(comments);
