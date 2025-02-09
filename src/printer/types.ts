@@ -133,6 +133,6 @@ export interface PrinterConfigs {
   hideAlert?: boolean;
   hideInfo?: boolean;
   hideImports?: boolean;
-  hideComponents?: boolean;
+  hideSchemas?: boolean;
   hidePaths?: boolean;
 }

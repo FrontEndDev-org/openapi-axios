@@ -57,6 +57,16 @@ type ResponseMatch = (
   response: OpenApiLatest_Response,
 ) => boolean;
 
+type WithId<T> = T & {
+  nodeId: string;
+  namedId?: string;
+};
+type SchemaInfo = WithId<{ position: 'root' | 'anchor'; schema: OpenApiLatest_Schema; typeName: string }>;
+type RequestBodyInfo = WithId<{ requestBody: OpenApiLatest_Request }>;
+type ParameterInfo = WithId<{ parameter: OpenApiLatest_Parameter }>;
+type ResponseInfo = WithId<{ response: OpenApiLatest_Response }>;
+type PathItemInfo = WithId<{ pathItem: OpenApiLatest_PathItem }>;
+
 export class Printer {
   named = new Named({ internalVars: true, internalTypes: true });
   schemata = new Schemata(this.named);
@@ -79,21 +89,20 @@ export class Printer {
     this.registerComponents();
   }
 
-  schemas: Record<string /** refId */, string /** refType */> = {};
-  anchors: Record<string /** anchorId */, string /** anchorType */> = {};
-  requestBodies: Record<string, OpenApiLatest_Request> = {};
-  parameters: Record<string, OpenApiLatest_Parameter> = {};
-  responses: Record<string, OpenApiLatest_Response> = {};
-  pathItems: Record<string, OpenApiLatest_PathItem> = {};
+  schemas: Record<string /** nodeId */, SchemaInfo> = {};
+  // anchorSchemas: Record<string /** nodeId */, WithId<{ schema: OpenApiLatest_Schema; typeName: string }>> = {};
+  requestBodies: Record<string /** nodeId */, RequestBodyInfo> = {};
+  parameters: Record<string /** nodeId */, ParameterInfo> = {};
+  responses: Record<string /** nodeId */, ResponseInfo> = {};
+  pathItems: Record<string /** nodeId */, PathItemInfo> = {};
 
   #parseRefComponent<T>(
-    { kind, name, obj, primary, additional }: {
+    { kind, name, obj }: {
       kind: keyof OpenAPILatest.ComponentsObject;
       name: string;
       obj: { $ref: string } | { $id?: string };
-      primary: (id: string) => T;
-      additional?: ((id: string, val: T) => void) | true;
     },
+    processor: (nodeId: string, namedId?: string) => unknown,
   ) {
     const nodeId = `#/components/${kind}/${name}`;
     const refId = '$ref' in obj ? obj.$ref : '';
@@ -103,16 +112,7 @@ export class Printer {
       throw new Error(`${kind}/${name} 引用了自身`);
     }
 
-    const val = primary(nodeId);
-
-    if (namedId && namedId !== nodeId) {
-      if (additional === true) {
-        primary(namedId);
-      }
-      else {
-        additional?.(namedId, val);
-      }
-    }
+    processor(nodeId, namedId);
   }
 
   registerComponents() {
@@ -129,140 +129,121 @@ export class Printer {
         kind: 'schemas',
         name,
         obj: schema,
-        primary: (id) => {
-          if (this.schemas[id]) {
-            throw new Error(`重复的 schema 引用 id：${id}`);
-          }
+      }, (nodeId, namedId) => {
+        if (this.schemas[nodeId]) {
+          throw new Error(`重复的 schema 引用 id：${nodeId}`);
+        }
 
-          const refType = this.named.nextRefType(name, id);
-          this.schemas[id] = refType;
-          this.#registerAnchors(id, refType, schema, []);
-          return refType;
-        },
-        additional: (id, refType) => {
-          this.schemas[id] = refType;
-          this.named.setRefType(id, refType);
-          this.#registerAnchors(id, refType, schema, []);
-        },
+        const typeName = this.named.nextRefType(name, nodeId);
+        this.schemas[nodeId] = {
+          position: 'root',
+          typeName,
+          schema,
+          nodeId,
+          namedId,
+        };
+        this.#tryRegisterAnchors({ namedId, nodeId, typeName }, schema);
+
+        if (namedId) {
+          this.named.setRefType(namedId, typeName);
+        }
       });
     }
 
     for (const [name, requestBody] of Object.entries(requestBodies)) {
-      const defaultId = `#/components/requestBodies/${name}`;
-      const overrideId = isRefRequest(requestBody)
-        ? defaultId
-        : requestBody.$id || defaultId;
-
       this.#parseRefComponent({
         kind: 'requestBodies',
         name,
         obj: requestBody,
-        primary: (id) => {
-          if (this.requestBodies[id]) {
-            throw new Error(`重复的 requestBody 引用 id：${id}`);
-          }
-          this.requestBodies[id] = requestBody;
-        },
-        additional: true,
+      }, (nodeId, namedId) => {
+        if (this.requestBodies[nodeId]) {
+          throw new Error(`重复的 requestBody 引用 id：${nodeId}`);
+        }
+
+        this.requestBodies[nodeId] = { nodeId, namedId, requestBody };
       });
     }
 
     for (const [name, parameter] of Object.entries(parameters)) {
-      const defaultId = `#/components/parameters/${name}`;
-      const overrideId = isRefParameter(parameter)
-        ? defaultId
-        : parameter.$id || defaultId;
-
       this.#parseRefComponent({
         kind: 'parameters',
         name,
         obj: parameter,
-        primary: (id) => {
-          if (this.parameters[id]) {
-            throw new Error(`重复的 parameter 引用 id：${id}`);
-          }
-          this.parameters[id] = parameter;
-        },
-        additional: true,
+      }, (nodeId, namedId) => {
+        if (this.parameters[nodeId]) {
+          throw new Error(`重复的 parameter 引用 id：${nodeId}`);
+        }
+
+        this.parameters[nodeId] = { nodeId, namedId, parameter };
       });
     }
 
     for (const [name, response] of Object.entries(responses)) {
-      const defaultId = `#/components/responses/${name}`;
-      const overrideId = isRefResponse(response)
-        ? defaultId
-        : response.$id || defaultId;
-
       this.#parseRefComponent({
         kind: 'responses',
         name,
         obj: response,
-        primary: (id) => {
-          if (this.responses[overrideId]) {
-            throw new Error(`重复的 response 引用 id：${overrideId}`);
-          }
+      }, (nodeId, namedId) => {
+        if (this.responses[nodeId]) {
+          throw new Error(`重复的 response 引用 id：${nodeId}`);
+        }
 
-          this.responses[id] = response;
-        },
-        additional: true,
+        this.responses[nodeId] = { nodeId, namedId, response };
       });
     }
 
     for (const [name, pathItem] of Object.entries(pathItems)) {
-      const defaultId = `#/components/pathItems/${name}`;
-      const overrideId = isRefPathItem(pathItem)
-        ? defaultId
-        : pathItem.$id || defaultId;
-
       this.#parseRefComponent({
         kind: 'pathItems',
         name,
         obj: pathItem,
-        primary: (id) => {
-          if (this.pathItems[id]) {
-            throw new Error(`重复的 pathItem 引用 id：${id}`);
-          }
+      }, (nodeId, namedId) => {
+        if (this.pathItems[nodeId]) {
+          throw new Error(`重复的 pathItem 引用 id：${nodeId}`);
+        }
 
-          this.pathItems[id] = pathItem;
-        },
-        additional: true,
+        this.pathItems[nodeId] = { nodeId, namedId, pathItem };
       });
     }
   }
 
-  #registerAnchors(
-    rootId: string,
-    rootType: string,
+  #tryRegisterAnchors(
+    info: { nodeId: string; namedId?: string ; typeName: string },
     schema: OpenApiLatest_Schema,
-    props: string[],
   ) {
+    const { nodeId, namedId, typeName } = info;
+
     if (isRefSchema(schema))
       return;
 
-    if (props.length && schema.$anchor) {
-      const anchorId = `${rootId}#${schema.$anchor}`;
-      const anchorType = `DeepGet<${rootType}, [${props.join(', ')}]>`;
+    if (schema.$anchor) {
+      const anchorId = `${nodeId}#${schema.$anchor}`;
 
-      if (this.anchors[anchorId]) {
+      if (this.schemas[anchorId]) {
         throw new Error(`重复的 anchor 引用 id：${anchorId}`);
       }
 
-      this.anchors[anchorId] = anchorType;
-      this.named.setRefType(anchorId, anchorType);
+      const anchorNamedId = namedId && `${namedId}#${schema.$anchor}`;
+      const anchorTypeName = this.named.nextTypeName(`${typeName}-${schema.$anchor}`);
+
+      this.schemas[anchorId] = {
+        position: 'anchor',
+        nodeId: anchorId,
+        namedId: anchorNamedId,
+        typeName: anchorTypeName,
+        schema,
+      };
+
+      this.named.setRefType(anchorId, anchorTypeName);
+      anchorNamedId && this.named.setRefType(anchorNamedId, anchorTypeName);
     }
 
     if ('items' in schema && schema.items) {
-      this.#registerAnchors(rootId, rootType, schema.items, [
-        ...props,
-        'number',
-      ]);
+      this.#tryRegisterAnchors(info, schema.items);
     }
     else if ('properties' in schema && schema.properties) {
       for (const [prop, property] of Object.entries(schema.properties)) {
-        this.#registerAnchors(rootId, rootType, property, [
-          ...props,
-          JSON.stringify(prop),
-        ]);
+        this.#tryRegisterAnchors(info, property);
       }
     }
   }
@@ -274,7 +255,7 @@ export class Printer {
       hideFooters,
       hideAlert,
       hideInfo,
-      hideComponents,
+      hideSchemas,
       hideImports,
       hidePaths,
     } = this.configs;
@@ -286,7 +267,7 @@ export class Printer {
       !hideAlert && this.#printAlert(),
       !hideInfo && this.#printInfo(),
       !hideImports && this.#printImports(),
-      !hideComponents && this.#printComponents(),
+      !hideSchemas && this.#printSchemas(),
       !hidePaths && this.#printPaths(),
       !hideFooters && footer,
     ]
@@ -374,33 +355,27 @@ export class Printer {
     ].join('\n');
   }
 
-  #printComponents() {
-    return Object.entries(this.document.components?.schemas || {})
-      .map(([name, schema]) => {
-        return this.#printComponent(
-          name,
-          `#/components/schemas/${name}`,
-          schema,
-        );
-      })
+  #printSchemas() {
+    return Object.entries(this.schemas)
+      .map(([nodeId, schemaInfo]) => this.#printSchema(schemaInfo))
       .join('\n\n');
   }
 
-  #printComponent(
-    name: string,
-    id: string,
-    schema: OpenApiLatest_Schema,
+  #printSchema(
+    { schema, nodeId, namedId, typeName }: SchemaInfo,
   ) {
     const { comments, type } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
-    const refType = this.schemas[id];
 
-    if (isUndefined(refType)) {
-      throw new Error(`未发现 schema 引用：${id}`);
+    if (isUndefined(typeName)) {
+      throw new Error(`未发现 schema 引用：${nodeId}`);
     }
 
-    return [jsDoc.print(), `export type ${refType} = ${type};`]
+    return [
+      jsDoc.print(),
+      `export type ${typeName} = ${type};`,
+    ]
       .filter(Boolean)
       .join('\n');
   }
@@ -420,13 +395,13 @@ export class Printer {
     pathItem: OpenApiLatest_PathItem,
   ): Array<string | undefined> {
     if (isRefPathItem(pathItem)) {
-      const relPathItem = this.pathItems[pathItem.$ref];
+      const refPathItem = this.pathItems[pathItem.$ref];
 
-      if (isUndefined(relPathItem)) {
+      if (isUndefined(refPathItem)) {
         throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
       }
 
-      return this.#printPathItem(url, relPathItem);
+      return this.#printPathItem(url, refPathItem.pathItem);
     }
 
     return Object.entries(pathItem).map(([method, _operation]) => {
@@ -640,7 +615,7 @@ export class Printer {
         throw new Error(`未发现 parameter 引用：${$ref}`);
       }
 
-      this.#parseParameter(refParameter, args);
+      this.#parseParameter(refParameter.parameter, args);
       return;
     }
 
@@ -664,7 +639,7 @@ export class Printer {
       if (!refRequestBody)
         throw new Error(`未发现 requestBody 引用：${$ref}`);
 
-      this.#parseRequestBody(arg, refRequestBody, match);
+      this.#parseRequestBody(arg, refRequestBody.requestBody, match);
       return;
     }
 
@@ -701,7 +676,7 @@ export class Printer {
       if (!refResponse)
         throw new Error(`未发现 response 引用：${$ref}`);
 
-      this.#parseResponse(arg, refResponse, contentMatch);
+      this.#parseResponse(arg, refResponse.response, contentMatch);
       return;
     }
 
@@ -712,4 +687,24 @@ export class Printer {
     this.#parseContents(arg, content, response, (contentType, content) =>
       contentMatch(contentType, content, response));
   }
+}
+
+interface AA {
+  aa: string;
+  bb: {
+    cc: string;
+    dd: {
+      ee: string;
+    };
+  }[];
+}
+interface BB {
+  aaa: string;
+  bbb: {
+    ccc: string;
+    ddd: {
+      eee: string;
+      dd: AA['bb'][number]['dd'];
+    };
+  }[];
 }
