@@ -685,23 +685,3 @@ export class Printer {
       contentMatch(contentType, content, response));
   }
 }
-
-interface AA {
-  aa: string;
-  bb: {
-    cc: string;
-    dd: {
-      ee: string;
-    };
-  }[];
-}
-interface BB {
-  aaa: string;
-  bbb: {
-    ccc: string;
-    ddd: {
-      eee: string;
-      dd: AA['bb'][number]['dd'];
-    };
-  }[];
-}
