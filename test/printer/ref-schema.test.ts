@@ -41,7 +41,6 @@ it('ref $id', () => {
     printer.print({
       hideHeaders: true,
       hideFooters: true,
-      hideHelpers: true,
       hideImports: true,
       hideInfo: true,
       hideAlert: true,
@@ -78,6 +77,7 @@ it('ref $anchor', () => {
     components: {
       schemas: {
         T0: {
+          $id: 'tttt0',
           type: 'object',
           properties: {
             aa: {
@@ -109,7 +109,7 @@ it('ref $anchor', () => {
               $ref: '#/components/schemas/T0#aa',
             },
             dd: {
-              $ref: '#/components/schemas/T0#dd',
+              $ref: 'tttt0#dd',
             },
           },
         },
@@ -121,26 +121,32 @@ it('ref $anchor', () => {
     printer.print({
       hideHeaders: true,
       hideFooters: true,
-      hideHelpers: true,
       hideImports: true,
       hideInfo: true,
       hideAlert: true,
     }),
   ).toMatchInlineSnapshot(`
-      "export type T0 = {
-      /**
-       * @format uuid
-       */
-      "aa"?:string;
-      "bb"?:Array<{
-      "cc"?:DeepGet<T0, ["aa"]>;
-      "dd"?:number;
-      }>;
-      };
+    "export type T0 = {
+    /**
+     * @format uuid
+     */
+    "aa"?:string;
+    "bb"?:Array<{
+    "cc"?:T0Aa;
+    "dd"?:number;
+    }>;
+    };
 
-      export type T1 = {
-      "aa"?:DeepGet<T0, ["aa"]>;
-      "dd"?:DeepGet<T0, ["bb", number, "dd"]>;
-      };"
-    `);
+    /**
+     * @format uuid
+     */
+    export type T0Aa = string;
+
+    export type T0Dd = number;
+
+    export type T1 = {
+    "aa"?:T0Aa;
+    "dd"?:T0Dd;
+    };"
+  `);
 });

@@ -95,8 +95,8 @@ it('nullable + anyOf', () => {
   });
     // console.log(type);
   expect(type).toMatchInlineSnapshot(`
-      "{
-      "t0"?:(null|AnyOf<[T1,T2]>);
-      }"
-    `);
+    "{
+    "t0"?:(null|(T1|T2));
+    }"
+  `);
 });

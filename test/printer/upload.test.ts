@@ -31,13 +31,12 @@ it('upload root', () => {
   });
 
   const output = printer.print({
-    hideComponents: true,
+    hideSchemas: true,
     hideInfo: true,
     hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,
-    hideHelpers: true,
   });
 
   expect(output).toMatchInlineSnapshot(`
@@ -119,13 +118,12 @@ it('upload single', () => {
   });
 
   const output = printer.print({
-    hideComponents: true,
+    hideSchemas: true,
     hideInfo: true,
     hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,
-    hideHelpers: true,
   });
 
   expect(output).toMatchInlineSnapshot(`
@@ -217,13 +215,12 @@ it('upload multiple', () => {
   });
 
   const output = printer.print({
-    hideComponents: true,
+    hideSchemas: true,
     hideInfo: true,
     hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,
-    hideHelpers: true,
   });
 
   expect(output).toMatchInlineSnapshot(`

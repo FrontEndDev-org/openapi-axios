@@ -42,7 +42,6 @@ it('unique vars', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -142,7 +141,6 @@ it('unique types', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -152,15 +150,15 @@ it('unique types', () => {
     "name"?:string;
     };
 
-    export type UnknownObject_2 = {
+    export type UnknownObject = {
     "name"?:number;
     };
 
     export type GetTestPath = string;
-    export type GetTestParams = UnknownObject_2;
+    export type GetTestParams = UnknownObject;
     export type GetTestResponse = {
     "AxiosResponse"?:AxiosResponse_2;
-    "UnknownObject"?:UnknownObject_2;
+    "UnknownObject"?:UnknownObject;
     };
 
     /**
