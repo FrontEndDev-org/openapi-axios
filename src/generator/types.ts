@@ -7,6 +7,12 @@ type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export type OpenAPIOptions = PrinterOptions & {
   /**
+   * 文件名称
+   * @default ${module}.ts
+   */
+  fileName?: string;
+
+  /**
    * openapi 的 document，可以是一个链接地址，也可以是本地路径，也可以是一个对象
    */
   document: OpenAPILatest.Document | string;

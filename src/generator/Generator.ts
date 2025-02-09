@@ -56,8 +56,7 @@ export class Generator extends Emitter<GeneratorEmits> {
 
   protected async generateOpenAPI(index: number, count: number, module: string, openAPIOptions: OpenAPIOptions, generatorOptions: StrictGeneratorOptions) {
     const { cwd, dest, ...globalPrinter } = generatorOptions;
-    const { document, ...scopePrinter } = openAPIOptions;
-    const fileName = `${module}.ts`;
+    const { document, fileName = `${module}.ts`, ...scopePrinter } = openAPIOptions;
     const file = path.join(cwd, dest, fileName);
 
     // 1. 参数合并
