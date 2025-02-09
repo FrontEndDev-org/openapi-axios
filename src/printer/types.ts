@@ -110,6 +110,17 @@ export interface PrinterOptions {
    * 生成文件的尾部信息
    */
   footer?: string;
+
+  /**
+   * 是否需要在运行时验证接口的出入参
+   */
+  runtimeValidate?: boolean | {
+    /**
+     * 指定响应数据 key
+     * @default data
+     */
+    responseDataKey: string;
+  };
 }
 
 export interface PrinterConfigs {
@@ -126,7 +137,9 @@ export interface PrinterConfigs {
   /**
    * file path
    */
-  file?: string;
+  mainFile?: string;
+  typeFile?: string;
+  zodFile?: string;
 
   hideHeaders?: boolean;
   hideFooters?: boolean;
@@ -135,4 +148,9 @@ export interface PrinterConfigs {
   hideImports?: boolean;
   hideSchemas?: boolean;
   hidePaths?: boolean;
+}
+
+export interface PrintResult {
+  errors: string[];
+  code: string;
 }

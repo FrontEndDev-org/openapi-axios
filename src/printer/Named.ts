@@ -2,8 +2,11 @@ import { fixVarName, nextUniqueName } from '../utils/string';
 import { INTERNAL_TYPES, INTERNAL_VARS, KEYWORD_VARS } from './const';
 
 export class Named {
+  // eslint-disable-next-line style/type-generic-spacing
   varNameCountMap = new Map<string /* var */, number /* count */>();
+  // eslint-disable-next-line style/type-generic-spacing
   typeNameCountMap = new Map<string /* type */, number /* count */>();
+  // eslint-disable-next-line style/type-generic-spacing
   refIdTypeMap = new Map<string /* refId */, string /* refType */>();
 
   constructor({ keywordVars, internalTypes, internalVars }: {

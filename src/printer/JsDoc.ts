@@ -1,6 +1,5 @@
 import type { OpenAPILatest } from '../types/openapi';
 import { isArray, isBoolean, isNumber, isString } from '../utils/type-is';
-import { filterLine } from './helpers';
 
 function formatLine(key: string, val: unknown) {
   val = key === 'externalDocs' ? JsDoc.printExternalDoc(val as OpenAPILatest.ExternalDocumentationObject) : val;
@@ -62,7 +61,7 @@ export class JsDoc {
         return formatLine(key, val);
       })
       .flat()
-      .filter(filterLine) as string[];
+      .filter(Boolean) as string[];
   }
 
   static fromRef(ref: OpenAPILatest.ReferenceObject) {

@@ -1,9 +1,11 @@
 import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Parameter, OpenApiLatest_PathItem, OpenApiLatest_Request, OpenApiLatest_Response, OpenApiLatest_Schema } from './helpers';
-import type { PrinterConfigs, PrinterOptions } from './types';
+import type { PrinterConfigs, PrinterOptions, PrintResult } from './types';
+import path from 'node:path';
+import { generate } from 'ts-to-zod';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
-import { toImportPath } from '../utils/path';
+import { toImportPath, toRelative } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -13,9 +15,9 @@ import {
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
+  TYPE_FILE_EXPORT_NAME,
 } from './const';
 import {
-  filterLine,
   isRefMedia,
   isRefOperation,
   isRefParameter,
@@ -248,9 +250,15 @@ export class Printer {
     }
   }
 
-  print(configs?: PrinterConfigs) {
+  print(configs?: PrinterConfigs): {
+    type: PrintResult;
+    main: PrintResult;
+    zod: PrintResult;
+  } {
     Object.assign(this.configs, configs);
+    const { runtimeValidate } = this.options || {};
     const {
+      typeFile = '.',
       hideHeaders,
       hideFooters,
       hideAlert,
@@ -259,20 +267,42 @@ export class Printer {
       hideImports,
       hidePaths,
     } = this.configs;
-    const header = this.options?.header || '';
-    const footer = this.options?.footer || '';
+    const info = !hideInfo && this.#printInfo();
+    const alert = !hideAlert && this.#printAlert();
+    const imports = !hideImports && this.#printImports();
+    const schemas = !hideSchemas && this.#printSchemas();
+    const header = !hideHeaders && (this.options?.header || '');
+    const footer = !hideFooters && (this.options?.footer || '');
+    let pathType = '';
+    let pathMain = '';
+    const zod: PrintResult = { errors: [], code: '' };
 
-    return [
-      !hideHeaders && header,
-      !hideAlert && this.#printAlert(),
-      !hideInfo && this.#printInfo(),
-      !hideImports && this.#printImports(),
-      !hideSchemas && this.#printSchemas(),
-      !hidePaths && this.#printPaths(),
-      !hideFooters && footer,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
+    if (runtimeValidate) {
+      const gen = generate({
+        sourceText: [schemas, pathType].join('\n'),
+      });
+      zod.errors = gen.errors;
+      zod.code = [header, alert, info, gen.getZodSchemasFile(toRelative(typeFile, path.dirname(typeFile)))].join('\n');
+    }
+
+    if (!hidePaths) {
+      this.#printPaths().forEach((path) => {
+        pathType += path.type;
+        pathMain += path.main;
+      });
+    }
+
+    return {
+      type: {
+        errors: [],
+        code: [header, alert, info, schemas, pathType, footer].join('\n'),
+      },
+      main: {
+        errors: [],
+        code: [header, alert, info, imports, pathMain, footer].join('\n'),
+      },
+      zod,
+    };
   }
 
   #printAlert() {
@@ -328,11 +358,11 @@ export class Printer {
       axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
       axiosResponseTypeName = AXIOS_RESPONSE_TYPE_NAME,
     } = this.options || {};
-    const { cwd = '/', file } = this.configs;
+    const { cwd = '/', mainFile, typeFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
-    const importPath = toImportPath(axiosImportFile2, cwd, file);
+    const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
     const axiosTypeImportFile2 = axiosTypeImportFile || axiosImportFile || AXIOS_TYPE_IMPORT_FILE;
-    const importTypePath = toImportPath(axiosTypeImportFile2, cwd, file);
+    const importTypePath = toImportPath(axiosTypeImportFile2, cwd, mainFile);
 
     return [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
@@ -348,6 +378,7 @@ export class Printer {
         importTypePath,
         true,
       ),
+      `import type * as Type from "${toRelative(typeFile, mainFile)}";`,
       '',
     ].join('\n');
   }
@@ -361,6 +392,7 @@ export class Printer {
   #printSchema(
     { schema, nodeId, namedId, typeName }: SchemaInfo,
   ) {
+    const { runtimeValidate } = this.options || {};
     const { comments, type } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
@@ -379,18 +411,15 @@ export class Printer {
 
   #printPaths() {
     return Object.entries(this.document.paths || {})
-      .map(([url, pathItem]) => {
-        return this.#printPathItem(url, pathItem)
-          .filter(filterLine)
-          .join('\n\n');
-      })
-      .join('\n\n');
+      .map(([url, pathItem]) => this.#printPathItem(url, pathItem))
+      .flat()
+      .filter(Boolean) as { type: string; main: string }[];
   }
 
   #printPathItem(
     url: string,
     pathItem: OpenApiLatest_PathItem,
-  ): Array<string | undefined> {
+  ): Array<{ type: string; main: string } | undefined> {
     if (isRefPathItem(pathItem)) {
       const refPathItem = this.pathItems[pathItem.$ref];
 
@@ -531,26 +560,29 @@ export class Printer {
     jsDoc.addComments(responseArgs.toComments());
 
     const formalParams = requestArgs.printFormalParams();
-    const returnType = responseArgs.fixedArgs.at(0)?.typeName ?? 'unknown';
+    let returnType = responseArgs.fixedArgs.at(0)?.typeName;
+    returnType = returnType ? `${TYPE_FILE_EXPORT_NAME}.${returnType}` : 'unknown';
 
-    const lines = [
+    const type = [
       ...requestArgs.printSchemaTypes(),
       ...responseArgs.printSchemaTypes(),
-      '',
+    ].filter(Boolean).join('\n');
+
+    const main = [
       jsDoc.print(),
-      `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${returnType}>> {
-    return ${AXIOS_IMPORT_NAME}({
-        method: ${JSON.stringify(method.toUpperCase())},
-        ${requestArgs.printActualParams()}
-    });
-}`,
-    ];
+      `
+export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${returnType}>> {
+  // validate request
+  const response = await ${AXIOS_IMPORT_NAME}({
+    method: ${JSON.stringify(method.toUpperCase())},
+    ${requestArgs.printActualParams()}
+  });
+  // validate response
+  return response;
+}`.trim(),
+    ].filter(Boolean).join('\n');
 
-    if (lines.at(0) === '') {
-      lines.shift();
-    }
-
-    return lines.join('\n');
+    return { type, main };
   }
 
   #parseContents(

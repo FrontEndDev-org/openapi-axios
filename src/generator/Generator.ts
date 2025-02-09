@@ -1,3 +1,4 @@
+import type { PrintResult } from '../printer/types';
 import type {
   GeneratingOptions,
   GeneratingPayload,
@@ -14,7 +15,6 @@ import process from 'node:process';
 import { Emitter } from 'strict-event-emitter';
 import { normalizeError } from 'try-flatten';
 import { Printer } from '../printer';
-import { formatTsCode } from '../utils/string';
 import { isString } from '../utils/type-is';
 import { Reader } from './Reader';
 
@@ -41,7 +41,7 @@ export class Generator extends Emitter<GeneratorEmits> {
       let index = 0;
       for (const [name, module] of entries) {
         const openAPI: OpenAPIOptions = isString(module) ? { document: module } : module;
-        await this.generateOpenAPI(index, count, name, openAPI, this.options);
+        await this.#generateOpenAPI(index, count, name, openAPI);
         index++;
       }
     }
@@ -54,10 +54,12 @@ export class Generator extends Emitter<GeneratorEmits> {
     this.emit('end', payload);
   }
 
-  protected async generateOpenAPI(index: number, count: number, module: string, openAPIOptions: OpenAPIOptions, generatorOptions: StrictGeneratorOptions) {
-    const { cwd, dest, ...globalPrinter } = generatorOptions;
+  async #generateOpenAPI(index: number, count: number, module: string, openAPIOptions: OpenAPIOptions) {
+    const { cwd, dest, ...globalPrinter } = this.options;
     const { document, fileName = `${module}.ts`, ...scopePrinter } = openAPIOptions;
-    const file = path.join(cwd, dest, fileName);
+    const mainFile = path.join(cwd, dest, fileName);
+    const zodFile = path.join(cwd, dest, fileName.replace(/\.ts$/, '.zod.ts'));
+    const typeFile = path.join(cwd, dest, fileName.replace(/\.ts$/, '.type.ts'));
 
     // 1. 参数合并
     const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
@@ -73,7 +75,7 @@ export class Generator extends Emitter<GeneratorEmits> {
       module,
       stage: step,
       options,
-      file,
+      file: mainFile,
     });
 
     // 2. 读取
@@ -85,13 +87,33 @@ export class Generator extends Emitter<GeneratorEmits> {
     // 3. 输出
     this.emit('process', makePayload('printing'));
     const printer = new Printer(openAPIV3Document, printerOptions);
-    const code = printer.print({ module, cwd, file });
+    const { type, main, zod } = printer.print({ module, cwd, mainFile, typeFile, zodFile });
 
     // 4. 写入
     this.emit('process', makePayload('writing'));
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, await formatTsCode(code), 'utf8');
+    fs.mkdirSync(path.dirname(mainFile), { recursive: true });
+
+    this.#writePrintResult('main', mainFile, main);
+    this.#writePrintResult('type', typeFile, type);
+    this.#writePrintResult('zod', zodFile, zod);
 
     this.emit('process', makePayload('generated'));
+  }
+
+  #writePrintResult(type: string, file: string, printResult: PrintResult) {
+    if (!printResult.code)
+      return;
+
+    const { cwd } = this.options;
+
+    fs.writeFileSync(file, printResult.code, 'utf8');
+
+    if (printResult.errors.length) {
+      const p = path.relative(cwd, file);
+      console.warn(`[${type}] 发现了 ${printResult.errors.length} 处错误，请检查文件 ${p}，可能会出现非预期错误`);
+      printResult.errors.forEach((error) => {
+        console.warn(error);
+      });
+    }
   }
 }

@@ -77,6 +77,10 @@ export const INTERNAL_VARS = [
   // config
   AXIOS_IMPORT_NAME,
 ];
+/**
+ * 合并导出类型名称
+ */
+export const TYPE_FILE_EXPORT_NAME = 'Type';
 export const INTERNAL_TYPES = [
   // native
   'Blob',
@@ -96,8 +100,8 @@ export const INTERNAL_TYPES = [
   'symbol',
   'bigint',
   'Record',
-  'NonNullable',
   // axios
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
+  TYPE_FILE_EXPORT_NAME,
 ];

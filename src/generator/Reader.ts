@@ -17,7 +17,7 @@ export class Reader {
     const { problems, bundle } = await bundleFromString({ config, source });
 
     if (problems.length) {
-      console.warn(`发现了 ${problems.length} 处错误，请检查文档，可能会出现非预期错误`);
+      console.warn(`[parse] 发现了 ${problems.length} 处错误，请检查文档，可能会出现非预期错误`);
       problems.forEach((p) => {
         console.warn(p.message);
       });

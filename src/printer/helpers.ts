@@ -43,10 +43,6 @@ export function isRefResponse(response: OpenApiLatest_Response): response is Ope
   return '$ref' in response && isString(response.$ref);
 }
 
-export function filterLine(line: string | undefined) {
-  return !!isString(line);
-}
-
 export function requiredTypeStringify(required?: boolean) {
   return required ? ':' : '?:';
 }

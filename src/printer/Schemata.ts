@@ -249,7 +249,7 @@ export class Schemata {
     const objectTypes = [...explicitTypes, ...genericTypes];
 
     if (objectTypes.length === 0) {
-      return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, genericProps === false ? '{}' : 'UnknownObject');
+      return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, genericProps === false ? '{}' : 'Record<string, unknown>');
     }
 
     return {

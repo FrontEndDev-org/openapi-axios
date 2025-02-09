@@ -1,4 +1,5 @@
 import type { Arg } from './Arg';
+import { TYPE_FILE_EXPORT_NAME } from './const';
 import { requiredTypeStringify } from './helpers';
 
 export class Args {
@@ -28,7 +29,7 @@ export class Args {
     return this.fixedArgs
       .filter(fixArg => fixArg.typeValue !== '')
       .map((fixArg) => {
-        const typeValue = fixArg.kind === 'config' ? fixArg.typeValue : fixArg.typeName;
+        const typeValue = fixArg.kind === 'config' ? fixArg.typeValue : `${TYPE_FILE_EXPORT_NAME}.${fixArg.typeName}`;
         return `${fixArg.varName}${requiredTypeStringify(fixArg.required)}${typeValue}`;
       })
       .join(',');
