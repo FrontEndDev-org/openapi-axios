@@ -114,13 +114,7 @@ export interface PrinterOptions {
   /**
    * 是否需要在运行时验证接口的出入参
    */
-  runtimeValidate?: boolean | {
-    /**
-     * 指定响应数据 key
-     * @default data
-     */
-    responseDataKey: string;
-  };
+  runtimeValidate?: boolean;
 }
 
 export interface PrinterConfigs {
