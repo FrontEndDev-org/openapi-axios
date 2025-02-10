@@ -2,6 +2,7 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Parameter } from './helpers';
 import type { Named } from './Named';
 import type { PrinterOptions } from './types';
+import { AXIOS_PARAM_CONFIG_NAME } from './const';
 import { isRefParameter, requiredKeyStringify } from './helpers';
 import { Schemata } from './Schemata';
 
@@ -123,7 +124,7 @@ export class Arg {
 
           case 'config':
             this.typeValue = this.defaultType;
-            this.varName = this.argNamed.nextVarName(this.docName);
+            this.varName = AXIOS_PARAM_CONFIG_NAME;
             this.comments = {
               [`param [${this.varName}]`]: `request ${this.propName}`,
             };

@@ -70,12 +70,14 @@ export const KEYWORD_VARS = [
 
 export const AXIOS_IMPORT_NAME = 'axios';
 export const AXIOS_IMPORT_FILE = 'axios';
+export const AXIOS_PARAM_CONFIG_NAME = 'config';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
 export const AXIOS_RESPONSE_TYPE_NAME = 'AxiosResponse';
 export const INTERNAL_VARS = [
   // config
   AXIOS_IMPORT_NAME,
+  AXIOS_PARAM_CONFIG_NAME,
 ];
 /**
  * 合并导出类型名称
