@@ -119,9 +119,9 @@ export interface PrinterOptions {
 
 export interface PrinterConfigs {
   /**
-   * 表明当前 API 所在的模块
+   * 文档名称
    */
-  module?: string;
+  document?: string;
 
   /**
    * file cwd

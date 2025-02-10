@@ -22,7 +22,7 @@ export class Generator extends Emitter<GeneratorEmits> {
   static defaults: StrictGeneratorOptions = {
     cwd: process.cwd(),
     dest: '/src/apis',
-    modules: {},
+    documents: {},
   };
 
   options: StrictGeneratorOptions;
@@ -32,7 +32,7 @@ export class Generator extends Emitter<GeneratorEmits> {
   }
 
   async generate() {
-    const entries = Object.entries(this.options.modules);
+    const entries = Object.entries(this.options.documents);
     const count = entries.length;
     const payload: GeneratorPayload = { count };
     this.emit('start', payload);
@@ -41,7 +41,7 @@ export class Generator extends Emitter<GeneratorEmits> {
       let index = 0;
       for (const [name, module] of entries) {
         const openAPI: OpenAPIOptions = isString(module) ? { document: module } : module;
-        await this.#generateOpenAPI(index, count, name, openAPI);
+        await this.#generateOpenAPI({ index, count, name }, openAPI);
         index++;
       }
     }
@@ -54,12 +54,12 @@ export class Generator extends Emitter<GeneratorEmits> {
     this.emit('end', payload);
   }
 
-  async #generateOpenAPI(index: number, count: number, module: string, openAPIOptions: OpenAPIOptions) {
+  async #generateOpenAPI({ index, count, name }: { index: number; count: number; name: string }, openAPIOptions: OpenAPIOptions) {
     const { cwd, dest, ...globalPrinter } = this.options;
-    const { document, fileName = `${module}.ts`, ...scopePrinter } = openAPIOptions;
+    const { document, fileName = `${name}.ts`, ...scopePrinter } = openAPIOptions;
     const mainFile = path.join(cwd, dest, fileName);
-    const typeFile = path.join(cwd, dest, fileName.replace(/\.ts$/, '.type.ts'));
-    const schemaFile = path.join(cwd, dest, fileName.replace(/\.ts$/, '.schema.ts'));
+    const typeFile = mainFile.replace(/\.ts$/, '.type.ts');
+    const schemaFile = mainFile.replace(/\.ts$/, '.schema.ts');
 
     // 1. 参数合并
     const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
@@ -69,11 +69,11 @@ export class Generator extends Emitter<GeneratorEmits> {
       dest,
       ...printerOptions,
     };
-    const makePayload = (step: GeneratingStage): GeneratingPayload => ({
+    const makePayload = (stage: GeneratingStage): GeneratingPayload => ({
       index,
       count,
-      module,
-      stage: step,
+      name,
+      stage,
       options,
       file: mainFile,
     });
@@ -87,7 +87,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     // 3. 输出
     this.emit('process', makePayload('printing'));
     const printer = new Printer(openAPIV3Document, printerOptions);
-    const { type, main, schema } = printer.print({ module, cwd, mainFile, typeFile, schemaFile });
+    const { type, main, schema } = printer.print({ document: name, cwd, mainFile, typeFile, schemaFile });
 
     // 4. 写入
     this.emit('process', makePayload('writing'));

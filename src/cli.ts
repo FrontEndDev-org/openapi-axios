@@ -43,8 +43,8 @@ const { defineConfig } = require('openapi-axios');
  * @ref https://github.com/FrontEndDev-org/openapi-axios
  */
 module.exports = defineConfig({
-  modules: {
-    '.petStore3': 'https://petstore3.swagger.io/api/v3/openapi.json'
+  documents: {
+    'petStore3': 'https://petstore3.swagger.io/api/v3/openapi.json'
   },
 });`.trim()}\n`,
       );

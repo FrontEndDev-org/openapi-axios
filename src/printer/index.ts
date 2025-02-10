@@ -65,7 +65,7 @@ type WithId<T> = T & {
   nodeId: string;
   namedId?: string;
 };
-type SchemaInfo = WithId<{ position: 'root' | 'anchor'; schema: OpenApiLatest_Schema; typeName: string }>;
+type SchemaInfo = WithId<{ position: 'root' | 'anchor'; schema: OpenApiLatest_Schema; typeName: string; nodeName: string }>;
 type RequestBodyInfo = WithId<{ requestBody: OpenApiLatest_Request }>;
 type ParameterInfo = WithId<{ parameter: OpenApiLatest_Parameter }>;
 type ResponseInfo = WithId<{ response: OpenApiLatest_Response }>;
@@ -147,6 +147,7 @@ export class Printer {
           schema,
           nodeId,
           namedId,
+          nodeName: name,
         };
         this.#tryRegisterAnchors({ namedId, nodeId, typeName }, schema);
 
@@ -238,6 +239,7 @@ export class Printer {
         namedId: anchorNamedId,
         typeName: anchorTypeName,
         schema,
+        nodeName: anchorId,
       };
 
       this.named.setRefType(anchorId, anchorTypeName);
@@ -353,10 +355,11 @@ export class Printer {
     } = this.document.info;
     const { externalDocs } = this.document;
     const { name, email, url } = contact || {};
+
     const jsDoc = new JsDoc();
-    const { module } = this.configs;
-    if (module)
-      jsDoc.addComments({ module });
+    const { document } = this.configs;
+    document && jsDoc.addComments({ document });
+
     const extDoc = JsDoc.printExternalDoc(externalDocs);
     jsDoc.addComments({
       title,
@@ -413,7 +416,7 @@ export class Printer {
   }
 
   #printSchema(
-    { schema, nodeId, namedId, typeName }: SchemaInfo,
+    { schema, nodeId, nodeName, typeName }: SchemaInfo,
   ) {
     if (isUndefined(typeName)) {
       throw new Error(`未发现 schema 引用：${nodeId}`);
@@ -421,6 +424,7 @@ export class Printer {
 
     const { comments, type } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
+    jsDoc.addComments({ name: nodeName });
     jsDoc.addComments(comments);
     this.schemaVars.set(typeName, {
       position: 'component',
@@ -578,7 +582,7 @@ export class Printer {
 
     const jsDoc = new JsDoc(this.document.tags);
     const comments = JsDoc.fromOperation(operation);
-    const { module } = this.configs;
+    const { document: module } = this.configs;
 
     if (module)
       jsDoc.addComments({ module });

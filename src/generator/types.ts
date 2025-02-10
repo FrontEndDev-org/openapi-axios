@@ -35,9 +35,9 @@ export type GeneratorOptions = PrinterOptions & {
   prettierOptions?: Options;
 
   /**
-   * openapi 模块配置
+   * openapi 文档配置
    */
-  modules: Record<string, OpenAPIOptions | string>;
+  documents: Record<string, OpenAPIOptions | string>;
 };
 export type StrictGeneratorOptions = RequiredWith<GeneratorOptions, 'cwd' | 'dest'>;
 
@@ -50,7 +50,7 @@ export interface GeneratorPayload {
 export interface GeneratingPayload {
   index: number;
   count: number;
-  module: string;
+  name: string;
   stage: GeneratingStage;
   options: GeneratingOptions;
   file: string;
