@@ -2,6 +2,7 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Parameter } from './helpers';
 import type { Named } from './Named';
 import type { PrinterOptions } from './types';
+import { fixVarName } from '../utils/string';
 import { AXIOS_PARAM_CONFIG_NAME } from './const';
 import { isRefParameter, requiredKeyStringify } from './helpers';
 import { Schemata } from './Schemata';
@@ -29,7 +30,11 @@ export class Arg {
   /**
    * 作为参数的变量名称
    */
-  varName = '';
+  argName = '';
+  /**
+   * 作为 schema 的变量名称
+   */
+  schemaName = '';
   /**
    * 是否必填
    */
@@ -60,8 +65,9 @@ export class Arg {
     this.originName = kind;
     this.propName = kind === 'path' ? 'url' : kind;
     this.docName = kind;
-    this.varName = '';
+    this.argName = '';
     this.typeName = docNamed.nextTypeName(`${operationName}-${kind}`);
+    this.schemaName = docNamed.nextVarName(fixVarName(`${this.typeName}-schema`, false));
   }
 
   url: string = '';
@@ -119,14 +125,14 @@ export class Arg {
           case 'path':
             this.required = true;
             this.typeValue = this.defaultType;
-            this.varName = this.argNamed.nextVarName(this.docName);
+            this.argName = this.argNamed.nextVarName(this.docName);
             return this;
 
           case 'config':
             this.typeValue = this.defaultType;
-            this.varName = AXIOS_PARAM_CONFIG_NAME;
+            this.argName = AXIOS_PARAM_CONFIG_NAME;
             this.comments = {
-              [`param [${this.varName}]`]: `request ${this.propName}`,
+              [`param [${this.argName}]`]: `request ${this.propName}`,
             };
             return this;
         }
@@ -142,7 +148,7 @@ export class Arg {
         const required = parameter.required || result.required || false;
 
         this.originName = firstArg.name;
-        this.varName = this.argNamed.nextVarName(firstArg.name);
+        this.argName = this.argNamed.nextVarName(firstArg.name);
         this.required = required;
         this.typeValue = Schemata.toString(result);
         this.comments = isResponse
@@ -151,7 +157,7 @@ export class Arg {
             }
           : {
               [
-              `param ${requiredKeyStringify(this.varName, required)}`]: parameter.description || schema.description
+              `param ${requiredKeyStringify(this.argName, required)}`]: parameter.description || schema.description
                 || (this.kind === 'data' ? 'request data' : `request ${this.docName} ${JSON.stringify(firstArg.name)}`),
             };
         return this;
@@ -179,7 +185,7 @@ export class Arg {
 
         this.required = required;
         this.typeValue = Schemata.toString(result);
-        this.varName = this.argNamed.nextVarName(this.docName);
+        this.argName = this.argNamed.nextVarName(this.docName);
         this.comments = this.kind === 'response'
           ? {
               returns: result.comments.description,

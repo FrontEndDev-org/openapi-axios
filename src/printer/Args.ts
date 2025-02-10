@@ -30,23 +30,25 @@ export class Args {
       .filter(fixArg => fixArg.typeValue !== '')
       .map((fixArg) => {
         const typeValue = fixArg.kind === 'config' ? fixArg.typeValue : `${TYPE_FILE_EXPORT_NAME}.${fixArg.typeName}`;
-        return `${fixArg.varName}${requiredTypeStringify(fixArg.required)}${typeValue}`;
+        return `${fixArg.argName}${requiredTypeStringify(fixArg.required)}${typeValue}`;
       })
       .join(',');
   }
 
-  printSchemaTypes() {
+  filterValidateAble() {
     return this.fixedArgs
-      .filter(fixArg => fixArg.typeValue !== '' && fixArg.kind !== 'config')
-      .map((fixArg) => {
-        return `export type ${fixArg.typeName} = ${fixArg.typeValue};`;
-      });
+      .filter(fixArg => fixArg.typeValue !== '' && fixArg.kind !== 'config');
+  }
+
+  printSchemaTypes() {
+    return this.filterValidateAble()
+      .map(fixArg => `export type ${fixArg.typeName} = ${fixArg.typeValue};`);
   }
 
   printActualParams() {
     return this.fixedArgs
       .map((fixedArg) => {
-        const { originName, varName, propName, kind, props, url, isSingle } = fixedArg;
+        const { originName, argName: varName, propName, kind, props, url, isSingle } = fixedArg;
 
         switch (kind) {
           case 'config':

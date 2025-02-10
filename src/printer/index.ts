@@ -1,17 +1,19 @@
 import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Parameter, OpenApiLatest_PathItem, OpenApiLatest_Request, OpenApiLatest_Response, OpenApiLatest_Schema } from './helpers';
 import type { PrinterConfigs, PrinterOptions, PrintResult } from './types';
-import path from 'node:path';
 import { generate } from 'ts-to-zod';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
+import { fixVarName } from '../utils/string';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
 import {
   AXIOS_IMPORT_FILE,
   AXIOS_IMPORT_NAME,
+  AXIOS_PARAM_CONFIG_NAME,
+  AXIOS_PARAM_TRANSFORM_RESPONSE_NAME,
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
@@ -97,6 +99,8 @@ export class Printer {
   parameters: Record<string /** nodeId */, ParameterInfo> = {};
   responses: Record<string /** nodeId */, ResponseInfo> = {};
   pathItems: Record<string /** nodeId */, PathItemInfo> = {};
+  schemaVars = new Map<string /** typeName */, { position: 'component' | 'argument'; varName: string }>();
+  validateTypes: string[] = [];
 
   #parseRefComponent<T>(
     { kind, name, obj }: {
@@ -251,14 +255,16 @@ export class Printer {
   }
 
   print(configs?: PrinterConfigs): {
-    type: PrintResult;
     main: PrintResult;
-    zod: PrintResult;
+    type: PrintResult;
+    schema: PrintResult;
   } {
     Object.assign(this.configs, configs);
     const { runtimeValidate } = this.options || {};
     const {
+      mainFile = '.',
       typeFile = '.',
+      schemaFile = '.',
       hideHeaders,
       hideFooters,
       hideAlert,
@@ -275,15 +281,8 @@ export class Printer {
     const footer = !hideFooters && (this.options?.footer || '');
     let pathType = '';
     let pathMain = '';
-    const zod: PrintResult = { errors: [], code: '' };
-
-    if (runtimeValidate) {
-      const gen = generate({
-        sourceText: [schemas, pathType].join('\n'),
-      });
-      zod.errors = gen.errors;
-      zod.code = [header, alert, info, gen.getZodSchemasFile(toRelative(typeFile, path.dirname(typeFile)))].join('\n');
-    }
+    const schema: PrintResult = { errors: [], code: '' };
+    let schemaImports = '';
 
     if (!hidePaths) {
       this.#printPaths().forEach((path) => {
@@ -292,16 +291,41 @@ export class Printer {
       });
     }
 
+    if (runtimeValidate) {
+      const gen = generate({
+        sourceText: [schemas, pathType].join('\n'),
+        getSchemaName: identifier => this.schemaVars.get(identifier)?.varName || this.named.nextVarName(fixVarName(`${identifier}-Schema`)),
+      });
+      schema.errors = gen.errors;
+      schema.code = [header, alert, info, gen.getZodSchemasFile(toRelative(typeFile, schemaFile))].join('\n');
+      const schemaNames = [...this.schemaVars.values()].filter(v => v.position === 'argument').map(v => v.varName).join(',');
+      schemaImports = `import {${schemaNames}} from "${toRelative(schemaFile, mainFile)}";`;
+    }
+
     return {
       type: {
         errors: [],
-        code: [header, alert, info, schemas, pathType, footer].join('\n'),
+        code: [
+          header,
+          alert,
+          info,
+          schemas,
+          pathType,
+          footer,
+        ].filter(Boolean).join('\n\n'),
       },
       main: {
         errors: [],
-        code: [header, alert, info, imports, pathMain, footer].join('\n'),
+        code: [
+          header,
+          alert,
+          info,
+          [imports, schemaImports].filter(Boolean).join('\n'),
+          pathMain,
+          footer,
+        ].filter(Boolean).join('\n\n'),
       },
-      zod,
+      schema,
     };
   }
 
@@ -379,7 +403,6 @@ export class Printer {
         true,
       ),
       `import type * as Type from "${toRelative(typeFile, mainFile)}";`,
-      '',
     ].join('\n');
   }
 
@@ -392,14 +415,17 @@ export class Printer {
   #printSchema(
     { schema, nodeId, namedId, typeName }: SchemaInfo,
   ) {
-    const { runtimeValidate } = this.options || {};
-    const { comments, type } = this.schemata.print(schema);
-    const jsDoc = new JsDoc();
-    jsDoc.addComments(comments);
-
     if (isUndefined(typeName)) {
       throw new Error(`未发现 schema 引用：${nodeId}`);
     }
+
+    const { comments, type } = this.schemata.print(schema);
+    const jsDoc = new JsDoc();
+    jsDoc.addComments(comments);
+    this.schemaVars.set(typeName, {
+      position: 'component',
+      varName: fixVarName(`${typeName}-schema`),
+    });
 
     return [
       jsDoc.print(),
@@ -456,7 +482,7 @@ export class Printer {
       return;
 
     const options = this.options || {};
-    const { responseStatusCode, responseContentType, requestContentType } = options;
+    const { responseStatusCode, responseContentType, requestContentType, runtimeValidate } = options;
     const { parameters, requestBody, responses, operationId } = operation;
 
     const argNamed = new Named({
@@ -464,6 +490,7 @@ export class Printer {
       internalVars: true,
       internalTypes: true,
     });
+    argNamed.internalVarName(AXIOS_PARAM_TRANSFORM_RESPONSE_NAME);
     const operationName = this.named.nextOperationId(method, url, operationId);
 
     const header = new Arg('headers', operationName, this.named, argNamed, this.schemata, options);
@@ -560,27 +587,58 @@ export class Printer {
     jsDoc.addComments(responseArgs.toComments());
 
     const formalParams = requestArgs.printFormalParams();
-    let returnType = responseArgs.fixedArgs.at(0)?.typeName;
-    returnType = returnType ? `${TYPE_FILE_EXPORT_NAME}.${returnType}` : 'unknown';
+    const responseArg = responseArgs.fixedArgs.at(0);
+    let responseType = responseArg?.typeName;
+    responseType = responseType ? `${TYPE_FILE_EXPORT_NAME}.${responseType}` : 'unknown';
 
     const type = [
       ...requestArgs.printSchemaTypes(),
       ...responseArgs.printSchemaTypes(),
     ].filter(Boolean).join('\n');
 
-    const main = [
-      jsDoc.print(),
-      `
-export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${returnType}>> {
-  // validate request
-  const response = await ${AXIOS_IMPORT_NAME}({
+    const validateAbleRequestArgs = requestArgs.filterValidateAble();
+    const validateRequests = runtimeValidate
+      ? validateAbleRequestArgs.map(arg => `${arg.schemaName}.parse(${arg.argName})`)
+      : [];
+    const validateResponse = runtimeValidate
+      ? `
+  const ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} = ${AXIOS_PARAM_CONFIG_NAME}?.transformResponse;
+  ${AXIOS_PARAM_CONFIG_NAME} = {
+    ...${AXIOS_PARAM_CONFIG_NAME},
+    transformResponse: [
+      ...Array.isArray(${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}) ? ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} : (${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} ? [${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}] : []),
+      data => ${responseArg ? `${responseArg.schemaName}.parse(data)` : 'data'},
+    ],
+  };`.trim()
+      : '';
+    const body = `
+  return ${AXIOS_IMPORT_NAME}({
     method: ${JSON.stringify(method.toUpperCase())},
     ${requestArgs.printActualParams()}
-  });
-  // validate response
-  return response;
-}`.trim(),
+  })`.trim();
+
+    const main = [
+      jsDoc.print(),
+      `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>> {`,
+      ...validateRequests,
+      validateResponse,
+      body,
+      '}',
     ].filter(Boolean).join('\n');
+
+    validateAbleRequestArgs.forEach((arg) => {
+      this.schemaVars.set(arg.typeName, {
+        position: 'argument',
+        varName: arg.schemaName,
+      });
+    });
+
+    if (responseArg) {
+      this.schemaVars.set(responseArg.typeName, {
+        position: 'argument',
+        varName: responseArg.schemaName,
+      });
+    }
 
     return { type, main };
   }
