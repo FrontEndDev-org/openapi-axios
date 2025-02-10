@@ -107,4 +107,7 @@ export const INTERNAL_TYPES = [
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
   TYPE_FILE_EXPORT_NAME,
+  // zod
+  'zod',
+  'z',
 ];
