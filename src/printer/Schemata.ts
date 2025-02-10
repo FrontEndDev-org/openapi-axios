@@ -2,14 +2,16 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Schema } from './helpers';
 import type { Named } from './Named';
 import { never } from '../utils/func';
+import { fixVarName } from '../utils/string';
 import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/type-is';
 import { isRefSchema, requiredTypeStringify } from './helpers';
 import { JsDoc } from './JsDoc';
 
 interface SchemaResult {
   comments: Record<string, unknown>;
-  type: string;
   required: boolean;
+  type: string;
+  zod: string;
 }
 
 function withGroup(texts: string[], separator: string, start = '(', end = ')') {
@@ -19,12 +21,26 @@ function withGroup(texts: string[], separator: string, start = '(', end = ')') {
 export class Schemata {
   constructor(private named: Named) {}
 
+  typeSchemas = new Map<string, string>();
+
   print(schema: OpenApiLatest_Schema): SchemaResult {
     if (isRefSchema(schema)) {
+      const typeName = this.named.getRefType(schema.$ref);
+      let schemaName = '';
+
+      if (typeName) {
+        schemaName = this.typeSchemas.get(typeName) || this.named.nextVarName(fixVarName(`${typeName}-schema`));
+        this.typeSchemas.set(typeName, schemaName);
+      }
+      else {
+        schemaName = 'z.unknown()';
+      }
+
       return {
         comments: JsDoc.fromRef(schema),
-        type: this.named.getRefType(schema.$ref) || 'unknown',
         required: false,
+        type: typeName || 'unknown',
+        zod: schemaName,
       };
     }
 
@@ -33,13 +49,18 @@ export class Schemata {
     const comments = JsDoc.fromSchema(schema);
 
     if (allOf && allOf.length > 0) {
+      const group = allOf.map(a => this.toString(a));
+
       return {
         comments,
-        type: withGroup(
-          allOf.map(s => this.toString(s)),
-          '&',
-        ),
         required: false,
+        type: withGroup(group.map(g => g.type), '&'),
+        zod: withGroup(
+          group.map(g => g.zod),
+          ',',
+          'z.intersection(',
+          ')',
+        ),
       };
     }
 
@@ -47,24 +68,34 @@ export class Schemata {
     // https://arif.thedev.id/blogs/typescript/the-oneof-type
     // 但为了能够将类型转换为 zod schema，暂时保持模糊
     if (oneOf && oneOf.length > 0) {
+      const group = oneOf.map(o => this.toString(o));
+
       return {
         comments,
-        type: withGroup(
-          oneOf.map(s => this.toString(s)),
-          '|',
-        ),
         required: false,
+        type: withGroup(group.map(g => g.type), '|'),
+        zod: withGroup(
+          group.map(g => g.zod),
+          ',',
+          'z.union([',
+          '])',
+        ),
       };
     }
 
     if (anyOf && anyOf.length > 0) {
+      const group = anyOf.map(a => this.toString(a));
+
       return {
         comments,
-        type: withGroup(
-          anyOf.map(s => this.toString(s)),
-          '|',
-        ),
         required: false,
+        type: withGroup(group.map(g => g.type), '|'),
+        zod: withGroup(
+          group.map(g => g.zod),
+          ',',
+          'z.union([',
+          '])',
+        ),
       };
     }
 
@@ -82,23 +113,25 @@ export class Schemata {
         });
       }
 
+      const group = type.map(type => this.toString(
+        type === 'null'
+          // null
+          ? { type }
+          // origin
+          : ({ ...schema, type } as OpenAPILatest.SchemaObject),
+        true,
+      ));
+
       return {
         comments,
-        type: withGroup(
-          type.map((type) => {
-            const typeStr = this.toString(
-              type === 'null'
-                // null
-                ? { type }
-                // origin
-                : ({ ...schema, type } as OpenAPILatest.SchemaObject),
-              true,
-            );
-            return `(${typeStr})`;
-          }),
-          '|',
-        ),
         required: false,
+        type: withGroup(group.map(g => g.type), '|'),
+        zod: withGroup(
+          group.map(g => g.zod),
+          ',',
+          'z.union([',
+          '])',
+        ),
       };
     }
 
@@ -106,6 +139,8 @@ export class Schemata {
       case 'string': {
         const { enum: enumValues = [], format, minLength, maxLength, pattern } = schema;
         const isBlob = format === 'binary';
+        const required = Boolean(schema.required);
+
         return {
           comments: {
             ...comments,
@@ -113,37 +148,64 @@ export class Schemata {
             maxLength,
             pattern,
           },
-          type:
-              enumValues.length > 0
-                ? withGroup(
-                    enumValues.map(e => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                    '|',
-                  )
-                : isBlob
-                  ? 'Blob'
-                  : 'string',
-          required: Boolean(schema.required),
+          required,
+          type: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isString(e)
+                  ? JSON.stringify(e)
+                  : this.named.getRefType(e.$ref) || 'unknown')),
+                '|',
+              )
+            : isBlob
+              ? 'Blob'
+              : 'string',
+          zod: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isString(e))
+                  ? `z.literal(${JSON.stringify(e)})`
+                  : this.typeSchemas.get(e.$ref) || 'z.unknown()'),
+                ',',
+                'z.union([',
+                '])',
+              )
+            : isBlob
+              ? 'z.instanceof(Blob)'
+              : 'z.string()',
         };
       }
 
       case 'boolean': {
         const { enum: enumValues = [] } = schema;
+        const required = Boolean(schema.required);
+
         return {
           comments,
-          type:
-              enumValues.length > 0
-                ? withGroup(
-                    enumValues.map(e => (isBoolean(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                    '|',
-                  )
-                : type,
-          required: Boolean(schema.required),
+          required,
+          type: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isBoolean(e)
+                  ? String(e)
+                  : this.named.getRefType(e.$ref) || 'unknown')),
+                '|',
+              )
+            : type,
+          zod: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isBoolean(e)
+                  ? `z.literal(${e})`
+                  : this.typeSchemas.get(e.$ref) || 'z.unknown()')),
+                ',',
+                'z.union([',
+                '])',
+              )
+            : 'z.boolean()',
         };
       }
 
       case 'number':
       case 'integer': {
         const { enum: enumValues = [], const: const_, minimum, maximum } = schema;
+        const required = Boolean(schema.required);
 
         if (!isUndefined(const_))
           enumValues.push(const_);
@@ -154,23 +216,38 @@ export class Schemata {
             minimum,
             maximum,
           },
-          type:
-              enumValues.length > 0
-                ? withGroup(
-                    enumValues.map(e => (isNumber(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                    '|',
-                  )
-                : 'number',
-          required: Boolean(schema.required),
+          required,
+          type: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isNumber(e)
+                  ? String(e)
+                  : this.named.getRefType(e.$ref) || 'unknown')),
+                '|',
+              )
+            : 'number',
+          zod: enumValues.length > 0
+            ? withGroup(
+                enumValues.map(e => (isNumber(e)
+                  ? `z.literal(${e})`
+                  : this.typeSchemas.get(e.$ref) || 'z.unknown()')),
+                ',',
+                'z.union([',
+                '])',
+              )
+            : 'z.number()',
         };
       }
 
-      case 'null':
+      case 'null': {
+        const required = Boolean(schema.required);
+
         return {
           comments,
+          required,
           type,
-          required: Boolean(schema.required),
+          zod: 'z.null()',
         };
+      }
 
       case 'array':
         return this._printArray(schema);
@@ -203,6 +280,7 @@ export class Schemata {
   private _printArray(schema: OpenAPILatest.ArraySchemaObject) {
     const comments = JsDoc.fromSchema(schema);
     const { minItems, maxItems, items } = schema;
+    const { type, zod } = this.toString(items);
 
     return {
       comments: {
@@ -210,24 +288,31 @@ export class Schemata {
         minItems,
         maxItems,
       },
-      type: `Array<${this.toString(items)}>`,
       required: false,
+      type: `Array<${type}>`,
+      zod: `z.array(${zod})`,
     };
   }
 
   private _printAddPropBoolean(bool: boolean) {
     return {
       comments: {},
-      type: bool ? 'any' : 'never',
       required: true,
+      type: bool ? 'any' : 'never',
+      zod: bool ? 'z.any()' : 'z.never()',
     };
   }
 
-  private _printObjectProp(name: string, propSchema: boolean | OpenAPILatest.SchemaObject | OpenAPILatest.ReferenceObject, propRequired1: boolean) {
-    const { required: propRequired2, comments, type } = isBoolean(propSchema) ? this._printAddPropBoolean(propSchema) : this.print(propSchema);
+  private _printObjectProp(propName: string, propSchema: boolean | OpenAPILatest.SchemaObject | OpenAPILatest.ReferenceObject, propRequired1: boolean) {
+    const { required: propRequired2, comments, type, zod } = isBoolean(propSchema) ? this._printAddPropBoolean(propSchema) : this.print(propSchema);
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
-    return [jsDoc.print(), `${name}${requiredTypeStringify(propRequired1 || propRequired2 || false)}${type};`].filter(Boolean).join('\n');
+    const required = propRequired1 || propRequired2 || false;
+
+    return {
+      type: [jsDoc.print(), `${JSON.stringify(propName)}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n'),
+      zod: `${JSON.stringify(propName)}: ${required ? zod : `z.optional(${zod})`},`,
+    };
   }
 
   private _printObject(schema: OpenAPILatest.SchemaObject) {
@@ -238,34 +323,47 @@ export class Schemata {
     // additionalProperties: {...}
     const genericProps = 'additionalProperties' in schema ? schema.additionalProperties : undefined;
     const explicitEntries = Object.entries(explicitProps || {});
+    const noGenericProps = isUndefined(genericProps) || genericProps === false || Object.keys(genericProps).length === 0;
 
-    const explicitTypes = explicitEntries.map(([name, propSchema]) => {
-      return this._printObjectProp(JSON.stringify(name), propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
+    const objectTypes: string[] = [];
+    const objectZods: string[] = [];
+
+    explicitEntries.forEach(([name, propSchema]) => {
+      const { type, zod } = this._printObjectProp(name, propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
+      objectTypes.push(type);
+      objectZods.push(zod);
     });
-    const genericTypes
-            = isUndefined(genericProps) || genericProps === false || Object.keys(genericProps).length === 0
-              ? []
-              : [this._printObjectProp('[key: string]', genericProps, true)];
-    const objectTypes = [...explicitTypes, ...genericTypes];
+
+    if (!noGenericProps) {
+      const { type, zod } = this._printObjectProp('[key: string]', genericProps, true);
+      objectTypes.push(type);
+      objectZods.push(zod);
+    }
 
     if (objectTypes.length === 0) {
-      return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, genericProps === false ? '{}' : 'Record<string, unknown>');
+      return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, {
+        type: genericProps === false ? 'Record<string, never>' : 'Record<string, unknown>',
+        zod: genericProps === false ? 'z.record(z.string(), z.never())' : 'z.record(z.string(), z.unknown())',
+      });
     }
 
     return {
       comments,
-      type: withGroup(objectTypes, '\n', '{\n', '\n}'),
       required: isBoolean(schema.required) ? schema.required : false,
+      type: withGroup(objectTypes, '\n', '{\n', '\n}'),
+      zod: withGroup(objectZods, '\n', 'z.object({\n', '\n})'),
     };
   }
 
-  private _printUnknown(schema: OpenApiLatest_Schema, required = false, type = 'unknown') {
+  private _printUnknown(schema: OpenApiLatest_Schema, required = false, spec?: { type?: string; zod?: string }) {
     const comments = JsDoc.fromSchema(schema);
 
     return {
       comments,
-      type,
+      type: spec?.type || 'unknown',
       required,
+      zod: spec?.zod || 'z.unknown()',
+      mock: '',
     };
   }
 
@@ -275,15 +373,18 @@ export class Schemata {
   }
 
   static toString(result: SchemaResult, ignoreComments = false) {
-    const { comments, type } = result;
+    const { comments, type, zod } = result;
 
     if (ignoreComments)
-      return type;
+      return { type, zod };
 
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
     const header = jsDoc.print();
 
-    return header ? `\n${header}\n${type}\n` : type;
+    return {
+      type: [header, type].filter(Boolean).join('\n'),
+      zod,
+    };
   }
 }
