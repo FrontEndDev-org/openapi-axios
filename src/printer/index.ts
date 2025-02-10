@@ -287,8 +287,8 @@ export class Printer {
 
     if (!hidePaths) {
       this.#printPaths().forEach((path) => {
-        pathType += path.type;
-        pathMain += path.main;
+        pathType += `${path.type}\n\n`;
+        pathMain += `${path.main}\n\n`;
       });
     }
 
