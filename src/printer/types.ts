@@ -133,7 +133,7 @@ export interface PrinterConfigs {
    */
   mainFile?: string;
   typeFile?: string;
-  schemaFile?: string;
+  zodFile?: string;
 
   hideHeaders?: boolean;
   hideFooters?: boolean;

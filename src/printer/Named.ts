@@ -44,6 +44,17 @@ export class Named {
     return nextUniqueName(fixVarName(name), this.varNameCountMap);
   }
 
+  prepareVars = new Map<string, string>();
+  /**
+   * 预设变量名，如果存在则返回，否则创建
+   * @param {string} name
+   */
+  prepareVarName(name: string) {
+    const next = this.prepareVars.get(name) || this.nextVarName(name);
+    this.prepareVars.set(name, next);
+    return next;
+  }
+
   nextOperationId(method: string, url: string, operationId?: string) {
     operationId = operationId
       || fixVarName(

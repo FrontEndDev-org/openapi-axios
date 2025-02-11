@@ -59,7 +59,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     const { document, fileName = `${name}.ts`, ...scopePrinter } = openAPIOptions;
     const mainFile = path.join(cwd, dest, fileName);
     const typeFile = mainFile.replace(/\.ts$/, '.type.ts');
-    const schemaFile = mainFile.replace(/\.ts$/, '.schema.ts');
+    const zodFile = mainFile.replace(/\.ts$/, '.zod.ts');
 
     // 1. 参数合并
     const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
@@ -87,7 +87,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     // 3. 输出
     this.emit('process', makePayload('printing'));
     const printer = new Printer(openAPIV3Document, printerOptions);
-    const { type, main, schema } = printer.print({ document: name, cwd, mainFile, typeFile, schemaFile });
+    const { type, main, zod } = printer.print({ document: name, cwd, mainFile, typeFile, zodFile });
 
     // 4. 写入
     this.emit('process', makePayload('writing'));
@@ -95,7 +95,7 @@ export class Generator extends Emitter<GeneratorEmits> {
 
     this.#writePrintResult('main', mainFile, main);
     this.#writePrintResult('type', typeFile, type);
-    this.#writePrintResult('schema', schemaFile, schema);
+    this.#writePrintResult('zod', zodFile, zod);
 
     this.emit('process', makePayload('generated'));
   }

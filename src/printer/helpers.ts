@@ -60,3 +60,7 @@ export function toImportString(id: string, name: string, path: string, isType = 
   // 具名导入
     : `import {${type}${name} as ${id}} from "${path}";`;
 }
+
+export function toZodName(typeName: string) {
+  return `z-${typeName}`;
+}

@@ -2,9 +2,8 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Parameter } from './helpers';
 import type { Named } from './Named';
 import type { PrinterOptions } from './types';
-import { fixVarName } from '../utils/string';
 import { AXIOS_PARAM_CONFIG_NAME } from './const';
-import { isRefParameter, requiredKeyStringify } from './helpers';
+import { isRefParameter, requiredKeyStringify, toZodName } from './helpers';
 import { Schemata } from './Schemata';
 
 export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
@@ -32,9 +31,9 @@ export class Arg {
    */
   argName = '';
   /**
-   * 作为 schema 的变量名称
+   * 作为 zod 的变量名称
    */
-  schemaName = '';
+  zodName = '';
   /**
    * 是否必填
    */
@@ -47,6 +46,10 @@ export class Arg {
    * 类型值
    */
   typeValue = '';
+  /**
+   * zod 值
+   */
+  zodValue = '';
   comments: Record<string, unknown> = {};
   props: ArgProp[] = [];
 
@@ -67,7 +70,7 @@ export class Arg {
     this.docName = kind;
     this.argName = '';
     this.typeName = docNamed.nextTypeName(`${operationName}-${kind}`);
-    this.schemaName = docNamed.nextVarName(fixVarName(`${this.typeName}-schema`, false));
+    this.zodName = docNamed.prepareVarName(toZodName(this.typeName));
   }
 
   url: string = '';
@@ -150,7 +153,9 @@ export class Arg {
         this.originName = firstArg.name;
         this.argName = this.argNamed.nextVarName(firstArg.name);
         this.required = required;
-        this.typeValue = Schemata.toString(result);
+        const { type, zod } = Schemata.toString(result);
+        this.typeValue = type;
+        this.zodValue = zod;
         this.comments = isResponse
           ? {
               returns: parameter.description || schema.description || false,
@@ -184,7 +189,9 @@ export class Arg {
         const required = requiredNames.length > 0;
 
         this.required = required;
-        this.typeValue = Schemata.toString(result);
+        const { type, zod } = Schemata.toString(result);
+        this.typeValue = type;
+        this.zodValue = zod;
         this.argName = this.argNamed.nextVarName(this.docName);
         this.comments = this.kind === 'response'
           ? {

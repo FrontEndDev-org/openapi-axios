@@ -2,9 +2,8 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Schema } from './helpers';
 import type { Named } from './Named';
 import { never } from '../utils/func';
-import { fixVarName } from '../utils/string';
 import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/type-is';
-import { isRefSchema, requiredTypeStringify } from './helpers';
+import { isRefSchema, requiredTypeStringify, toZodName } from './helpers';
 import { JsDoc } from './JsDoc';
 
 interface SchemaResult {
@@ -15,26 +14,21 @@ interface SchemaResult {
 }
 
 function withGroup(texts: string[], separator: string, start = '(', end = ')') {
-  return start + texts.join(separator) + end;
+  return texts.length < 2 ? (texts.at(0) || '') : start + texts.join(separator) + end;
 }
 
 export class Schemata {
   constructor(private named: Named) {}
 
-  typeSchemas = new Map<string, string>();
+  prepareVarName(refId: string) {
+    const typeName = this.named.getRefType(refId);
+    return this.named.prepareVarName(toZodName(typeName));
+  }
 
   print(schema: OpenApiLatest_Schema): SchemaResult {
     if (isRefSchema(schema)) {
       const typeName = this.named.getRefType(schema.$ref);
-      let schemaName = '';
-
-      if (typeName) {
-        schemaName = this.typeSchemas.get(typeName) || this.named.nextVarName(fixVarName(`${typeName}-schema`));
-        this.typeSchemas.set(typeName, schemaName);
-      }
-      else {
-        schemaName = 'z.unknown()';
-      }
+      const schemaName = typeName ? this.prepareVarName(schema.$ref) : 'z.unknown()';
 
       return {
         comments: JsDoc.fromRef(schema),
@@ -163,7 +157,7 @@ export class Schemata {
             ? withGroup(
                 enumValues.map(e => (isString(e))
                   ? `z.literal(${JSON.stringify(e)})`
-                  : this.typeSchemas.get(e.$ref) || 'z.unknown()'),
+                  : this.prepareVarName(e.$ref)),
                 ',',
                 'z.union([',
                 '])',
@@ -193,7 +187,7 @@ export class Schemata {
             ? withGroup(
                 enumValues.map(e => (isBoolean(e)
                   ? `z.literal(${e})`
-                  : this.typeSchemas.get(e.$ref) || 'z.unknown()')),
+                  : this.prepareVarName(e.$ref))),
                 ',',
                 'z.union([',
                 '])',
@@ -229,7 +223,7 @@ export class Schemata {
             ? withGroup(
                 enumValues.map(e => (isNumber(e)
                   ? `z.literal(${e})`
-                  : this.typeSchemas.get(e.$ref) || 'z.unknown()')),
+                  : this.prepareVarName(e.$ref))),
                 ',',
                 'z.union([',
                 '])',
@@ -316,42 +310,58 @@ export class Schemata {
   }
 
   private _printObject(schema: OpenAPILatest.SchemaObject) {
+    const required = isBoolean(schema.required) ? schema.required : false;
     const comments = JsDoc.fromSchema(schema);
     const explicitProps = 'properties' in schema ? schema.properties : undefined;
+
     // additionalProperties: true
     // additionalProperties: false
     // additionalProperties: {...}
     const genericProps = 'additionalProperties' in schema ? schema.additionalProperties : undefined;
     const explicitEntries = Object.entries(explicitProps || {});
+
+    const noExplicitProps = explicitEntries.length === 0;
     const noGenericProps = isUndefined(genericProps) || genericProps === false || Object.keys(genericProps).length === 0;
 
-    const objectTypes: string[] = [];
-    const objectZods: string[] = [];
+    const typeList: string[] = [];
+    const zodList: string[] = [];
 
-    explicitEntries.forEach(([name, propSchema]) => {
-      const { type, zod } = this._printObjectProp(name, propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
-      objectTypes.push(type);
-      objectZods.push(zod);
-    });
+    // 有显式属性
+    if (!noExplicitProps) {
+      const propTypeList: string[] = [];
+      const propZodList: string[] = [];
 
-    if (!noGenericProps) {
-      const { type, zod } = this._printObjectProp('[key: string]', genericProps, true);
-      objectTypes.push(type);
-      objectZods.push(zod);
+      explicitEntries.forEach(([name, propSchema]) => {
+        const { type, zod } = this._printObjectProp(name, propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
+        propTypeList.push(type);
+        propZodList.push(zod);
+      });
+
+      typeList.push(withGroup(propTypeList, '\n', '{\n', '\n}'));
+      zodList.push(withGroup(propZodList, '\n', 'z.object({\n', '\n})'));
     }
 
-    if (objectTypes.length === 0) {
-      return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, {
-        type: genericProps === false ? 'Record<string, never>' : 'Record<string, unknown>',
-        zod: genericProps === false ? 'z.record(z.string(), z.never())' : 'z.record(z.string(), z.unknown())',
+    // 有泛型属性
+    if (!noGenericProps) {
+      const { type, zod } = this.print(genericProps as OpenApiLatest_Schema);
+
+      typeList.push(`Record<string, ${type}>`);
+      zodList.push(`z.record(z.string(), ${zod})`);
+    }
+
+    // 无显式属性 && 无泛型属性
+    if (typeList.length === 0) {
+      return this._printUnknown(schema, required, {
+        type: 'Record<string, unknown>',
+        zod: 'z.record(z.string(), z.unknown())',
       });
     }
 
     return {
       comments,
       required: isBoolean(schema.required) ? schema.required : false,
-      type: withGroup(objectTypes, '\n', '{\n', '\n}'),
-      zod: withGroup(objectZods, '\n', 'z.object({\n', '\n})'),
+      type: withGroup(typeList, '&'),
+      zod: withGroup(zodList, ',', 'z.intersection(', ')'),
     };
   }
 

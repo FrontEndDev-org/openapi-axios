@@ -1,11 +1,9 @@
 import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Parameter, OpenApiLatest_PathItem, OpenApiLatest_Request, OpenApiLatest_Response, OpenApiLatest_Schema } from './helpers';
 import type { PrinterConfigs, PrinterOptions, PrintResult } from './types';
-import { generate } from 'ts-to-zod';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
-import { fixVarName } from '../utils/string';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -29,6 +27,7 @@ import {
   isRefSchema,
 
   toImportString,
+  toZodName,
 } from './helpers';
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
@@ -99,7 +98,9 @@ export class Printer {
   parameters: Record<string /** nodeId */, ParameterInfo> = {};
   responses: Record<string /** nodeId */, ResponseInfo> = {};
   pathItems: Record<string /** nodeId */, PathItemInfo> = {};
-  schemaVars = new Map<string /** typeName */, { position: 'component' | 'argument'; varName: string }>();
+
+  argumentZodNames = new Set<string>();
+
   validateTypes: string[] = [];
 
   #parseRefComponent<T>(
@@ -259,14 +260,14 @@ export class Printer {
   print(configs?: PrinterConfigs): {
     main: PrintResult;
     type: PrintResult;
-    schema: PrintResult;
+    zod: PrintResult;
   } {
     Object.assign(this.configs, configs);
     const { runtimeValidate } = this.options || {};
     const {
       mainFile = '.',
       typeFile = '.',
-      schemaFile = '.',
+      zodFile = '.',
       hideHeaders,
       hideFooters,
       hideAlert,
@@ -283,26 +284,19 @@ export class Printer {
     const footer = !hideFooters && (this.options?.footer || '');
     let pathType = '';
     let pathMain = '';
-    const schema: PrintResult = { errors: [], code: '' };
-    let schemaImports = '';
+    let pathZod = '';
+    let zodImports = '';
 
     if (!hidePaths) {
       this.#printPaths().forEach((path) => {
         pathType += `${path.type}\n\n`;
         pathMain += `${path.main}\n\n`;
+        pathZod += `${path.zod}\n\n`;
       });
     }
 
-    if (runtimeValidate) {
-      const gen = generate({
-        sourceText: [schemas, pathType].join('\n'),
-        getSchemaName: identifier => this.schemaVars.get(identifier)?.varName || this.named.nextVarName(fixVarName(`${identifier}-Schema`)),
-      });
-      schema.errors = gen.errors;
-      schema.code = [header, alert, info, gen.getZodSchemasFile(toRelative(typeFile, schemaFile))].join('\n');
-      const schemaNames = [...this.schemaVars.values()].filter(v => v.position === 'argument').map(v => v.varName).join(',');
-      schemaImports = `import {${schemaNames}} from "${toRelative(schemaFile, mainFile)}";`;
-    }
+    const zodNames = [...this.argumentZodNames.values()].join(',');
+    zodImports = `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`;
 
     return {
       type: {
@@ -311,7 +305,7 @@ export class Printer {
           header,
           alert,
           info,
-          schemas,
+          ...(schemas ? schemas.type : []),
           pathType,
           footer,
         ].filter(Boolean).join('\n\n'),
@@ -322,12 +316,22 @@ export class Printer {
           header,
           alert,
           info,
-          [imports, schemaImports].filter(Boolean).join('\n'),
+          [imports, zodImports].filter(Boolean).join('\n'),
           pathMain,
           footer,
         ].filter(Boolean).join('\n\n'),
       },
-      schema,
+      zod: {
+        errors: [],
+        code: [
+          header,
+          alert,
+          info,
+          'import {z} from "zod";',
+          ...(schemas ? schemas.zod : []),
+          pathZod,
+        ].join('\n'),
+      },
     };
   }
 
@@ -412,7 +416,11 @@ export class Printer {
   #printSchemas() {
     return Object.entries(this.schemas)
       .map(([nodeId, schemaInfo]) => this.#printSchema(schemaInfo))
-      .join('\n\n');
+      .reduce((acc, cur) => {
+        acc.type.push(cur.type);
+        acc.zod.push(cur.zod);
+        return acc;
+      }, { type: [], zod: [] } as { type: string[]; zod: string[] });
   }
 
   #printSchema(
@@ -422,34 +430,35 @@ export class Printer {
       throw new Error(`未发现 schema 引用：${nodeId}`);
     }
 
-    const { comments, type } = this.schemata.print(schema);
+    const zodName = this.named.prepareVarName(toZodName(typeName));
+
+    const { comments, type, zod } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments({ name: nodeName });
     jsDoc.addComments(comments);
-    this.schemaVars.set(typeName, {
-      position: 'component',
-      varName: fixVarName(`${typeName}-schema`),
-    });
 
-    return [
-      jsDoc.print(),
-      `export type ${typeName} = ${type};`,
-    ]
-      .filter(Boolean)
-      .join('\n');
+    return {
+      type: [
+        jsDoc.print(),
+        `export type ${typeName} = ${type};`,
+      ]
+        .filter(Boolean)
+        .join('\n'),
+      zod: `export const ${zodName} = ${zod};`,
+    };
   }
 
   #printPaths() {
     return Object.entries(this.document.paths || {})
       .map(([url, pathItem]) => this.#printPathItem(url, pathItem))
       .flat()
-      .filter(Boolean) as { type: string; main: string }[];
+      .filter(Boolean) as { type: string; main: string; zod: string }[];
   }
 
   #printPathItem(
     url: string,
     pathItem: OpenApiLatest_PathItem,
-  ): Array<{ type: string; main: string } | undefined> {
+  ): Array<{ type: string; main: string; zod: string } | undefined> {
     if (isRefPathItem(pathItem)) {
       const refPathItem = this.pathItems[pathItem.$ref];
 
@@ -602,7 +611,7 @@ export class Printer {
 
     const validateAbleRequestArgs = requestArgs.filterValidateAble();
     const validateRequests = runtimeValidate
-      ? validateAbleRequestArgs.map(arg => `${arg.schemaName}.parse(${arg.argName})`)
+      ? validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`)
       : [];
     const validateResponse = runtimeValidate
       ? `
@@ -611,7 +620,7 @@ export class Printer {
     ...${AXIOS_PARAM_CONFIG_NAME},
     transformResponse: [
       ...Array.isArray(${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}) ? ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} : (${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} ? [${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}] : []),
-      data => ${responseArg ? `${responseArg.schemaName}.parse(data)` : 'data'},
+      data => ${responseArg ? `${responseArg.zodName}.parse(data)` : 'data'},
     ],
   };`.trim()
       : '';
@@ -630,21 +639,23 @@ export class Printer {
       '}',
     ].filter(Boolean).join('\n');
 
+    // url: `/ai/roleInfo/getBotInfo`,
+    // data: {botId: data}, 对
+    // data: data, 错，并且不在 body 里
+    // 支持重写类型
+    const zodLines: string[] = [];
+
     validateAbleRequestArgs.forEach((arg) => {
-      this.schemaVars.set(arg.typeName, {
-        position: 'argument',
-        varName: arg.schemaName,
-      });
+      this.argumentZodNames.add(arg.zodName);
+      zodLines.push(`export const ${arg.zodName} = ${arg.zodValue};`);
     });
 
     if (responseArg) {
-      this.schemaVars.set(responseArg.typeName, {
-        position: 'argument',
-        varName: responseArg.schemaName,
-      });
+      this.argumentZodNames.add(responseArg.zodName);
+      zodLines.push(`export const ${responseArg.zodName} = ${responseArg.zodValue};`);
     }
 
-    return { type, main };
+    return { type, main, zod: zodLines.join('\n') };
   }
 
   #parseContents(
