@@ -69,7 +69,9 @@ export const KEYWORD_VARS = [
 ];
 
 export const AXIOS_IMPORT_NAME = 'axios';
+export const ZOD_IMPORT_NAME = 'z';
 export const AXIOS_IMPORT_FILE = 'axios';
+export const ZOD_IMPORT_FILE = 'zod';
 export const AXIOS_PARAM_CONFIG_NAME = 'config';
 export const AXIOS_PARAM_TRANSFORM_RESPONSE_NAME = 'transformResponse';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
@@ -78,6 +80,7 @@ export const AXIOS_RESPONSE_TYPE_NAME = 'AxiosResponse';
 export const INTERNAL_VARS = [
   // config
   AXIOS_IMPORT_NAME,
+  ZOD_IMPORT_NAME,
   AXIOS_PARAM_CONFIG_NAME,
 ];
 /**
@@ -106,8 +109,6 @@ export const INTERNAL_TYPES = [
   // axios
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
+  // type
   TYPE_FILE_EXPORT_NAME,
-  // zod
-  'zod',
-  'z',
 ];

@@ -45,7 +45,7 @@ export type OperationIdNormalize = (context: OperationContext) => string;
 
 export interface PrinterOptions {
   /**
-   * 导入名称，为空字符串时默认导入
+   * axios 导入名称，为空字符串时默认导入
    * @default ""
    * @example
    * // 具名导入
@@ -56,10 +56,27 @@ export interface PrinterOptions {
   axiosImportName?: string;
 
   /**
+   * zod 导入名称，为空字符串时默认导入
+   * @default "z"
+   * @example
+   * // 具名导入 zodImportName=z
+   * import { z } from 'zod';
+   * // 默认导入（非具名导入）
+   * import z from 'zod';
+   */
+  zodImportName?: string;
+
+  /**
    * axios 模块的导入文件
    * @default axios
    */
   axiosImportFile?: string;
+
+  /**
+   * zod 模块的导入文件
+   * @default zod
+   */
+  zodImportFile?: string;
 
   /**
    * axios 相关类型的导入文件

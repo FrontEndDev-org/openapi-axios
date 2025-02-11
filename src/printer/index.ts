@@ -16,6 +16,8 @@ import {
   AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
   TYPE_FILE_EXPORT_NAME,
+  ZOD_IMPORT_FILE,
+  ZOD_IMPORT_NAME,
 } from './const';
 import {
   isRefMedia,
@@ -263,8 +265,8 @@ export class Printer {
     zod: PrintResult;
   } {
     Object.assign(this.configs, configs);
-    const { runtimeValidate } = this.options || {};
     const {
+      cwd = '/',
       mainFile = '.',
       typeFile = '.',
       zodFile = '.',
@@ -276,6 +278,10 @@ export class Printer {
       hideImports,
       hidePaths,
     } = this.configs;
+
+    const { zodImportName = ZOD_IMPORT_NAME, zodImportFile = ZOD_IMPORT_FILE } = this.options || {};
+    const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
+
     const info = !hideInfo && this.#printInfo();
     const alert = !hideAlert && this.#printAlert();
     const imports = !hideImports && this.#printImports();
@@ -327,7 +333,7 @@ export class Printer {
           header,
           alert,
           info,
-          'import {z} from "zod";',
+          toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath),
           ...(schemas ? schemas.zod : []),
           pathZod,
         ].join('\n'),
@@ -639,10 +645,6 @@ export class Printer {
       '}',
     ].filter(Boolean).join('\n');
 
-    // url: `/ai/roleInfo/getBotInfo`,
-    // data: {botId: data}, 对
-    // data: data, 错，并且不在 body 里
-    // 支持重写类型
     const zodLines: string[] = [];
 
     validateAbleRequestArgs.forEach((arg) => {
