@@ -64,3 +64,26 @@ export function toImportString(id: string, name: string, path: string, isType = 
 export function toZodName(typeName: string) {
   return `z-${typeName}`;
 }
+
+export interface DepItem {
+  name: string;
+  deps: string[];
+}
+/**
+ * 根据依赖进行排序
+ * @param depList
+ * @returns
+ */
+export function sortingByDeps<T extends DepItem>(depList: T[]) {
+  return depList.sort((a, b) => {
+    if (a.deps.includes(b.name)) {
+      return 1;
+    }
+    else if (b.deps.includes(a.name)) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  });
+}
