@@ -1,5 +1,14 @@
 import type { OpenAPILatest } from '../types/openapi';
-import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Parameter, OpenApiLatest_PathItem, OpenApiLatest_Request, OpenApiLatest_Response, OpenApiLatest_Schema } from './helpers';
+import type {
+  DepItem,
+  OpenApiLatest_Media,
+  OpenApiLatest_Operation,
+  OpenApiLatest_Parameter,
+  OpenApiLatest_PathItem,
+  OpenApiLatest_Request,
+  OpenApiLatest_Response,
+  OpenApiLatest_Schema,
+} from './helpers';
 import type { PrinterConfigs, PrinterOptions, PrintResult } from './types';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
@@ -27,7 +36,7 @@ import {
   isRefRequest,
   isRefResponse,
   isRefSchema,
-
+  sortingByDeps,
   toImportString,
   toZodName,
 } from './helpers';
@@ -35,42 +44,36 @@ import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Schemata } from './Schemata';
 
-const allowMethods = [
-  'get',
-  'put',
-  'post',
-  'delete',
-  'options',
-  'head',
-  'patch',
-  'trace',
-];
+const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const parameterTypes = ['query', 'header', 'path', 'cookie'];
 
-type RequestMediaMatch = (
-  contentType: string,
-  content: OpenApiLatest_Media,
-) => boolean;
+type RequestMediaMatch = (contentType: string, content: OpenApiLatest_Media) => boolean;
 type ResponseMediaMatch = (
   contentType: string,
   content: OpenApiLatest_Media,
   response: OpenAPILatest.ResponseObject,
 ) => boolean;
 
-type ResponseMatch = (
-  statusCode: string,
-  response: OpenApiLatest_Response,
-) => boolean;
+type ResponseMatch = (statusCode: string, response: OpenApiLatest_Response) => boolean;
 
 type WithId<T> = T & {
   nodeId: string;
   namedId?: string;
 };
-type SchemaInfo = WithId<{ position: 'root' | 'anchor'; schema: OpenApiLatest_Schema; typeName: string; nodeName: string }>;
+type SchemaInfo = WithId<{
+  position: 'root' | 'anchor';
+  schema: OpenApiLatest_Schema;
+  typeName: string;
+  nodeName: string;
+}>;
 type RequestBodyInfo = WithId<{ requestBody: OpenApiLatest_Request }>;
 type ParameterInfo = WithId<{ parameter: OpenApiLatest_Parameter }>;
 type ResponseInfo = WithId<{ response: OpenApiLatest_Response }>;
 type PathItemInfo = WithId<{ pathItem: OpenApiLatest_PathItem }>;
+
+interface ZodItem extends DepItem {
+  code: string;
+}
 
 export class Printer {
   named = new Named({ internalVars: true, internalTypes: true });
@@ -86,9 +89,7 @@ export class Printer {
     if (!openapi)
       throw new Error('未找到 openapi 版本号');
     if (!openapi.startsWith(OpenAPIVersion.V3_1)) {
-      throw new Error(
-        `当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`,
-      );
+      throw new Error(`当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`);
     }
 
     this.registerComponents();
@@ -106,7 +107,11 @@ export class Printer {
   validateTypes: string[] = [];
 
   #parseRefComponent<T>(
-    { kind, name, obj }: {
+    {
+      kind,
+      name,
+      obj,
+    }: {
       kind: keyof OpenAPILatest.ComponentsObject;
       name: string;
       obj: { $ref: string } | { $id?: string };
@@ -134,93 +139,105 @@ export class Printer {
     } = this.document.components || {};
 
     for (const [name, schema] of Object.entries(schemas)) {
-      this.#parseRefComponent({
-        kind: 'schemas',
-        name,
-        obj: schema,
-      }, (nodeId, namedId) => {
-        if (this.schemas[nodeId]) {
-          throw new Error(`重复的 schema 引用 id：${nodeId}`);
-        }
+      this.#parseRefComponent(
+        {
+          kind: 'schemas',
+          name,
+          obj: schema,
+        },
+        (nodeId, namedId) => {
+          if (this.schemas[nodeId]) {
+            throw new Error(`重复的 schema 引用 id：${nodeId}`);
+          }
 
-        const typeName = this.named.nextRefType(name, nodeId);
-        this.schemas[nodeId] = {
-          position: 'root',
-          typeName,
-          schema,
-          nodeId,
-          namedId,
-          nodeName: name,
-        };
-        this.#tryRegisterAnchors({ namedId, nodeId, typeName }, schema);
+          const typeName = this.named.nextRefType(name, nodeId);
+          this.schemas[nodeId] = {
+            position: 'root',
+            typeName,
+            schema,
+            nodeId,
+            namedId,
+            nodeName: name,
+          };
+          this.#tryRegisterAnchors({ namedId, nodeId, typeName }, schema);
 
-        if (namedId) {
-          this.named.setRefType(namedId, typeName);
-        }
-      });
+          if (namedId) {
+            this.named.setRefType(namedId, typeName);
+          }
+        },
+      );
     }
 
     for (const [name, requestBody] of Object.entries(requestBodies)) {
-      this.#parseRefComponent({
-        kind: 'requestBodies',
-        name,
-        obj: requestBody,
-      }, (nodeId, namedId) => {
-        if (this.requestBodies[nodeId]) {
-          throw new Error(`重复的 requestBody 引用 id：${nodeId}`);
-        }
+      this.#parseRefComponent(
+        {
+          kind: 'requestBodies',
+          name,
+          obj: requestBody,
+        },
+        (nodeId, namedId) => {
+          if (this.requestBodies[nodeId]) {
+            throw new Error(`重复的 requestBody 引用 id：${nodeId}`);
+          }
 
-        this.requestBodies[nodeId] = { nodeId, namedId, requestBody };
-      });
+          this.requestBodies[nodeId] = { nodeId, namedId, requestBody };
+        },
+      );
     }
 
     for (const [name, parameter] of Object.entries(parameters)) {
-      this.#parseRefComponent({
-        kind: 'parameters',
-        name,
-        obj: parameter,
-      }, (nodeId, namedId) => {
-        if (this.parameters[nodeId]) {
-          throw new Error(`重复的 parameter 引用 id：${nodeId}`);
-        }
+      this.#parseRefComponent(
+        {
+          kind: 'parameters',
+          name,
+          obj: parameter,
+        },
+        (nodeId, namedId) => {
+          if (this.parameters[nodeId]) {
+            throw new Error(`重复的 parameter 引用 id：${nodeId}`);
+          }
 
-        this.parameters[nodeId] = { nodeId, namedId, parameter };
-      });
+          this.parameters[nodeId] = { nodeId, namedId, parameter };
+        },
+      );
     }
 
     for (const [name, response] of Object.entries(responses)) {
-      this.#parseRefComponent({
-        kind: 'responses',
-        name,
-        obj: response,
-      }, (nodeId, namedId) => {
-        if (this.responses[nodeId]) {
-          throw new Error(`重复的 response 引用 id：${nodeId}`);
-        }
+      this.#parseRefComponent(
+        {
+          kind: 'responses',
+          name,
+          obj: response,
+        },
+        (nodeId, namedId) => {
+          if (this.responses[nodeId]) {
+            throw new Error(`重复的 response 引用 id：${nodeId}`);
+          }
 
-        this.responses[nodeId] = { nodeId, namedId, response };
-      });
+          this.responses[nodeId] = { nodeId, namedId, response };
+        },
+      );
     }
 
     for (const [name, pathItem] of Object.entries(pathItems)) {
-      this.#parseRefComponent({
-        kind: 'pathItems',
-        name,
-        obj: pathItem,
-      }, (nodeId, namedId) => {
-        if (this.pathItems[nodeId]) {
-          throw new Error(`重复的 pathItem 引用 id：${nodeId}`);
-        }
+      this.#parseRefComponent(
+        {
+          kind: 'pathItems',
+          name,
+          obj: pathItem,
+        },
+        (nodeId, namedId) => {
+          if (this.pathItems[nodeId]) {
+            throw new Error(`重复的 pathItem 引用 id：${nodeId}`);
+          }
 
-        this.pathItems[nodeId] = { nodeId, namedId, pathItem };
-      });
+          this.pathItems[nodeId] = { nodeId, namedId, pathItem };
+        },
+      );
     }
   }
 
-  #tryRegisterAnchors(
-    info: { nodeId: string; namedId?: string ; typeName: string },
-    schema: OpenApiLatest_Schema,
-  ) {
+  #tryRegisterAnchors(info: { nodeId: string; namedId?: string; typeName: string }, schema: OpenApiLatest_Schema) {
     const { nodeId, namedId, typeName } = info;
 
     if (isRefSchema(schema))
@@ -307,25 +324,13 @@ export class Printer {
     return {
       type: {
         errors: [],
-        code: [
-          header,
-          alert,
-          info,
-          ...(schemas ? schemas.type : []),
-          pathType,
-          footer,
-        ].filter(Boolean).join('\n\n'),
+        code: [header, alert, info, ...(schemas ? schemas.type.map(t => t.code) : []), pathType, footer].filter(Boolean).join('\n\n'),
       },
       main: {
         errors: [],
-        code: [
-          header,
-          alert,
-          info,
-          [imports, zodImports].filter(Boolean).join('\n'),
-          pathMain,
-          footer,
-        ].filter(Boolean).join('\n\n'),
+        code: [header, alert, info, [imports, zodImports].filter(Boolean).join('\n'), pathMain, footer]
+          .filter(Boolean)
+          .join('\n\n'),
       },
       zod: {
         errors: [],
@@ -334,7 +339,7 @@ export class Printer {
           alert,
           info,
           toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath),
-          ...(schemas ? schemas.zod : []),
+          ...(schemas ? sortingByDeps(schemas.zod).map(z => z.code) : []),
           pathZod,
         ].join('\n'),
       },
@@ -354,15 +359,7 @@ export class Printer {
   }
 
   #printInfo() {
-    const {
-      contact,
-      description,
-      license,
-      summary,
-      termsOfService,
-      title,
-      version,
-    } = this.document.info;
+    const { contact, description, license, summary, termsOfService, title, version } = this.document.info;
     const { externalDocs } = this.document;
     const { name, email, url } = contact || {};
 
@@ -376,9 +373,7 @@ export class Printer {
       version,
       contact:
         name || url || email
-          ? [name, email ? `<${email}>` : '', url ? `(${url})` : '']
-              .filter(Boolean)
-              .join(' ')
+          ? [name, email ? `<${email}>` : '', url ? `(${url})` : ''].filter(Boolean).join(' ')
           : undefined,
       description,
       summary,
@@ -403,18 +398,8 @@ export class Printer {
 
     return [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
-      toImportString(
-        AXIOS_REQUEST_TYPE_NAME,
-        axiosRequestConfigTypeName,
-        importTypePath,
-        true,
-      ),
-      toImportString(
-        AXIOS_RESPONSE_TYPE_NAME,
-        axiosResponseTypeName,
-        importTypePath,
-        true,
-      ),
+      toImportString(AXIOS_REQUEST_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
+      toImportString(AXIOS_RESPONSE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
       `import type * as Type from "${toRelative(typeFile, mainFile)}";`,
     ].join('\n');
   }
@@ -422,35 +407,37 @@ export class Printer {
   #printSchemas() {
     return Object.entries(this.schemas)
       .map(([nodeId, schemaInfo]) => this.#printSchema(schemaInfo))
-      .reduce((acc, cur) => {
-        acc.type.push(cur.type);
-        acc.zod.push(cur.zod);
-        return acc;
-      }, { type: [], zod: [] } as { type: string[]; zod: string[] });
+      .reduce(
+        (acc, cur) => {
+          acc.type.push(cur.type);
+          acc.zod.push(cur.zod);
+          return acc;
+        },
+        { type: [], zod: [] } as { type: { code: string }[]; zod: ZodItem[] },
+      );
   }
 
-  #printSchema(
-    { schema, nodeId, nodeName, typeName }: SchemaInfo,
-  ) {
+  #printSchema({ schema, nodeId, nodeName, typeName }: SchemaInfo) {
     if (isUndefined(typeName)) {
       throw new Error(`未发现 schema 引用：${nodeId}`);
     }
 
     const zodName = this.named.prepareVarName(toZodName(typeName));
 
-    const { comments, type, zod } = this.schemata.print(schema);
+    const { comments, deps, type, zod } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments({ name: nodeName });
     jsDoc.addComments(comments);
 
     return {
-      type: [
-        jsDoc.print(),
-        `export type ${typeName} = ${type};`,
-      ]
-        .filter(Boolean)
-        .join('\n'),
-      zod: `export const ${zodName} = ${zod};`,
+      type: {
+        code: [jsDoc.print(), `export type ${typeName} = ${type};`].filter(Boolean).join('\n'),
+      },
+      zod: {
+        name: zodName,
+        deps,
+        code: `export const ${zodName} = ${zod};`,
+      },
     };
   }
 
@@ -492,11 +479,7 @@ export class Printer {
     });
   }
 
-  #printOperation(
-    method: string,
-    url: string,
-    operation: OpenApiLatest_Operation,
-  ) {
+  #printOperation(method: string, url: string, operation: OpenApiLatest_Operation) {
     if (isRefOperation(operation))
       return;
 
@@ -586,13 +569,7 @@ export class Printer {
       );
     }
 
-    const requestArgs = new Args([
-      header.parse(),
-      path.parse(),
-      query.parse(),
-      data.parse(),
-      config.parse(),
-    ]);
+    const requestArgs = new Args([header.parse(), path.parse(), query.parse(), data.parse(), config.parse()]);
     const responseArgs = new Args([resp.parse()]);
 
     const jsDoc = new JsDoc(this.document.tags);
@@ -610,10 +587,7 @@ export class Printer {
     let responseType = responseArg?.typeName;
     responseType = responseType ? `${TYPE_FILE_EXPORT_NAME}.${responseType}` : 'unknown';
 
-    const type = [
-      ...requestArgs.printSchemaTypes(),
-      ...responseArgs.printSchemaTypes(),
-    ].filter(Boolean).join('\n');
+    const type = [...requestArgs.printSchemaTypes(), ...responseArgs.printSchemaTypes()].filter(Boolean).join('\n');
 
     const validateAbleRequestArgs = requestArgs.filterValidateAble();
     const validateRequests = runtimeValidate
@@ -643,7 +617,9 @@ export class Printer {
       validateResponse,
       body,
       '}',
-    ].filter(Boolean).join('\n');
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     const zodLines: string[] = [];
 
@@ -663,9 +639,7 @@ export class Printer {
   #parseContents(
     arg: Arg,
     contents: {
-      [contentType: string]:
-        | OpenAPILatest.MediaTypeObject
-        | OpenAPILatest.ReferenceObject;
+      [contentType: string]: OpenAPILatest.MediaTypeObject | OpenAPILatest.ReferenceObject;
     },
     comments: {
       description?: string;
@@ -707,10 +681,7 @@ export class Printer {
     });
   }
 
-  #parseParameter(
-    parameter: OpenApiLatest_Parameter,
-    args: Record<OpenAPILatest.ParameterObject['in'], Arg>,
-  ) {
+  #parseParameter(parameter: OpenApiLatest_Parameter, args: Record<OpenAPILatest.ParameterObject['in'], Arg>) {
     if (isRefParameter(parameter)) {
       const { $ref } = parameter;
       const refParameter = this.parameters[$ref];
@@ -728,11 +699,7 @@ export class Printer {
     }
   }
 
-  #parseRequestBody(
-    arg: Arg,
-    requestBody: OpenApiLatest_Request,
-    match: RequestMediaMatch,
-  ) {
+  #parseRequestBody(arg: Arg, requestBody: OpenApiLatest_Request, match: RequestMediaMatch) {
     if (!requestBody)
       return;
 
@@ -756,11 +723,9 @@ export class Printer {
     responseMatch: ResponseMatch,
     contentMatch: ResponseMediaMatch,
   ) {
-    const response = Object.entries(responses).find(
-      ([statusCode, response]) => {
-        return responseMatch(statusCode, response);
-      },
-    )?.[1];
+    const response = Object.entries(responses).find(([statusCode, response]) => {
+      return responseMatch(statusCode, response);
+    })?.[1];
 
     if (!response)
       return;
@@ -768,11 +733,7 @@ export class Printer {
     this.#parseResponse(arg, response, contentMatch);
   }
 
-  #parseResponse(
-    arg: Arg,
-    response: OpenApiLatest_Response,
-    contentMatch: ResponseMediaMatch,
-  ) {
+  #parseResponse(arg: Arg, response: OpenApiLatest_Response, contentMatch: ResponseMediaMatch) {
     if (isRefResponse(response)) {
       const { $ref } = response;
       const refResponse = this.responses[$ref];
@@ -788,7 +749,6 @@ export class Printer {
     if (!content)
       return;
 
-    this.#parseContents(arg, content, response, (contentType, content) =>
-      contentMatch(contentType, content, response));
+    this.#parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
   }
 }
