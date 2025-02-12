@@ -6,11 +6,16 @@ import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/ty
 import { isRefSchema, requiredTypeStringify, toZodName } from './helpers';
 import { JsDoc } from './JsDoc';
 
-interface SchemaResult {
-  comments: Record<string, unknown>;
-  required: boolean;
+interface PrintResult {
   type: string;
   zod: string;
+  deps: string[];
+}
+
+interface SchemaResult extends PrintResult {
+  comments: Record<string, unknown>;
+  required: boolean;
+
 }
 
 function withGroup(texts: string[], separator: string, start = '(', end = ')') {
@@ -20,21 +25,37 @@ function withGroup(texts: string[], separator: string, start = '(', end = ')') {
 export class Schemata {
   constructor(private named: Named) {}
 
+  dependencies = new Set<string>();
+  get deps() {
+    return [...this.dependencies.values()];
+  }
+
+  addDeps(printResults: PrintResult[]) {
+    printResults.forEach(({ zod, type, deps }) => {
+      deps.forEach((d) => {
+        this.dependencies.add(d);
+      });
+    });
+  }
+
   prepareVarName(refId: string) {
     const typeName = this.named.getRefType(refId);
-    return this.named.prepareVarName(toZodName(typeName));
+    const varName = this.named.prepareVarName(toZodName(typeName));
+    this.dependencies.add(varName);
+    return varName;
   }
 
   print(schema: OpenApiLatest_Schema): SchemaResult {
     if (isRefSchema(schema)) {
       const typeName = this.named.getRefType(schema.$ref);
-      const schemaName = typeName ? this.prepareVarName(schema.$ref) : 'z.unknown()';
+      const zodName = typeName ? this.prepareVarName(schema.$ref) : 'z.unknown()';
 
       return {
         comments: JsDoc.fromRef(schema),
         required: false,
+        deps: this.deps,
         type: typeName || 'unknown',
-        zod: schemaName,
+        zod: zodName,
       };
     }
 
@@ -44,10 +65,12 @@ export class Schemata {
 
     if (allOf && allOf.length > 0) {
       const group = allOf.map(a => this.toString(a));
+      this.addDeps(group);
 
       return {
         comments,
         required: false,
+        deps: this.deps,
         type: withGroup(group.map(g => g.type), '&'),
         zod: withGroup(
           group.map(g => g.zod),
@@ -63,10 +86,12 @@ export class Schemata {
     // 但为了能够将类型转换为 zod schema，暂时保持模糊
     if (oneOf && oneOf.length > 0) {
       const group = oneOf.map(o => this.toString(o));
+      this.addDeps(group);
 
       return {
         comments,
         required: false,
+        deps: this.deps,
         type: withGroup(group.map(g => g.type), '|'),
         zod: withGroup(
           group.map(g => g.zod),
@@ -79,10 +104,12 @@ export class Schemata {
 
     if (anyOf && anyOf.length > 0) {
       const group = anyOf.map(a => this.toString(a));
+      this.addDeps(group);
 
       return {
         comments,
         required: false,
+        deps: this.deps,
         type: withGroup(group.map(g => g.type), '|'),
         zod: withGroup(
           group.map(g => g.zod),
@@ -115,10 +142,12 @@ export class Schemata {
           : ({ ...schema, type } as OpenAPILatest.SchemaObject),
         true,
       ));
+      this.addDeps(group);
 
       return {
         comments,
         required: false,
+        deps: this.deps,
         type: withGroup(group.map(g => g.type), '|'),
         zod: withGroup(
           group.map(g => g.zod),
@@ -143,6 +172,7 @@ export class Schemata {
             pattern,
           },
           required,
+          deps: this.deps,
           type: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isString(e)
@@ -175,6 +205,7 @@ export class Schemata {
         return {
           comments,
           required,
+          deps: this.deps,
           type: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isBoolean(e)
@@ -211,6 +242,7 @@ export class Schemata {
             maximum,
           },
           required,
+          deps: this.deps,
           type: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isNumber(e)
@@ -238,6 +270,7 @@ export class Schemata {
         return {
           comments,
           required,
+          deps: this.deps,
           type,
           zod: 'z.null()',
         };
@@ -274,7 +307,8 @@ export class Schemata {
   private _printArray(schema: OpenAPILatest.ArraySchemaObject) {
     const comments = JsDoc.fromSchema(schema);
     const { minItems, maxItems, items } = schema;
-    const { type, zod } = this.toString(items);
+    const item = this.toString(items);
+    this.addDeps([item]);
 
     return {
       comments: {
@@ -283,8 +317,9 @@ export class Schemata {
         maxItems,
       },
       required: false,
-      type: `Array<${type}>`,
-      zod: `z.array(${zod})`,
+      deps: this.deps,
+      type: `Array<${item.type}>`,
+      zod: `z.array(${item.zod})`,
     };
   }
 
@@ -360,6 +395,7 @@ export class Schemata {
     return {
       comments,
       required: isBoolean(schema.required) ? schema.required : false,
+      deps: this.deps,
       type: withGroup(typeList, '&'),
       zod: withGroup(zodList, ',', 'z.intersection(', ')'),
     };
@@ -370,29 +406,30 @@ export class Schemata {
 
     return {
       comments,
-      type: spec?.type || 'unknown',
       required,
+      deps: this.deps,
+      type: spec?.type || 'unknown',
       zod: spec?.zod || 'z.unknown()',
-      mock: '',
     };
   }
 
-  toString(schema: OpenApiLatest_Schema, ignoreComments = false) {
+  toString(schema: OpenApiLatest_Schema, ignoreComments = false): PrintResult {
     const result = this.print(schema);
     return Schemata.toString(result, ignoreComments);
   }
 
-  static toString(result: SchemaResult, ignoreComments = false) {
-    const { comments, type, zod } = result;
+  static toString(result: SchemaResult, ignoreComments = false): PrintResult {
+    const { comments, deps, type, zod } = result;
 
     if (ignoreComments)
-      return { type, zod };
+      return { deps, type, zod };
 
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
     const header = jsDoc.print();
 
     return {
+      deps,
       type: [header, type].filter(Boolean).join('\n'),
       zod,
     };
