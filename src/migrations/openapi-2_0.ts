@@ -135,9 +135,10 @@ function migGeneralParameter(parameter: OpenAPIV2.GeneralParameterObject | OpenA
   const inQuery = in_ === 'query';
   const style = inQuery ? collectionFormatMap[parameter.collectionFormat || 'csv'] : undefined;
   const explode = inQuery ? explodeMap[parameter.collectionFormat || 'csv'] : undefined;
+  const inV3 = in_ === 'cookie' || in_ === 'header' || in_ === 'path' ? in_ : 'query';
 
   return {
-    in: in_ as OpenAPIV3.ParameterObject['in'],
+    in: inV3,
     name,
     required,
     description,
