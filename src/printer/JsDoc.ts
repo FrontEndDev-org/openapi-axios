@@ -70,7 +70,7 @@ export class JsDoc {
   }
 
   static fromSchema(schema: OpenAPILatest.SchemaObject) {
-    const { deprecated, description, default: defaultValue, format, example, title, externalDocs, type } = schema;
+    const { deprecated, description, default: defaultValue, format, example, examples, title, externalDocs, type } = schema;
     const types = isArray(type) ? type : isString(type) ? [type] : undefined;
 
     return {
@@ -78,8 +78,9 @@ export class JsDoc {
       description,
       deprecated,
       default: defaultValue,
-      format: format || types?.filter(type => !supportTypes.includes(type)).join(' | ') || false,
+      format: format || types?.filter(type => !supportTypes.includes(type)).join(' | ') || undefined,
       example,
+      examples,
       externalDocs,
     };
   }

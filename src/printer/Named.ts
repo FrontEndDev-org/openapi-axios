@@ -85,6 +85,6 @@ export class Named {
   }
 
   getRefType(refId: string) {
-    return this.refIdTypeMap.get(refId) || '';
+    return this.refIdTypeMap.get(refId);
   }
 }

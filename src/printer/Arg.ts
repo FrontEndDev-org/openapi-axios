@@ -4,7 +4,7 @@ import type { Named } from './Named';
 import type { PrinterOptions } from './types';
 import { AXIOS_PARAM_CONFIG_NAME } from './const';
 import { isRefParameter, requiredKeyStringify, toZodName } from './helpers';
-import { Schemata } from './Schemata';
+import { Parser } from './Parser';
 
 export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
 
@@ -58,7 +58,6 @@ export class Arg {
     readonly operationName: string,
     readonly docNamed: Named,
     readonly argNamed: Named,
-    readonly schemata: Schemata,
     readonly printOptions: PrinterOptions,
     /**
      * 是否单参数（如 data、config、response）
@@ -146,16 +145,15 @@ export class Arg {
         // prop0: type0
         const [firstArg] = this.props;
         const { parameter, schema } = firstArg;
-        const result = this.schemata.print(schema);
+        const result = Parser.parse(this.docNamed, schema);
         const isResponse = this.kind === 'response';
         const required = parameter.required || result.required || false;
 
         this.originName = firstArg.name;
         this.argName = this.argNamed.nextVarName(firstArg.name);
         this.required = required;
-        const { type, zod } = Schemata.toString(result);
-        this.typeValue = type;
-        this.zodValue = zod;
+        this.typeValue = result.type;
+        this.zodValue = result.zod;
         this.comments = isResponse
           ? {
               returns: parameter.description || schema.description || false,
@@ -185,13 +183,12 @@ export class Arg {
           ),
           required: requiredNames,
         };
-        const result = this.schemata.print(rootSchema);
+        const result = Parser.parse(this.docNamed, rootSchema);
         const required = requiredNames.length > 0;
 
         this.required = required;
-        const { type, zod } = Schemata.toString(result);
-        this.typeValue = type;
-        this.zodValue = zod;
+        this.typeValue = result.type;
+        this.zodValue = result.zod;
         this.argName = this.argNamed.nextVarName(this.docName);
         this.comments = this.kind === 'response'
           ? {

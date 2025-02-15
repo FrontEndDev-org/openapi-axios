@@ -1,6 +1,5 @@
 import type { OpenAPILatest } from '../types/openapi';
 import type {
-  DepItem,
   OpenApiLatest_Media,
   OpenApiLatest_Operation,
   OpenApiLatest_Parameter,
@@ -28,6 +27,7 @@ import {
   ZOD_IMPORT_FILE,
   ZOD_IMPORT_NAME,
 } from './const';
+import { Content } from './Content';
 import {
   isRefMedia,
   isRefOperation,
@@ -36,13 +36,12 @@ import {
   isRefRequest,
   isRefResponse,
   isRefSchema,
-  sortingByDeps,
   toImportString,
   toZodName,
 } from './helpers';
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
-import { Schemata } from './Schemata';
+import { Parser } from './Parser';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const parameterTypes = ['query', 'header', 'path', 'cookie'];
@@ -71,13 +70,13 @@ type ParameterInfo = WithId<{ parameter: OpenApiLatest_Parameter }>;
 type ResponseInfo = WithId<{ response: OpenApiLatest_Response }>;
 type PathItemInfo = WithId<{ pathItem: OpenApiLatest_PathItem }>;
 
-interface ZodItem extends DepItem {
-  code: string;
-}
-
 export class Printer {
   named = new Named({ internalVars: true, internalTypes: true });
-  schemata = new Schemata(this.named);
+
+  #mainContent = new Content();
+  #typeContent = new Content();
+  #zodContent = new Content();
+
   private configs: PrinterConfigs = {};
 
   constructor(
@@ -103,8 +102,6 @@ export class Printer {
   pathItems: Record<string /** nodeId */, PathItemInfo> = {};
 
   argumentZodNames = new Set<string>();
-
-  validateTypes: string[] = [];
 
   #parseRefComponent<T>(
     {
@@ -283,10 +280,6 @@ export class Printer {
   } {
     Object.assign(this.configs, configs);
     const {
-      cwd = '/',
-      mainFile = '.',
-      typeFile = '.',
-      zodFile = '.',
       hideHeaders,
       hideFooters,
       hideAlert,
@@ -296,58 +289,33 @@ export class Printer {
       hidePaths,
     } = this.configs;
 
-    const { zodImportName = ZOD_IMPORT_NAME, zodImportFile = ZOD_IMPORT_FILE } = this.options || {};
-    const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
-
-    const info = !hideInfo && this.#printInfo();
-    const alert = !hideAlert && this.#printAlert();
-    const imports = !hideImports && this.#printImports();
-    const schemas = !hideSchemas && this.#printSchemas();
-    const header = !hideHeaders && (this.options?.header || '');
-    const footer = !hideFooters && (this.options?.footer || '');
-    let pathType = '';
-    let pathMain = '';
-    let pathZod = '';
-    let zodImports = '';
-
-    if (!hidePaths) {
-      this.#printPaths().forEach((path) => {
-        pathType += `${path.type}\n\n`;
-        pathMain += `${path.main}\n\n`;
-        pathZod += `${path.zod}\n\n`;
-      });
-    }
-
-    const zodNames = [...this.argumentZodNames.values()].join(',');
-    zodImports = `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`;
+    !hideInfo && this.#printInfo();
+    !hideAlert && this.#printAlert();
+    !hideSchemas && this.#printSchemas();
+    !hidePaths && this.#printPaths();
+    !hideHeaders && this.#printHeader();
+    !hideFooters && this.#printFooter();
+    // 一定要放在最后，因为在 printSchemas 和 printPaths 阶段有更新 zodName
+    !hideImports && this.#printImports();
 
     return {
-      type: {
-        errors: [],
-        code: [header, alert, info, ...(schemas ? schemas.type.map(t => t.code) : []), pathType, footer].filter(Boolean).join('\n\n'),
-      },
       main: {
         errors: [],
-        code: [header, alert, info, [imports, zodImports].filter(Boolean).join('\n'), pathMain, footer]
-          .filter(Boolean)
-          .join('\n\n'),
+        code: this.#mainContent.print(),
+      },
+      type: {
+        errors: [],
+        code: this.#typeContent.print(),
       },
       zod: {
         errors: [],
-        code: [
-          header,
-          alert,
-          info,
-          toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath),
-          ...(schemas ? sortingByDeps(schemas.zod).map(z => z.code) : []),
-          pathZod,
-        ].join('\n'),
+        code: this.#zodContent.print(),
       },
     };
   }
 
   #printAlert() {
-    return [
+    const alert = [
       `/**`,
       ` * 由 ${pkgName}@${pkgVersion} 生成，参考下述文档链接，忽略此文件的格式校验`,
       ` *`,
@@ -355,7 +323,11 @@ export class Printer {
       ` * - [Prettier](https://prettier.io/docs/en/ignore.html)`,
       ` * - [Biome](https://biomejs.dev/guides/configure-biome/#ignore-files)`,
       ` */`,
-    ].join(`\n`);
+    ];
+
+    this.#mainContent.push('alert', alert);
+    this.#typeContent.push('alert', alert);
+    this.#zodContent.push('alert', alert);
   }
 
   #printInfo() {
@@ -379,7 +351,11 @@ export class Printer {
       summary,
       see: extDoc,
     });
-    return jsDoc.print();
+    const code = jsDoc.print();
+
+    this.#mainContent.push('info', code);
+    this.#typeContent.push('info', code);
+    this.#zodContent.push('info', code);
   }
 
   #printImports() {
@@ -389,32 +365,47 @@ export class Printer {
       axiosTypeImportFile,
       axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
       axiosResponseTypeName = AXIOS_RESPONSE_TYPE_NAME,
+      zodImportName = ZOD_IMPORT_NAME,
+      zodImportFile = ZOD_IMPORT_FILE,
     } = this.options || {};
-    const { cwd = '/', mainFile, typeFile = '.' } = this.configs;
+    const { cwd = '/', mainFile, typeFile = '.', zodFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
     const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
     const axiosTypeImportFile2 = axiosTypeImportFile || axiosImportFile || AXIOS_TYPE_IMPORT_FILE;
     const importTypePath = toImportPath(axiosTypeImportFile2, cwd, mainFile);
+    const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
+    const zodNames = [...this.argumentZodNames.values()].join(',');
 
-    return [
+    this.#mainContent.push('import', [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
       toImportString(AXIOS_REQUEST_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
       toImportString(AXIOS_RESPONSE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
       `import type * as Type from "${toRelative(typeFile, mainFile)}";`,
-    ].join('\n');
+      `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
+    ]);
+
+    this.#zodContent.push('import', toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath));
+  }
+
+  #printHeader() {
+    const { header } = this.options || {};
+    header && this.#mainContent.push('header', header);
+    header && this.#typeContent.push('header', header);
+    header && this.#zodContent.push('header', header);
+  }
+
+  #printFooter() {
+    const { footer } = this.options || {};
+    footer && this.#mainContent.push('footer', footer);
+    footer && this.#typeContent.push('footer', footer);
+    footer && this.#zodContent.push('footer', footer);
   }
 
   #printSchemas() {
-    return Object.entries(this.schemas)
-      .map(([nodeId, schemaInfo]) => this.#printSchema(schemaInfo))
-      .reduce(
-        (acc, cur) => {
-          acc.type.push(cur.type);
-          acc.zod.push(cur.zod);
-          return acc;
-        },
-        { type: [], zod: [] } as { type: { code: string }[]; zod: ZodItem[] },
-      );
+    Object.entries(this.schemas)
+      .forEach(([nodeId, schemaInfo]) => {
+        this.#printSchema(schemaInfo);
+      });
   }
 
   #printSchema({ schema, nodeId, nodeName, typeName }: SchemaInfo) {
@@ -424,34 +415,33 @@ export class Printer {
 
     const zodName = this.named.prepareVarName(toZodName(typeName));
 
-    const { comments, deps, type, zod } = this.schemata.print(schema);
+    const { comments, deps, type, zod } = Parser.parse(this.named, schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments({ name: nodeName });
     jsDoc.addComments(comments);
 
-    return {
-      type: {
-        code: [jsDoc.print(), `export type ${typeName} = ${type};`].filter(Boolean).join('\n'),
-      },
-      zod: {
-        name: zodName,
-        deps,
-        code: `export const ${zodName} = ${zod};`,
-      },
-    };
+    this.#typeContent.push('block', [
+      jsDoc.print(),
+      `export type ${typeName} = ${type};`,
+    ]);
+    this.#zodContent.add({
+      name: zodName,
+      deps,
+      code: `export const ${zodName} = ${zod};`,
+    });
   }
 
   #printPaths() {
-    return Object.entries(this.document.paths || {})
-      .map(([url, pathItem]) => this.#printPathItem(url, pathItem))
-      .flat()
-      .filter(Boolean) as { type: string; main: string; zod: string }[];
+    Object.entries(this.document.paths || {})
+      .forEach(([url, pathItem]) => {
+        this.#printPathItem(url, pathItem);
+      });
   }
 
   #printPathItem(
     url: string,
     pathItem: OpenApiLatest_PathItem,
-  ): Array<{ type: string; main: string; zod: string } | undefined> {
+  ) {
     if (isRefPathItem(pathItem)) {
       const refPathItem = this.pathItems[pathItem.$ref];
 
@@ -459,23 +449,24 @@ export class Printer {
         throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
       }
 
-      return this.#printPathItem(url, refPathItem.pathItem);
+      this.#printPathItem(url, refPathItem.pathItem);
+      return;
     }
 
-    return Object.entries(pathItem).map(([method, _operation]) => {
+    Object.entries(pathItem).forEach(([method, _operation]) => {
       // method === 'parameters'，migration 已忽略
 
       const isOperation = allowMethods.includes(method);
       if (!isOperation)
-        return undefined;
+        return;
 
       // 转换后可能有 undefined 的情况
       if (isUndefined(_operation))
-        return undefined;
+        return;
 
       // 已经约束了是 http method
       const operation = _operation as OpenApiLatest_Operation;
-      return this.#printOperation(method, url, operation);
+      this.#printOperation(method, url, operation);
     });
   }
 
@@ -495,13 +486,13 @@ export class Printer {
     argNamed.internalVarName(AXIOS_PARAM_TRANSFORM_RESPONSE_NAME);
     const operationName = this.named.nextOperationId(method, url, operationId);
 
-    const header = new Arg('headers', operationName, this.named, argNamed, this.schemata, options);
-    const cookie = new Arg('cookies', operationName, this.named, argNamed, this.schemata, options);
-    const query = new Arg('params', operationName, this.named, argNamed, this.schemata, options);
-    const path = new Arg('path', operationName, this.named, argNamed, this.schemata, options);
-    const data = new Arg('data', operationName, this.named, argNamed, this.schemata, options, true);
-    const config = new Arg('config', operationName, this.named, argNamed, this.schemata, options, true);
-    const resp = new Arg('response', operationName, this.named, argNamed, this.schemata, options, true);
+    const header = new Arg('headers', operationName, this.named, argNamed, options);
+    const cookie = new Arg('cookies', operationName, this.named, argNamed, options);
+    const query = new Arg('params', operationName, this.named, argNamed, options);
+    const path = new Arg('path', operationName, this.named, argNamed, options);
+    const data = new Arg('data', operationName, this.named, argNamed, options, true);
+    const config = new Arg('config', operationName, this.named, argNamed, options, true);
+    const resp = new Arg('response', operationName, this.named, argNamed, options, true);
 
     path.setUrl(url); // 设置 url，用于解析 path 参数
     config.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
@@ -572,68 +563,61 @@ export class Printer {
     const requestArgs = new Args([header.parse(), path.parse(), query.parse(), data.parse(), config.parse()]);
     const responseArgs = new Args([resp.parse()]);
 
-    const jsDoc = new JsDoc(this.document.tags);
-    const comments = JsDoc.fromOperation(operation);
-    const { document: module } = this.configs;
-
-    if (module)
-      jsDoc.addComments({ module });
-    jsDoc.addComments(comments);
-    jsDoc.addComments(requestArgs.toComments());
-    jsDoc.addComments(responseArgs.toComments());
-
     const formalParams = requestArgs.printFormalParams();
     const responseArg = responseArgs.fixedArgs.at(0);
-    let responseType = responseArg?.typeName;
-    responseType = responseType ? `${TYPE_FILE_EXPORT_NAME}.${responseType}` : 'unknown';
-
-    const type = [...requestArgs.printSchemaTypes(), ...responseArgs.printSchemaTypes()].filter(Boolean).join('\n');
 
     const validateAbleRequestArgs = requestArgs.filterValidateAble();
-    const validateRequests = runtimeValidate
-      ? validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`)
-      : [];
-    const validateResponse = runtimeValidate
-      ? `
-  const ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} = ${AXIOS_PARAM_CONFIG_NAME}?.transformResponse;
-  ${AXIOS_PARAM_CONFIG_NAME} = {
-    ...${AXIOS_PARAM_CONFIG_NAME},
-    transformResponse: [
-      ...Array.isArray(${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}) ? ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} : (${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} ? [${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}] : []),
-      data => ${responseArg ? `${responseArg.zodName}.parse(data)` : 'data'},
-    ],
-  };`.trim()
-      : '';
-    const body = `
-  return ${AXIOS_IMPORT_NAME}({
-    method: ${JSON.stringify(method.toUpperCase())},
-    ${requestArgs.printActualParams()}
-  })`.trim();
 
-    const main = [
-      jsDoc.print(),
-      `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>> {`,
-      ...validateRequests,
-      validateResponse,
-      body,
-      '}',
-    ]
-      .filter(Boolean)
-      .join('\n');
+    // jsdoc
+    {
+      const jsDoc = new JsDoc(this.document.tags);
+      const comments = JsDoc.fromOperation(operation);
+      const { document: module } = this.configs;
 
-    const zodLines: string[] = [];
+      module && jsDoc.addComments({ module });
+      jsDoc.addComments(comments);
+      jsDoc.addComments(requestArgs.toComments());
+      jsDoc.addComments(responseArgs.toComments());
+      this.#mainContent.push('block', jsDoc.print());
+    }
+
+    let responseType = responseArg?.typeName;
+    responseType = responseType ? `${TYPE_FILE_EXPORT_NAME}.${responseType}` : 'unknown';
+    this.#mainContent.push('block', `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>> {`);
+
+    if (runtimeValidate) {
+      // validate request
+      this.#mainContent.push('block', validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`));
+
+      // validate response
+      this.#mainContent.push('block', `const ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} = ${AXIOS_PARAM_CONFIG_NAME}?.transformResponse;`);
+      this.#mainContent.push('block', `${AXIOS_PARAM_CONFIG_NAME} = {`);
+      this.#mainContent.push('block', `...${AXIOS_PARAM_CONFIG_NAME},`);
+      this.#mainContent.push('block', `transformResponse: [`);
+      this.#mainContent.push('block', `...Array.isArray(${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}) ? ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} : (${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} ? [${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}] : []),`);
+      this.#mainContent.push('block', `data => ${responseArg ? `${responseArg.zodName}.parse(data)` : 'data'},`);
+      this.#mainContent.push('block', `],`);
+      this.#mainContent.push('block', `};`);
+    }
+
+    this.#mainContent.push('block', `return ${AXIOS_IMPORT_NAME}({`);
+    this.#mainContent.push('block', `  method: ${JSON.stringify(method.toUpperCase())},`);
+    this.#mainContent.push('block', requestArgs.printActualParams());
+    this.#mainContent.push('block', '})');
+    this.#mainContent.push('block', '}');
 
     validateAbleRequestArgs.forEach((arg) => {
       this.argumentZodNames.add(arg.zodName);
-      zodLines.push(`export const ${arg.zodName} = ${arg.zodValue};`);
+      this.#zodContent.push('block', `export const ${arg.zodName} = ${arg.zodValue};`);
     });
 
     if (responseArg) {
       this.argumentZodNames.add(responseArg.zodName);
-      zodLines.push(`export const ${responseArg.zodName} = ${responseArg.zodValue};`);
+      this.#zodContent.push('block', `export const ${responseArg.zodName} = ${responseArg.zodValue};`);
     }
 
-    return { type, main, zod: zodLines.join('\n') };
+    this.#typeContent.push('block', requestArgs.printSchemaTypes());
+    this.#typeContent.push('block', responseArgs.printSchemaTypes());
   }
 
   #parseContents(

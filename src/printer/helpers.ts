@@ -65,7 +65,7 @@ export function toZodName(typeName: string) {
   return `z-${typeName}`;
 }
 
-export interface DepItem {
+export interface OrderlyItem {
   name: string;
   deps: string[];
 }
@@ -74,7 +74,7 @@ export interface DepItem {
  * @param depList
  * @returns
  */
-export function sortingByDeps<T extends DepItem>(depList: T[]) {
+export function sortingByDeps<T extends OrderlyItem>(depList: T[]) {
   return depList.sort((a, b) => {
     if (a.deps.includes(b.name)) {
       return 1;
@@ -86,4 +86,18 @@ export function sortingByDeps<T extends DepItem>(depList: T[]) {
       return 0;
     }
   });
+}
+
+export function withGroup(texts: string[], options?: {
+  sep?: string;
+  wrap?: [start: string, end: string];
+  always?: boolean;
+}) {
+  const {
+    sep = ',',
+    wrap = ['(', ')'],
+    always = false,
+  } = options || {};
+  const [start, end] = wrap;
+  return !always && texts.length < 2 ? (texts.at(0) || '') : start + texts.join(sep) + end;
 }
