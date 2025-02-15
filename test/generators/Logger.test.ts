@@ -12,7 +12,7 @@ it('logger', async () => {
   logger.pipeProcessEvent({
     index: 5,
     count: 99,
-    module: 'test',
+    name: 'test',
     stage: 'generated',
     file: '/a/b/c/d/e/f',
     options: {

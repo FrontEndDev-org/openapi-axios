@@ -67,7 +67,6 @@ it('1*path + 1*query + 1*header', () => {
       hideFooters: true,
       hideInfo: true,
       hideAlert: true,
-      hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
     "export type GetPetPath = string;
@@ -159,7 +158,6 @@ it('n*path + 1*query + 1*header', () => {
       hideFooters: true,
       hideInfo: true,
       hideAlert: true,
-      hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
     "export type GetPetPath = {
@@ -259,7 +257,6 @@ it('n*path + n*query + 1*header', () => {
       hideFooters: true,
       hideInfo: true,
       hideAlert: true,
-      hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
     "export type GetPetPath = {
@@ -369,7 +366,6 @@ it('n*path + n*query + n*header', () => {
       hideFooters: true,
       hideInfo: true,
       hideAlert: true,
-      hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
     "export type GetPetPath = {
@@ -438,7 +434,6 @@ it('path name unique', () => {
       hideFooters: true,
       hideInfo: true,
       hideAlert: true,
-      hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
     "export type GetPetPath = string;

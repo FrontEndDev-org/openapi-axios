@@ -39,7 +39,6 @@ it('ref parameter', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,

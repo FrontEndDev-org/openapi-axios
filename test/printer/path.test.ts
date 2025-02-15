@@ -17,7 +17,6 @@ it('1路径 + 1请求', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -52,9 +51,8 @@ it('1路径 + 1请求 * module', () => {
 
   expect(
     printer.print({
-      module: 'TTT',
+      document: 'TTT',
       hideImports: true,
-      hideHelpers: true,
       hideAlert: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -96,7 +94,6 @@ it('1路径 + 2请求', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -160,13 +157,12 @@ it('1路径 + 1请求 + 1query', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcParams = 
+    "export type GetApiAbcParams =
     /**
      * @description description 2
      */
@@ -220,7 +216,6 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -276,7 +271,6 @@ it('1路径 + 1请求 + 1path', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -338,7 +332,6 @@ it('1路径 + 1请求 + 2path', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -409,7 +402,6 @@ it('1路径 + 1请求 + 2query', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -494,13 +486,12 @@ it('1路径 + 1请求 + 2query + 1path', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath = 
+    "export type GetApiAbcPath =
     /**
      * @description xxx
      */
@@ -594,13 +585,12 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath = 
+    "export type GetApiAbcPath =
     /**
      * @description xxx
      */
@@ -613,7 +603,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
      */
     "b":string;
     };
-    export type GetApiAbcData = 
+    export type GetApiAbcData =
     /**
      * @description aaa
      */
@@ -706,13 +696,12 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath = 
+    "export type GetApiAbcPath =
     /**
      * @description xxx
      */
@@ -824,13 +813,12 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath = 
+    "export type GetApiAbcPath =
     /**
      * @description xxx
      */
@@ -961,13 +949,12 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type GetApiAbcDefPath = 
+    "export type GetApiAbcDefPath =
     /**
      * @description xxx
      */
@@ -986,7 +973,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      */
     "name":string;
     };
-    export type GetApiAbcDefResponse = 
+    export type GetApiAbcDefResponse =
     /**
      * @description resp---123
      */

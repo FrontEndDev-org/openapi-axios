@@ -54,7 +54,6 @@ it('ref request', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,
@@ -65,7 +64,7 @@ it('ref request', () => {
     "password"?:string;
     };
 
-    export type PostTestData = 
+    export type PostTestData =
     /**
      * @description 用户列表
      */

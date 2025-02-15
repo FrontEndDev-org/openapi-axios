@@ -56,7 +56,6 @@ it('ref response', () => {
   expect(
     printer.print({
       hideHeaders: true,
-      hideHelpers: true,
       hideInfo: true,
       hideAlert: true,
       hideImports: true,

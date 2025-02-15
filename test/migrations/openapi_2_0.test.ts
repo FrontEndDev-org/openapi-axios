@@ -84,6 +84,7 @@ it('path', () => {
     components: {},
   });
 });
+
 it('pet store', () => {
   const v2 = petStore as OpenAPIV2.Document;
   const v3 = migrate_2_0To3_0(v2);

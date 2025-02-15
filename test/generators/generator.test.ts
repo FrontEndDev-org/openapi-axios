@@ -7,7 +7,7 @@ it('generator', async () => {
   const [tempDir, clean] = createTempDirname();
   const generator = new Generator({
     cwd: tempDir,
-    modules: {
+    documents: {
       petStore3: {
         document: path.join(__dirname, '../example-json/3.0/pet-store.json'),
       },
