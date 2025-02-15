@@ -21,3 +21,7 @@ export function isVarName(varName: string) {
 export function isUndefined(any: unknown): any is undefined {
   return any === undefined;
 }
+
+export function isNever(never: never) {
+  //
+}
