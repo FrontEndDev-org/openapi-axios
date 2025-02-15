@@ -165,3 +165,9 @@ export interface PrintResult {
   errors: string[];
   code: string;
 }
+
+export interface PrintResults {
+  main: PrintResult;
+  type: PrintResult;
+  zod: PrintResult;
+}

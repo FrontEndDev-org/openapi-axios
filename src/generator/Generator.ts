@@ -95,7 +95,10 @@ export class Generator extends Emitter<GeneratorEmits> {
 
     this.#writePrintResult('main', mainFile, main);
     this.#writePrintResult('type', typeFile, type);
-    this.#writePrintResult('zod', zodFile, zod);
+
+    if (printerOptions.runtimeValidate) {
+      this.#writePrintResult('zod', zodFile, zod);
+    }
 
     this.emit('process', makePayload('generated'));
   }

@@ -8,7 +8,7 @@ import type {
   OpenApiLatest_Response,
   OpenApiLatest_Schema,
 } from './helpers';
-import type { PrinterConfigs, PrinterOptions, PrintResult } from './types';
+import type { PrinterConfigs, PrinterOptions, PrintResults } from './types';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
@@ -273,11 +273,7 @@ export class Printer {
     }
   }
 
-  print(configs?: PrinterConfigs): {
-    main: PrintResult;
-    type: PrintResult;
-    zod: PrintResult;
-  } {
+  print(configs?: PrinterConfigs): PrintResults {
     Object.assign(this.configs, configs);
     const {
       hideHeaders,
@@ -317,11 +313,7 @@ export class Printer {
   #printAlert() {
     const alert = [
       `/**`,
-      ` * 由 ${pkgName}@${pkgVersion} 生成，参考下述文档链接，忽略此文件的格式校验`,
-      ` *`,
-      ` * - [ESLint](https://eslint.org/docs/latest/use/configure/ignore)`,
-      ` * - [Prettier](https://prettier.io/docs/en/ignore.html)`,
-      ` * - [Biome](https://biomejs.dev/guides/configure-biome/#ignore-files)`,
+      ` * 由 ${pkgName}@${pkgVersion} 生成，建议忽略此文件的格式校验`,
       ` */`,
     ];
 
@@ -367,6 +359,7 @@ export class Printer {
       axiosResponseTypeName = AXIOS_RESPONSE_TYPE_NAME,
       zodImportName = ZOD_IMPORT_NAME,
       zodImportFile = ZOD_IMPORT_FILE,
+      runtimeValidate,
     } = this.options || {};
     const { cwd = '/', mainFile, typeFile = '.', zodFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
@@ -380,9 +373,14 @@ export class Printer {
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
       toImportString(AXIOS_REQUEST_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
       toImportString(AXIOS_RESPONSE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
-      `import type * as Type from "${toRelative(typeFile, mainFile)}";`,
-      `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
+      `import type * as ${TYPE_FILE_EXPORT_NAME} from "${toRelative(typeFile, mainFile)}";`,
     ]);
+
+    if (runtimeValidate) {
+      this.#mainContent.push('import', [
+        `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
+      ]);
+    }
 
     this.#zodContent.push('import', toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath));
   }
