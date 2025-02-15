@@ -36,26 +36,27 @@ it('ref parameter', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type PostTestPath = number;
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param userId request path "userId"
      * @param [config] request config
      */
-    export async function postTest(userId:PostTestPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/test/\${userId}\`,
+    export async function postTest(userId:Type.PostTestPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "POST",
+    url: \`/test/\${userId}\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`"export type PostTestPath = number;"`);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zPostTestPath = z.number();"`);
 });

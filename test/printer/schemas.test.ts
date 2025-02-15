@@ -17,20 +17,24 @@ it('number', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @format int64
-       * @example 10
-       */
-      export type OrderId = number;"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name OrderId
+     * @format int64
+     * @example 10
+     */
+    export type OrderId = number;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrderId = z.number();"`);
 });
 
 it('number enum', () => {
@@ -51,20 +55,24 @@ it('number enum', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @format int64
-       * @example 10
-       */
-      export type OrderId = (1|3|5|7|9);"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name OrderId
+     * @format int64
+     * @example 10
+     */
+    export type OrderId = (1|3|5|7|9);"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrderId = z.union([z.literal(1),z.literal(3),z.literal(5),z.literal(7),z.literal(9)]);"`);
 });
 
 it('[number, null] enum', () => {
@@ -85,20 +93,24 @@ it('[number, null] enum', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @format int64
-       * @example 10
-       */
-      export type OrderId = (((1|3|5|7|9))|(null));"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name OrderId
+     * @format int64
+     * @example 10
+     */
+    export type OrderId = ((1|3|5|7|9)|null);"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrderId = z.union([z.union([z.literal(1),z.literal(3),z.literal(5),z.literal(7),z.literal(9)]),z.null()]);"`);
 });
 
 it('type[]', () => {
@@ -120,22 +132,26 @@ it('type[]', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @description test1
-       * @deprecated
-       * @format int64
-       * @example 10
-       */
-      export type Order = ((number)|(string));"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Order
+     * @description test1
+     * @deprecated
+     * @format int64
+     * @example 10
+     */
+    export type Order = (number|string);"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrder = z.union([z.number(),z.string()]);"`);
 });
 
 it('allOf primitive', () => {
@@ -174,33 +190,33 @@ it('allOf primitive', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type User = (({
-      "username":string;
-      })|(null));
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-      export type Order = (
-      /**
-       * @description test1
-       * @deprecated
-       * @format int64
-       * @example 10
-       */
-      number
-      &
-      /**
-       * @description test2
-       */
-      User
-      );"
-    `);
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name User
+     */
+    export type User = ({
+    "username":string;
+    }|null);
+    /**
+     * @name Order
+     */
+    export type Order = (number&User);"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zUser = z.union([z.object({
+    "username": z.string(),
+    }),z.null()]);
+    export const zOrder = z.intersection(z.number(),zUser);"
+  `);
 });
 
 it('explicit array', () => {
@@ -225,24 +241,22 @@ it('explicit array', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type Order = Array<
-      /**
-       * @description test1
-       * @deprecated
-       * @format int64
-       * @example 10
-       */
-      number
-      >;"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Order
+     */
+    export type Order = Array<number>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrder = z.array(z.number());"`);
 });
 
 it('generic array', () => {
@@ -267,24 +281,22 @@ it('generic array', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type Order = Array<
-      /**
-       * @description test1
-       * @deprecated
-       * @format int64
-       * @example 10
-       */
-      number
-      >;"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Order
+     */
+    export type Order = Array<number>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zOrder = z.array(z.number());"`);
 });
 
 it('explicit object', () => {
@@ -319,26 +331,38 @@ it('explicit object', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type Order = {
-      /**
-       * @description test1
-       * @deprecated
-       * @format int64
-       * @example 10
-       */
-      "aaa":number;
-      "bbb":string;
-      "ccc"?:boolean;
-      };"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Order
+     */
+    export type Order = {
+    /**
+     * @description test1
+     * @deprecated
+     * @format int64
+     * @example 10
+     */
+    "aaa":number;
+    "bbb":string;
+    "ccc"?:boolean;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zOrder = z.object({
+    "aaa": z.number(),
+    "bbb": z.string(),
+    "ccc": z.optional(z.boolean()),
+    });"
+  `);
 });
 
 it('generic object', () => {
@@ -369,20 +393,32 @@ it('generic object', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type Pet = {
-      "aa":UnknownObject;
-      "b-b":UnknownObject;
-      "string"?:UnknownObject;
-      };"
-    `);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Pet
+     */
+    export type Pet = {
+    "aa":Record<string, unknown>;
+    "b-b":Record<string, unknown>;
+    "string"?:Record<string, unknown>;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zPet = z.object({
+    "aa": z.record(z.string(), z.unknown()),
+    "b-b": z.record(z.string(), z.unknown()),
+    "string": z.optional(z.record(z.string(), z.unknown())),
+    });"
+  `);
 });
 
 it('additionalProperties true', () => {
@@ -401,14 +437,22 @@ it('additionalProperties true', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`"export type Pet = UnknownObject;"`);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Pet
+     */
+    export type Pet = Record<string, unknown>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zPet = z.record(z.string(), z.unknown());"`);
 });
 
 it('additionalProperties false', () => {
@@ -427,14 +471,22 @@ it('additionalProperties false', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`"export type Pet = {};"`);
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Pet
+     */
+    export type Pet = Record<string, unknown>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zPet = z.record(z.string(), z.unknown());"`);
 });
 
 it('additionalProperties schema type', () => {
@@ -464,22 +516,29 @@ it('additionalProperties schema type', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type PetA = {
-      [key: string]:("a"|"b");
-      };
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-      export type PetB = {
-      [key: string]:("a"|"b");
-      };"
-    `);
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name PetA
+     */
+    export type PetA = Record<string, ("a"|"b")>;
+    /**
+     * @name PetB
+     */
+    export type PetB = Record<string, ("a"|"b")>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zPetA = z.record(z.string(), z.union([z.literal("a"),z.literal("b")]));
+    export const zPetB = z.record(z.string(), z.union([z.literal("a"),z.literal("b")]));"
+  `);
 });
 
 it('additionalProperties schema ref', () => {
@@ -514,24 +573,37 @@ it('additionalProperties schema ref', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "export type PetA = {
-      [key: string]:Pet1;
-      };
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-      export type PetB = {
-      [key: string]:Pet2;
-      };
-
-      export type Pet1 = ("a"|"b");
-
-      export type Pet2 = ("a"|"b");"
-    `);
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name PetA
+     */
+    export type PetA = Record<string, Pet1>;
+    /**
+     * @name PetB
+     */
+    export type PetB = Record<string, Pet2>;
+    /**
+     * @name Pet1
+     */
+    export type Pet1 = ("a"|"b");
+    /**
+     * @name Pet2
+     */
+    export type Pet2 = ("a"|"b");"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zPetA = z.record(z.string(), zPet1);
+    export const zPetB = z.record(z.string(), zPet2);
+    export const zPet1 = z.union([z.literal("a"),z.literal("b")]);
+    export const zPet2 = z.union([z.literal("a"),z.literal("b")]);"
+  `);
 });

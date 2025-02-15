@@ -51,37 +51,43 @@ it('ref request', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type User = {
-    "username"?:string;
-    "password"?:string;
-    };
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-    export type PostTestData =
-    /**
-     * @description 用户列表
-     */
-    Array<User>
-    ;
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param data 用户列表
      * @param [config] request config
      */
-    export async function postTest(data:PostTestData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/test\`,
+    export async function postTest(data:Type.PostTestData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "POST",
+    url: \`/test\`,
     data: data,
     ...config
-        });
+    })
     }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name User
+     */
+    export type User = {
+    "username"?:string;
+    "password"?:string;
+    };
+    export type PostTestData = Array<User>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zUser = z.object({
+    "username": z.optional(z.string()),
+    "password": z.optional(z.string()),
+    });
+    export const zPostTestData = z.array(zUser);"
   `);
 });

@@ -13,26 +13,28 @@ it('1路径 + 1请求', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
     "/**
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('1路径 + 1请求 * module', () => {
@@ -48,32 +50,28 @@ it('1路径 + 1请求 * module', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      document: 'TTT',
-      hideImports: true,
-      hideAlert: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
     "/**
-     * @module TTT
-     * @title api
-     * @version v1
-     */
-
-    /**
-     * @module TTT
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('1路径 + 2请求', () => {
@@ -90,37 +88,38 @@ it('1路径 + 2请求', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
     "/**
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
     ...config
-        });
+    })
     }
-
     /**
      * @param [config] request config
      */
     export async function postApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/api/abc\`,
+    return axios({
+      method: "POST",
+    url: \`/api/abc\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('1路径 + 1请求 + 1query', () => {
@@ -153,35 +152,30 @@ it('1路径 + 1请求 + 1query', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcParams =
-    /**
-     * @description description 2
-     */
-    number
-    ;
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [var_2] description 1
      * @param [config] request config
      */
-    export async function getApiAbc(var_2?:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
+    export async function getApiAbc(var_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
     params: {"var": var_2},
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcParams = number;"`);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zGetApiAbcParams = z.number();"`);
 });
 
 it('1路径 + 1请求 + 1query with duplicate', () => {
@@ -212,30 +206,30 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcParams = string;
-
-    /**
-     * @param [config] request params "config"
-     * @param [config_2] request config
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param [config_2] request params "config"
+     * @param [config] request config
      */
-    export async function getApiAbc(config?:GetApiAbcParams,config_2?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
-    params: {"config": config},
-    ...config_2
-        });
+    export async function getApiAbc(config_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
+    params: {"config": config_2},
+    ...config
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcParams = string;"`);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zGetApiAbcParams = z.string();"`);
 });
 
 it('1路径 + 1请求 + 1path', () => {
@@ -267,29 +261,29 @@ it('1路径 + 1请求 + 1path', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath = string;
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param var_2 request path "var"
      * @param [config] request config
      */
-    export async function getApiAbc(var_2:GetApiAbcPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${var_2}\`,
+    export async function getApiAbc(var_2:Type.GetApiAbcPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${var_2}\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcPath = string;"`);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zGetApiAbcPath = z.string();"`);
 });
 
 it('1路径 + 1请求 + 2path', () => {
@@ -328,34 +322,41 @@ it('1路径 + 1请求 + 2path', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param path request path
+     * @param [config] request config
+     */
+    export async function getApiAbcDef(path:Type.GetApiAbcDefPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
     "export type GetApiAbcDefPath = {
     "var":string;
     /**
      * @format integer
      */
     "xyz":number;
-    };
-
-    /**
-     * @param path request path
-     * @param [config] request config
-     */
-    export async function getApiAbcDef(path:GetApiAbcDefPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcDefPath = z.object({
+    "var": z.string(),
+    "xyz": z.number(),
+    });"
   `);
 });
 
@@ -398,15 +399,29 @@ it('1路径 + 1请求 + 2query', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param params request params
+     * @param [config] request config
+     */
+    export async function getApiAbc(params:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc\`,
+    params: params,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
     "export type GetApiAbcParams = {
     /**
      * @description description 1
@@ -416,20 +431,13 @@ it('1路径 + 1请求 + 2query', () => {
      * @description description 3
      */
     "b":string;
-    };
-
-    /**
-     * @param params request params
-     * @param [config] request config
-     */
-    export async function getApiAbc(params:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc\`,
-    params: params,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcParams = z.object({
+    "a": z.optional(z.string()),
+    "b": z.string(),
+    });"
   `);
 });
 
@@ -482,21 +490,30 @@ it('1路径 + 1请求 + 2query + 1path', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath =
-    /**
-     * @description xxx
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param params request params
+     * @param [config] request config
      */
-    string
-    ;
+    export async function getApiAbc(params:Type.GetApiAbcPath,params_2:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${params}\`,
+    params: params_2,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type GetApiAbcPath = string;
     export type GetApiAbcParams = {
     /**
      * @description test--
@@ -507,20 +524,14 @@ it('1路径 + 1请求 + 2query + 1path', () => {
      * @description xxx
      */
     "b":string;
-    };
-
-    /**
-     * @param params request params
-     * @param [config] request config
-     */
-    export async function getApiAbc(params:GetApiAbcPath,params_2:GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${params}\`,
-    params: params_2,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcPath = z.string();
+    export const zGetApiAbcParams = z.object({
+    "a": z.string(),
+    "b": z.string(),
+    });"
   `);
 });
 
@@ -581,21 +592,33 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath =
-    /**
-     * @description xxx
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param c xxx
+     * @param params request params
+     * @param data aaa
+     * @param [config] request config
      */
-    string
-    ;
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${c}\`,
+    params: params,
+    data: data,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type GetApiAbcPath = string;
     export type GetApiAbcParams = {
     "a":string;
     /**
@@ -603,28 +626,15 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
      */
     "b":string;
     };
-    export type GetApiAbcData =
-    /**
-     * @description aaa
-     */
-    string
-    ;
-
-    /**
-     * @param c xxx
-     * @param params request params
-     * @param data aaa
-     * @param [config] request config
-     */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${c}\`,
-    params: params,
-    data: data,
-    ...config
-        });
-    }"
+    export type GetApiAbcData = string;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcPath = z.string();
+    export const zGetApiAbcParams = z.object({
+    "a": z.string(),
+    "b": z.string(),
+    });
+    export const zGetApiAbcData = z.string();"
   `);
 });
 
@@ -692,21 +702,33 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath =
-    /**
-     * @description xxx
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param c xxx
+     * @param params request params
+     * @param data request--data--description
+     * @param [config] request config
      */
-    string
-    ;
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${c}\`,
+    params: params,
+    data: data,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type GetApiAbcPath = string;
     export type GetApiAbcParams = {
     "a":string;
     /**
@@ -719,23 +741,17 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
      * @description yyy
      */
     "name":string;
-    };
-
-    /**
-     * @param c xxx
-     * @param params request params
-     * @param data request--data--description
-     * @param [config] request config
-     */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${c}\`,
-    params: params,
-    data: data,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcPath = z.string();
+    export const zGetApiAbcParams = z.object({
+    "a": z.string(),
+    "b": z.string(),
+    });
+    export const zGetApiAbcData = z.object({
+    "name": z.string(),
+    });"
   `);
 });
 
@@ -809,21 +825,34 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcPath =
-    /**
-     * @description xxx
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param c xxx
+     * @param params request params
+     * @param data request data
+     * @param [config] request config
+     * @returns success
      */
-    string
-    ;
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetApiAbcResponse>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${c}\`,
+    params: params,
+    data: data,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type GetApiAbcPath = string;
     export type GetApiAbcParams = {
     "a":string;
     /**
@@ -837,24 +866,18 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
      */
     "name":string;
     };
-    export type GetApiAbcResponse = string;
-
-    /**
-     * @param c xxx
-     * @param params request params
-     * @param data request data
-     * @param [config] request config
-     * @returns success
-     */
-    export async function getApiAbc(c:GetApiAbcPath,params:GetApiAbcParams,data:GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<GetApiAbcResponse>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${c}\`,
-    params: params,
-    data: data,
-    ...config
-        });
-    }"
+    export type GetApiAbcResponse = string;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcPath = z.string();
+    export const zGetApiAbcParams = z.object({
+    "a": z.string(),
+    "b": z.string(),
+    });
+    export const zGetApiAbcData = z.object({
+    "name": z.string(),
+    });
+    export const zGetApiAbcResponse = z.string();"
   `);
 });
 
@@ -945,21 +968,34 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type GetApiAbcDefPath =
-    /**
-     * @description xxx
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param data xxx
+     * @param params request params
+     * @param data_2 request data
+     * @param [config] request config
+     * @returns success
      */
-    string
-    ;
+    export async function getApiAbcDef(data:Type.GetApiAbcDefPath,params:Type.GetApiAbcDefParams,data_2:Type.GetApiAbcDefData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetApiAbcDefResponse>> {
+    return axios({
+      method: "GET",
+    url: \`/api/abc/\${data}/def\`,
+    params: params,
+    data: data_2,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type GetApiAbcDefPath = string;
     export type GetApiAbcDefParams = {
     "config":string;
     /**
@@ -973,11 +1009,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      */
     "name":string;
     };
-    export type GetApiAbcDefResponse =
-    /**
-     * @description resp---123
-     */
-    {
+    export type GetApiAbcDefResponse = {
     /**
      * @description aaaa
      */
@@ -991,24 +1023,22 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      */
     "name"?:string;
     };
-    }
-    ;
-
-    /**
-     * @param data xxx
-     * @param params request params
-     * @param data_2 request data
-     * @param [config] request config
-     * @returns success
-     */
-    export async function getApiAbcDef(data:GetApiAbcDefPath,params:GetApiAbcDefParams,data_2:GetApiAbcDefData,config?:AxiosRequestConfig): Promise<AxiosResponse<GetApiAbcDefResponse>> {
-        return axios({
-            method: "GET",
-            url: \`/api/abc/\${data}/def\`,
-    params: params,
-    data: data_2,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zGetApiAbcDefPath = z.string();
+    export const zGetApiAbcDefParams = z.object({
+    "config": z.string(),
+    "path": z.string(),
+    });
+    export const zGetApiAbcDefData = z.object({
+    "name": z.string(),
+    });
+    export const zGetApiAbcDefResponse = z.object({
+    "code": z.optional(z.number()),
+    "data": z.optional(z.object({
+    "name": z.optional(z.string()),
+    })),
+    });"
   `);
 });

@@ -36,34 +36,46 @@ it('ref $id', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideFooters: true,
-      hideImports: true,
-      hideInfo: true,
-      hideAlert: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @description 11
-       */
-      export type AxiosRequestConfig_2 = {
-      /**
-       * @description 22
-       */
-      "aa"?:string;
-      };
-
-      export type T1 = {
-      /**
-       * @description 33
-       */
-      "t0"?:AxiosRequestConfig_2;
-      "t1"?:AxiosRequestConfig_2;
-      };"
-    `);
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name AxiosRequestConfig
+     * @description 11
+     */
+    export type AxiosRequestConfig_2 = {
+    /**
+     * @description 22
+     */
+    "aa"?:string;
+    };
+    /**
+     * @name T1
+     */
+    export type T1 = {
+    /**
+     * @description 33
+     */
+    "t0"?:AxiosRequestConfig_2;
+    "t1"?:AxiosRequestConfig_2;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zAxiosRequestConfig2 = z.object({
+    "aa": z.optional(z.string()),
+    });
+    export const zT1 = z.object({
+    "t0": z.optional(zAxiosRequestConfig2),
+    "t1": z.optional(zAxiosRequestConfig2),
+    });"
+  `);
 });
 
 it('ref $anchor', () => {
@@ -116,17 +128,20 @@ it('ref $anchor', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideFooters: true,
-      hideImports: true,
-      hideInfo: true,
-      hideAlert: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type T0 = {
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name T0
+     */
+    export type T0 = {
     /**
      * @format uuid
      */
@@ -136,17 +151,36 @@ it('ref $anchor', () => {
     "dd"?:number;
     }>;
     };
-
     /**
+     * @name #/components/schemas/T0#aa
      * @format uuid
      */
     export type T0Aa = string;
-
+    /**
+     * @name #/components/schemas/T0#dd
+     */
     export type T0Dd = number;
-
+    /**
+     * @name T1
+     */
     export type T1 = {
     "aa"?:T0Aa;
     "dd"?:T0Dd;
     };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zT0Aa = z.string();
+    export const zT0 = z.object({
+    "aa": z.optional(z.string()),
+    "bb": z.optional(z.array(z.object({
+    "cc": z.optional(zT0Aa),
+    "dd": z.optional(z.number()),
+    }))),
+    });
+    export const zT0Dd = z.number();
+    export const zT1 = z.object({
+    "aa": z.optional(zT0Aa),
+    "dd": z.optional(zT0Dd),
+    });"
   `);
 });

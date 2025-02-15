@@ -53,30 +53,41 @@ it('ref response', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type User = {
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @param [config] request config
+     */
+    export async function postTest(config?:AxiosRequestConfig): Promise<AxiosResponse<Type.PostTestResponse>> {
+    return axios({
+      method: "POST",
+    url: \`/test\`,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name User
+     */
+    export type User = {
     "username"?:string;
     "password"?:string;
     };
-
-    export type PostTestResponse = Array<User>;
-
-    /**
-     * @param [config] request config
-     */
-    export async function postTest(config?:AxiosRequestConfig): Promise<AxiosResponse<PostTestResponse>> {
-        return axios({
-            method: "POST",
-            url: \`/test\`,
-    ...config
-        });
-    }"
+    export type PostTestResponse = Array<User>;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zUser = z.object({
+    "username": z.optional(z.string()),
+    "password": z.optional(z.string()),
+    });
+    export const zPostTestResponse = z.array(zUser);"
   `);
 });

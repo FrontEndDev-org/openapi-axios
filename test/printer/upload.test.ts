@@ -29,40 +29,32 @@ it('upload root', () => {
       },
     },
   });
-
-  const output = printer.print({
-    hideSchemas: true,
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-    hideFooters: true,
-    hideHeaders: true,
-    hideImports: true,
   });
 
-  expect(output).toMatchInlineSnapshot(`
-    "export type UploadData = 
-    /**
-     * @description A file
-     * @format binary
-     */
-    Blob
-    ;
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @description upload
      * @summary upload
      * @param data A file
      * @param [config] request config
      */
-    export async function upload(data:UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/upload\`,
+    export async function upload(data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "POST",
+    url: \`/upload\`,
     data: data,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`"export type UploadData = Blob;"`);
+  expect(result.zod.code).toMatchInlineSnapshot(`"export const zUploadData = z.instanceof(Blob);"`);
 });
 
 it('upload single', () => {
@@ -116,17 +108,33 @@ it('upload single', () => {
       },
     },
   });
-
-  const output = printer.print({
-    hideSchemas: true,
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-    hideFooters: true,
-    hideHeaders: true,
-    hideImports: true,
   });
 
-  expect(output).toMatchInlineSnapshot(`
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
+     * @description upload
+     * @summary upload
+     * @param category request param
+     * @param data request data
+     * @param [config] request config
+     */
+    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "POST",
+    url: \`/upload\`,
+    params: {"category": category},
+    data: data,
+    ...config
+    })
+    }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
     "export type UploadParams = ("a"|"b");
     export type UploadData = {
     /**
@@ -138,24 +146,14 @@ it('upload single', () => {
      * @description A name
      */
     "name"?:string;
-    };
-
-    /**
-     * @description upload
-     * @summary upload
-     * @param category request param
-     * @param data request data
-     * @param [config] request config
-     */
-    export async function upload(category:UploadParams,data:UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/upload\`,
-    params: {"category": category},
-    data: data,
-    ...config
-        });
-    }"
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zUploadParams = z.union([z.literal("a"),z.literal("b")]);
+    export const zUploadData = z.object({
+    "file": z.instanceof(Blob),
+    "name": z.optional(z.string()),
+    });"
   `);
 });
 
@@ -213,47 +211,47 @@ it('upload multiple', () => {
       },
     },
   });
-
-  const output = printer.print({
-    hideSchemas: true,
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-    hideFooters: true,
-    hideHeaders: true,
-    hideImports: true,
   });
 
-  expect(output).toMatchInlineSnapshot(`
-    "export type UploadParams = ("a"|"b");
-    export type UploadData = {
-    "file"?:Array<
-    /**
-     * @description A file
-     * @format binary
-     */
-    Blob
-    >;
-    /**
-     * @description A name
-     */
-    "name"?:string;
-    };
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @description upload
      * @summary upload
      * @param category request param
      * @param data request data
      * @param [config] request config
      */
-    export async function upload(category:UploadParams,data:UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "POST",
-            url: \`/upload\`,
+    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+    return axios({
+      method: "POST",
+    url: \`/upload\`,
     params: {"category": category},
     data: data,
     ...config
-        });
+    })
     }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "export type UploadParams = ("a"|"b");
+    export type UploadData = {
+    "file"?:Array<Blob>;
+    /**
+     * @description A name
+     */
+    "name"?:string;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zUploadParams = z.union([z.literal("a"),z.literal("b")]);
+    export const zUploadData = z.object({
+    "file": z.optional(z.array(z.instanceof(Blob))),
+    "name": z.optional(z.string()),
+    });"
   `);
 });

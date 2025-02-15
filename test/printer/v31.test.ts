@@ -42,37 +42,51 @@ it('v3.1 schema', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-      "/**
-       * @summary Category Title
-       * @description Category Description
-       */
-      export type Category = {
-      /**
-       * @format int64
-       * @example 1
-       */
-      "id"?:number;
-      /**
-       * @example Dogs
-       */
-      "name"?:string;
-      };
-
-      export type Pet = {
-      /**
-       * @format int64
-       */
-      "id"?:number;
-      "category"?:Category;
-      };"
-    `);
+  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Category
+     * @summary Category Title
+     * @description Category Description
+     */
+    export type Category = {
+    /**
+     * @format int64
+     * @example 1
+     */
+    "id"?:number;
+    /**
+     * @example Dogs
+     */
+    "name"?:string;
+    };
+    /**
+     * @name Pet
+     */
+    export type Pet = {
+    /**
+     * @format int64
+     */
+    "id"?:number;
+    "category"?:Category;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zCategory = z.object({
+    "id": z.optional(z.number()),
+    "name": z.optional(z.string()),
+    });
+    export const zPet = z.object({
+    "id": z.optional(z.number()),
+    "category": z.optional(zCategory),
+    });"
+  `);
 });

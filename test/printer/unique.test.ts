@@ -38,32 +38,41 @@ it('unique vars', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type TestAa = {
-    "name"?:string;
-    };
-
-    export type GetTestResponse = TestAa;
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<GetTestResponse>> {
-        return axios({
-            method: "GET",
-            url: \`/test\`,
+    export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetTestResponse>> {
+    return axios({
+      method: "GET",
+    url: \`/test\`,
     ...config
-        });
+    })
     }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name Test_aa_
+     */
+    export type TestAa = {
+    "name"?:string;
+    };
+    export type GetTestResponse = TestAa;"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zTestAa = z.object({
+    "name": z.optional(z.string()),
+    });
+    export const zGetTestResponse = zTestAa;"
   `);
 });
 
@@ -137,43 +146,62 @@ it('unique types', () => {
       },
     },
   });
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
 
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
-    "export type AxiosResponse_2 = {
-    "name"?:string;
-    };
-
-    export type UnknownObject = {
-    "name"?:number;
-    };
-
-    export type GetTestPath = string;
-    export type GetTestParams = UnknownObject;
-    export type GetTestResponse = {
-    "AxiosResponse"?:AxiosResponse_2;
-    "UnknownObject"?:UnknownObject;
-    };
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param axios_2 request path "axios"
      * @param [unknownObject] request params "UnknownObject"
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(axios_2:GetTestPath,unknownObject?:GetTestParams,config?:AxiosRequestConfig): Promise<AxiosResponse<GetTestResponse>> {
-        return axios({
-            method: "GET",
-            url: \`/test/\${axios_2}\`,
+    export async function getTest(axios_2:Type.GetTestPath,unknownObject?:Type.GetTestParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetTestResponse>> {
+    return axios({
+      method: "GET",
+    url: \`/test/\${axios_2}\`,
     params: {"UnknownObject": unknownObject},
     ...config
-        });
+    })
     }"
+  `);
+  expect(result.type.code).toMatchInlineSnapshot(`
+    "/**
+     * @name AxiosResponse
+     */
+    export type AxiosResponse_2 = {
+    "name"?:string;
+    };
+    /**
+     * @name UnknownObject
+     */
+    export type UnknownObject = {
+    "name"?:number;
+    };
+    export type GetTestPath = string;
+    export type GetTestParams = UnknownObject;
+    export type GetTestResponse = {
+    "AxiosResponse"?:AxiosResponse_2;
+    "UnknownObject"?:UnknownObject;
+    };"
+  `);
+  expect(result.zod.code).toMatchInlineSnapshot(`
+    "export const zAxiosResponse2 = z.object({
+    "name": z.optional(z.string()),
+    });
+    export const zUnknownObject = z.object({
+    "name": z.optional(z.number()),
+    });
+    export const zGetTestPath = z.string();
+    export const zGetTestParams = zUnknownObject;
+    export const zGetTestResponse = z.object({
+    "AxiosResponse": z.optional(zAxiosResponse2),
+    "UnknownObject": z.optional(zUnknownObject),
+    });"
   `);
 });

@@ -26,23 +26,26 @@ it('ref path', () => {
       },
     },
   });
-  expect(
-    printer.print({
-      hideHeaders: true,
-      hideInfo: true,
-      hideAlert: true,
-      hideImports: true,
-    }),
-  ).toMatchInlineSnapshot(`
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
+    hideInfo: true,
+    hideAlert: true,
+  });
+
+  expect(result.main.code).toMatchInlineSnapshot(`
     "/**
      * @param [config] request config
      */
     export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/test\`,
+    return axios({
+      method: "GET",
+    url: \`/test\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });

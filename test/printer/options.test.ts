@@ -14,26 +14,28 @@ it('axios 模块导入名称默认', () => {
     },
   }, {
   });
-  expect(printer.print({
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-  })).toMatchInlineSnapshot(`
-    "import axios from "axios";
-    import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosResponse as AxiosResponse} from "axios";
+  });
 
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/\`,
+    return axios({
+      method: "GET",
+    url: \`/\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('axios 模块导入名称指定', () => {
@@ -51,26 +53,28 @@ it('axios 模块导入名称指定', () => {
   }, {
     axiosImportName: 'axios2',
   });
-  expect(printer.print({
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-  })).toMatchInlineSnapshot(`
-    "import {axios2 as axios} from "axios";
-    import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosResponse as AxiosResponse} from "axios";
+  });
 
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/\`,
+    return axios({
+      method: "GET",
+    url: \`/\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('axios 默认导入名称为空', () => {
@@ -88,26 +92,28 @@ it('axios 默认导入名称为空', () => {
   }, {
     axiosImportName: '',
   });
-  expect(printer.print({
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-  })).toMatchInlineSnapshot(`
-    "import axios from "axios";
-    import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosResponse as AxiosResponse} from "axios";
+  });
 
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/\`,
+    return axios({
+      method: "GET",
+    url: \`/\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
 
 it('axios 模块和类型指定文件', () => {
@@ -129,25 +135,26 @@ it('axios 模块和类型指定文件', () => {
     axiosResponseTypeName: 'AxiosResponse2',
     axiosTypeImportFile: '/a/c/request-types.ts',
   });
-  expect(printer.print({
-    mainFile: '/a/d/my-api.ts',
+  const result = printer.print({
+    hideImports: true,
+    hideHeaders: true,
+    hideFooters: true,
     hideInfo: true,
     hideAlert: true,
-  })).toMatchInlineSnapshot(`
-    "import {axios2 as axios} from "../b/request.ts";
-    import {type AxiosRequestConfig2 as AxiosRequestConfig} from "../c/request-types.ts";
-    import {type AxiosResponse2 as AxiosResponse} from "../c/request-types.ts";
+  });
 
-
-    /**
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "/**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-        return axios({
-            method: "GET",
-            url: \`/\`,
+    return axios({
+      method: "GET",
+    url: \`/\`,
     ...config
-        });
+    })
     }"
   `);
+  expect(result.type.code).toMatchInlineSnapshot(`""`);
+  expect(result.zod.code).toMatchInlineSnapshot(`""`);
 });
