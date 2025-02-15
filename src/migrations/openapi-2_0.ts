@@ -132,10 +132,10 @@ function migGeneralParameter(parameter: OpenAPIV2.GeneralParameterObject | OpenA
   }
 
   const { $ref, in: in_, name, required, description, ...schema } = parameter;
-  const inQuery = in_ === 'query';
+  const inV3 = in_ === 'cookie' || in_ === 'header' || in_ === 'path' ? in_ : 'query';
+  const inQuery = inV3 === 'query';
   const style = inQuery ? collectionFormatMap[parameter.collectionFormat || 'csv'] : undefined;
   const explode = inQuery ? explodeMap[parameter.collectionFormat || 'csv'] : undefined;
-  const inV3 = in_ === 'cookie' || in_ === 'header' || in_ === 'path' ? in_ : 'query';
 
   return {
     in: inV3,
@@ -150,15 +150,8 @@ function migGeneralParameter(parameter: OpenAPIV2.GeneralParameterObject | OpenA
 
 function makeRequestBody(bodySchema: BodySchema[], medias: string[]): OpenAPIV3.RequestBodyObject {
   let requestBodySchema: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject | undefined;
-  const bodyRequest = bodySchema.find(({ parameter }) => parameter.in === 'body');
-  const requestBodyRest = {};
 
-  if (bodyRequest) {
-    requestBodySchema = bodyRequest.schema;
-    const { required, description } = bodyRequest.parameter;
-    Object.assign(requestBodyRest, { required, description });
-  }
-  else if (bodySchema.length > 0) {
+  if (bodySchema.length > 0) {
     requestBodySchema = {
       type: 'object',
       properties: bodySchema.reduce(
@@ -178,7 +171,6 @@ function makeRequestBody(bodySchema: BodySchema[], medias: string[]): OpenAPIV3.
   }
 
   return {
-    ...requestBodyRest,
     content: requestBodySchema
       ? medias.reduce(
           (content, media) => {
@@ -196,13 +188,13 @@ interface BodySchema {
   parameter: OpenAPIV2.Parameter;
   schema: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject;
 }
-function migOperation(operation: OpenAPIV2.OperationObject): OpenAPIV3.OperationObject {
+function migOperation(operation: OpenAPIV2.OperationObject, migBody = false): OpenAPIV3.OperationObject {
   const { parameters, responses, consumes, produces, ...rest } = operation;
   const generalParameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[] = [];
   const inBodySchemas: BodySchema[] = [];
 
   parameters?.forEach((parameter) => {
-    if ('in' in parameter && bodyIns.includes(parameter.in)) {
+    if (migBody && 'in' in parameter && bodyIns.includes(parameter.in)) {
       const schema = extractParameterSchema(parameter);
       inBodySchemas.push({
         parameter,
@@ -233,12 +225,12 @@ function migPathItem(pathItem: OpenAPIV2.PathItemObject | undefined): OpenAPIV3.
     // 忽略
     // parameters: parameters && parameters.map(migParameter),
     get: get && migOperation(get),
-    delete: delete_ && migOperation(delete_),
+    delete: delete_ && migOperation(delete_, true),
     head: head && migOperation(head),
     options: options && migOperation(options),
-    patch: patch && migOperation(patch),
-    post: post && migOperation(post),
-    put: put && migOperation(put),
+    patch: patch && migOperation(patch, true),
+    post: post && migOperation(post, true),
+    put: put && migOperation(put, true),
   };
 }
 
