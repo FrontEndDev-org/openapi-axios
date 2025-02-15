@@ -1,3 +1,4 @@
+import type { PrinterConfigs, PrintResults } from '../src';
 import type { OpenAPILatest } from '../src/types/openapi';
 import * as crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -29,13 +30,23 @@ export function createTempDirname() {
   ] as const;
 }
 
-export function exampleTest(version: string, name: string, test: (document: OpenAPILatest.Document) => string) {
+export function exampleTest(version: string, name: string, test: (document: OpenAPILatest.Document, configs: PrinterConfigs) => PrintResults) {
   const src = path.join(__dirname, 'example-json', version, `${name}.json`);
-  const dest = path.join(__dirname, 'example-dest', version, `${name}.ts`);
+  const dir = path.join(__dirname, 'example-dest', version);
   const document = fs.readFileSync(src, 'utf8');
-  const output = test(JSON.parse(document));
-  const dir = path.dirname(dest);
+
+  const mainFile = path.join(dir, `${name}.ts`);
+  const typeFile = path.join(dir, `${name}.type.ts`);
+  const zodFile = path.join(dir, `${name}.zod.ts`);
+
+  const { main, type, zod } = test(JSON.parse(document), {
+    mainFile,
+    typeFile,
+    zodFile,
+  });
 
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(dest, output);
+  fs.writeFileSync(mainFile, main.code);
+  fs.writeFileSync(typeFile, type.code);
+  fs.writeFileSync(zodFile, zod.code);
 }
