@@ -15,15 +15,17 @@ export class Reader {
     const source = await this._read(document);
     const config = await createConfig({});
     const { problems, bundle } = await bundleFromString({ config, source });
+    const errors: string[] = [];
 
     if (problems.length) {
-      console.warn(`[parse] 发现了 ${problems.length} 处错误，请检查文档，可能会出现非预期错误`);
       problems.forEach((p) => {
-        console.warn(p.message);
+        errors.push(p.message);
       });
     }
 
-    return migrate(bundle.parsed);
+    const migrated = migrate(bundle.parsed);
+    migrated[0].errors.push(...errors);
+    return migrated;
   }
 
   private async _read(document: AcceptDocument): Promise<string> {

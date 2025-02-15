@@ -132,6 +132,11 @@ export interface PrinterOptions {
    * 是否需要在运行时验证接口的出入参
    */
   runtimeValidate?: boolean;
+
+  /**
+   * 是否生成 schema
+   */
+  writeSchema?: boolean;
 }
 
 export interface PrinterConfigs {

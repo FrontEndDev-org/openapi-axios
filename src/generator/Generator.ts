@@ -1,4 +1,5 @@
 import type { PrintResult } from '../printer/types';
+import type { OpenAPILatest } from '../types/openapi';
 import type {
   GeneratingOptions,
   GeneratingPayload,
@@ -15,6 +16,7 @@ import process from 'node:process';
 import { Emitter } from 'strict-event-emitter';
 import { normalizeError } from 'try-flatten';
 import { Printer } from '../printer';
+import { OpenAPIVersion } from '../types/openapi';
 import { isString } from '../utils/type-is';
 import { Reader } from './Reader';
 
@@ -60,6 +62,11 @@ export class Generator extends Emitter<GeneratorEmits> {
     const mainFile = path.join(cwd, dest, fileName);
     const typeFile = mainFile.replace(/\.ts$/, '.type.ts');
     const zodFile = mainFile.replace(/\.ts$/, '.zod.ts');
+    const schemaFiles: Record<OpenAPIVersion, string> = {
+      [OpenAPIVersion.V2_0]: mainFile.replace(/\.ts$/, '.v2_0.json'),
+      [OpenAPIVersion.V3_0]: mainFile.replace(/\.ts$/, '.v3_0.json'),
+      [OpenAPIVersion.V3_1]: mainFile.replace(/\.ts$/, '.v3_1.json'),
+    };
 
     // 1. 参数合并
     const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
@@ -82,11 +89,11 @@ export class Generator extends Emitter<GeneratorEmits> {
     this.emit('process', makePayload('reading'));
     const reader = new Reader();
     reader.cwd = cwd;
-    const openAPIV3Document = await reader.read(document);
+    const migrated = await reader.read(document);
 
     // 3. 输出
     this.emit('process', makePayload('printing'));
-    const printer = new Printer(openAPIV3Document, printerOptions);
+    const printer = new Printer(migrated.at(-1)!.document! as OpenAPILatest.Document, printerOptions);
     const { type, main, zod } = printer.print({ document: name, cwd, mainFile, typeFile, zodFile });
 
     // 4. 写入
@@ -98,6 +105,15 @@ export class Generator extends Emitter<GeneratorEmits> {
 
     if (printerOptions.runtimeValidate) {
       this.#writePrintResult('zod', zodFile, zod);
+    }
+
+    if (printerOptions.writeSchema) {
+      migrated.forEach(({ version, document, errors }) => {
+        this.#writePrintResult(`schema@${version}`, schemaFiles[version], {
+          code: JSON.stringify(document, null, 2),
+          errors,
+        });
+      });
     }
 
     this.emit('process', makePayload('generated'));
