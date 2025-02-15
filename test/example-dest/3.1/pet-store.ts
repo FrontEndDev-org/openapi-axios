@@ -20,94 +20,8 @@
 import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import {type AxiosResponse as AxiosResponse} from "axios";
-
-
-/**
- * @description Category
- */
-export type Category = {
-/**
- * @format int64
- * @example 1
- */
-"id"?:number;
-/**
- * @example Dogs
- */
-"name"?:string;
-};
-
-/**
- * @description Pet
- */
-export type Pet = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @description Pet Category
- */
-"category"?:Category;
-/**
- * @example doggie
- */
-"name":string;
-"photoUrls":Array<string>;
-"tags"?:Array<Tag>;
-/**
- * @description pet status in the store
- */
-"status"?:("available"|"pending"|"sold");
-/**
- * @format int32
- * @example 7
- */
-"availableInstances"?:number;
-"petDetailsId"?:PetDetailsPetDetailsId;
-"petDetails"?:PetDetails;
-};
-
-export type PetDetails = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @description PetDetails Category
- */
-"category"?:Category;
-"tag"?:Tag;
-};
-
-/**
- * @format int64
- * @example 10
- */
-export type PetDetailsPetDetailsId = number;
-
-export type Tag = {
-/**
- * @format int64
- */
-"id"?:number;
-"name"?:string;
-};
-
-export type UpdatePetData = 
-/**
- * @description A Pet in JSON Format
- */
-Pet
-;
-export type UpdatePetResponse = 
-/**
- * @description A Pet in XML Format
- */
-Pet
-;
+import type * as Type from "./pet-store.type.ts";
+import {zUpdatePetData,zUpdatePetResponse,zAddPetData,zAddPetResponse,zGetPetByIdPath} from "./pet-store.zod.ts";
 
 /**
  * @description Update an existing pet by Id
@@ -117,28 +31,23 @@ Pet
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): Promise<AxiosResponse<UpdatePetResponse>> {
-    return axios({
-        method: "PUT",
-        url: `/pet`,
+export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.UpdatePetResponse>> {
+zUpdatePetData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zUpdatePetResponse.parse(data),
+],
+};
+return axios({
+  method: "PUT",
+url: `/pet`,
 data: data,
 ...config
-    });
+})
 }
-
-export type AddPetData = 
-/**
- * @description A Pet in JSON Format
- */
-Pet
-;
-export type AddPetResponse = 
-/**
- * @description A Pet in XML Format
- */
-Pet
-;
-
 /**
  * @description Add a new pet to the store
  * @summary Add a new pet to the store
@@ -147,33 +56,42 @@ Pet
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:AddPetData,config?:AxiosRequestConfig): Promise<AxiosResponse<AddPetResponse>> {
-    return axios({
-        method: "POST",
-        url: `/pet`,
+export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.AddPetResponse>> {
+zAddPetData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zAddPetResponse.parse(data),
+],
+};
+return axios({
+  method: "POST",
+url: `/pet`,
 data: data,
 ...config
-    });
+})
 }
-
-export type GetPetByIdPath = 
-/**
- * @description param ID of pet that needs to be fetched
- * @format int64
- */
-number
-;
-
 /**
  * @description Returns a pet when 0 < ID <= 10.  ID > 10 or nonintegers will simulate API error conditions
  * @summary Find pet by ID
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "GET",
-        url: `/pet/${petId}`,
+export async function getPetById(petId:Type.GetPetByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zGetPetByIdPath.parse(petId)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "GET",
+url: `/pet/${petId}`,
 ...config
-    });
+})
 }

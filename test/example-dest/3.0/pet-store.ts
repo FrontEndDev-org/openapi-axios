@@ -23,156 +23,8 @@
 import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import {type AxiosResponse as AxiosResponse} from "axios";
-
-
-export type Order = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @format int64
- * @example 198772
- */
-"petId"?:number;
-/**
- * @format int32
- * @example 7
- */
-"quantity"?:number;
-/**
- * @format date-time
- */
-"shipDate"?:string;
-/**
- * @description Order Status
- * @example approved
- */
-"status"?:("placed"|"approved"|"delivered");
-"complete"?:boolean;
-};
-
-export type Customer = {
-/**
- * @format int64
- * @example 100000
- */
-"id"?:number;
-/**
- * @example fehguy
- */
-"username"?:string;
-"address"?:Array<Address>;
-};
-
-export type Address = {
-/**
- * @example 437 Lytton
- */
-"street"?:string;
-/**
- * @example Palo Alto
- */
-"city"?:string;
-/**
- * @example CA
- */
-"state"?:string;
-/**
- * @example 94301
- */
-"zip"?:string;
-};
-
-export type Category = {
-/**
- * @format int64
- * @example 1
- */
-"id"?:number;
-/**
- * @example Dogs
- */
-"name"?:string;
-};
-
-export type User = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @example theUser
- */
-"username"?:string;
-/**
- * @example John
- */
-"firstName"?:string;
-/**
- * @example James
- */
-"lastName"?:string;
-/**
- * @example john@email.com
- */
-"email"?:string;
-/**
- * @example 12345
- */
-"password"?:string;
-/**
- * @example 12345
- */
-"phone"?:string;
-/**
- * @description User Status
- * @format int32
- * @example 1
- */
-"userStatus"?:number;
-};
-
-export type Tag = {
-/**
- * @format int64
- */
-"id"?:number;
-"name"?:string;
-};
-
-export type Pet = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @example doggie
- */
-"name":string;
-"category"?:Category;
-"photoUrls":Array<string>;
-"tags"?:Array<Tag>;
-/**
- * @description pet status in the store
- */
-"status"?:("available"|"pending"|"sold");
-};
-
-export type ApiResponse = {
-/**
- * @format int32
- */
-"code"?:number;
-"type"?:string;
-"message"?:string;
-};
-
-export type AddPetData = Pet;
-export type AddPetResponse = Pet;
+import type * as Type from "./pet-store.type.ts";
+import {zAddPetData,zAddPetResponse,zUpdatePetData,zUpdatePetResponse,zFindPetsByStatusParams,zFindPetsByStatusResponse,zFindPetsByTagsParams,zFindPetsByTagsResponse,zGetPetByIdPath,zGetPetByIdResponse,zUpdatePetWithFormPath,zUpdatePetWithFormParams,zDeletePetPath,zDeletePetHeaders,zUploadFilePath,zUploadFileData,zUploadFileParams,zUploadFileResponse,zGetInventoryResponse,zPlaceOrderData,zPlaceOrderResponse,zGetOrderByIdPath,zGetOrderByIdResponse,zDeleteOrderPath,zCreateUserData,zCreateUsersWithListInputData,zCreateUsersWithListInputResponse,zLoginUserParams,zLoginUserResponse,zGetUserByNamePath,zGetUserByNameResponse,zDeleteUserPath,zUpdateUserPath,zUpdateUserData} from "./pet-store.zod.ts";
 
 /**
  * @description Add a new pet to the store
@@ -182,18 +34,23 @@ export type AddPetResponse = Pet;
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:AddPetData,config?:AxiosRequestConfig): Promise<AxiosResponse<AddPetResponse>> {
-    return axios({
-        method: "POST",
-        url: `/pet`,
+export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.AddPetResponse>> {
+zAddPetData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zAddPetResponse.parse(data),
+],
+};
+return axios({
+  method: "POST",
+url: `/pet`,
 data: data,
 ...config
-    });
+})
 }
-
-export type UpdatePetData = Pet;
-export type UpdatePetResponse = Pet;
-
 /**
  * @description Update an existing pet by Id
  * @summary Update an existing pet
@@ -202,23 +59,23 @@ export type UpdatePetResponse = Pet;
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:UpdatePetData,config?:AxiosRequestConfig): Promise<AxiosResponse<UpdatePetResponse>> {
-    return axios({
-        method: "PUT",
-        url: `/pet`,
+export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.UpdatePetResponse>> {
+zUpdatePetData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zUpdatePetResponse.parse(data),
+],
+};
+return axios({
+  method: "PUT",
+url: `/pet`,
 data: data,
 ...config
-    });
+})
 }
-
-export type FindPetsByStatusParams = 
-/**
- * @default available
- */
-("available"|"pending"|"sold")
-;
-export type FindPetsByStatusResponse = Array<Pet>;
-
 /**
  * @description Multiple status values can be provided with comma separated strings
  * @summary Finds Pets by status
@@ -227,18 +84,23 @@ export type FindPetsByStatusResponse = Array<Pet>;
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByStatus(status?:FindPetsByStatusParams,config?:AxiosRequestConfig): Promise<AxiosResponse<FindPetsByStatusResponse>> {
-    return axios({
-        method: "GET",
-        url: `/pet/findByStatus`,
+export async function findPetsByStatus(status?:Type.FindPetsByStatusParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.FindPetsByStatusResponse>> {
+zFindPetsByStatusParams.parse(status)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zFindPetsByStatusResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/pet/findByStatus`,
 params: {"status": status},
 ...config
-    });
+})
 }
-
-export type FindPetsByTagsParams = Array<string>;
-export type FindPetsByTagsResponse = Array<Pet>;
-
 /**
  * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
  * @summary Finds Pets by tags
@@ -247,23 +109,23 @@ export type FindPetsByTagsResponse = Array<Pet>;
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags?:FindPetsByTagsParams,config?:AxiosRequestConfig): Promise<AxiosResponse<FindPetsByTagsResponse>> {
-    return axios({
-        method: "GET",
-        url: `/pet/findByTags`,
+export async function findPetsByTags(tags?:Type.FindPetsByTagsParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.FindPetsByTagsResponse>> {
+zFindPetsByTagsParams.parse(tags)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zFindPetsByTagsResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/pet/findByTags`,
 params: {"tags": tags},
 ...config
-    });
+})
 }
-
-export type GetPetByIdPath = 
-/**
- * @format int64
- */
-number
-;
-export type GetPetByIdResponse = Pet;
-
 /**
  * @description Returns a single pet
  * @summary Find pet by ID
@@ -272,31 +134,22 @@ export type GetPetByIdResponse = Pet;
  * @param [config] request config
  * @returns successful operation
  */
-export async function getPetById(petId:GetPetByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<GetPetByIdResponse>> {
-    return axios({
-        method: "GET",
-        url: `/pet/${petId}`,
-...config
-    });
-}
-
-export type UpdatePetWithFormPath = 
-/**
- * @format int64
- */
-number
-;
-export type UpdatePetWithFormParams = {
-/**
- * @description Name of pet that needs to be updated
- */
-"name"?:string;
-/**
- * @description Status of pet that needs to be updated
- */
-"status"?:string;
+export async function getPetById(petId:Type.GetPetByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetPetByIdResponse>> {
+zGetPetByIdPath.parse(petId)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zGetPetByIdResponse.parse(data),
+],
 };
-
+return axios({
+  method: "GET",
+url: `/pet/${petId}`,
+...config
+})
+}
 /**
  * @description 
  * @summary Updates a pet in the store with form data
@@ -305,23 +158,24 @@ export type UpdatePetWithFormParams = {
  * @param [params] request params
  * @param [config] request config
  */
-export async function updatePetWithForm(petId:UpdatePetWithFormPath,params?:UpdatePetWithFormParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "POST",
-        url: `/pet/${petId}`,
+export async function updatePetWithForm(petId:Type.UpdatePetWithFormPath,params?:Type.UpdatePetWithFormParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zUpdatePetWithFormPath.parse(petId)
+zUpdatePetWithFormParams.parse(params)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "POST",
+url: `/pet/${petId}`,
 params: params,
 ...config
-    });
+})
 }
-
-export type DeletePetPath = 
-/**
- * @format int64
- */
-number
-;
-export type DeletePetHeaders = string;
-
 /**
  * @description 
  * @summary Deletes a pet
@@ -330,30 +184,24 @@ export type DeletePetHeaders = string;
  * @param [apiKey] request headers "api_key"
  * @param [config] request config
  */
-export async function deletePet(petId:DeletePetPath,apiKey?:DeletePetHeaders,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "DELETE",
-        url: `/pet/${petId}`,
+export async function deletePet(petId:Type.DeletePetPath,apiKey?:Type.DeletePetHeaders,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zDeletePetPath.parse(petId)
+zDeletePetHeaders.parse(apiKey)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "DELETE",
+url: `/pet/${petId}`,
 headers: {"api_key": apiKey},
 ...config
-    });
+})
 }
-
-export type UploadFilePath = 
-/**
- * @format int64
- */
-number
-;
-export type UploadFileData = 
-/**
- * @format binary
- */
-Blob
-;
-export type UploadFileParams = string;
-export type UploadFileResponse = ApiResponse;
-
 /**
  * @description 
  * @summary uploads an image
@@ -364,23 +212,26 @@ export type UploadFileResponse = ApiResponse;
  * @param [config] request config
  * @returns successful operation
  */
-export async function uploadFile(petId:UploadFilePath,data:UploadFileData,additionalMetadata?:UploadFileParams,config?:AxiosRequestConfig): Promise<AxiosResponse<UploadFileResponse>> {
-    return axios({
-        method: "POST",
-        url: `/pet/${petId}/uploadImage`,
+export async function uploadFile(petId:Type.UploadFilePath,data:Type.UploadFileData,additionalMetadata?:Type.UploadFileParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.UploadFileResponse>> {
+zUploadFilePath.parse(petId)
+zUploadFileData.parse(data)
+zUploadFileParams.parse(additionalMetadata)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zUploadFileResponse.parse(data),
+],
+};
+return axios({
+  method: "POST",
+url: `/pet/${petId}/uploadImage`,
 data: data,
 params: {"additionalMetadata": additionalMetadata},
 ...config
-    });
+})
 }
-
-export type GetInventoryResponse = {
-/**
- * @format int32
- */
-[key: string]:number;
-};
-
 /**
  * @description Returns a map of status codes to quantities
  * @summary Returns pet inventories by status
@@ -388,17 +239,21 @@ export type GetInventoryResponse = {
  * @param [config] request config
  * @returns successful operation
  */
-export async function getInventory(config?:AxiosRequestConfig): Promise<AxiosResponse<GetInventoryResponse>> {
-    return axios({
-        method: "GET",
-        url: `/store/inventory`,
+export async function getInventory(config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetInventoryResponse>> {
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zGetInventoryResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/store/inventory`,
 ...config
-    });
+})
 }
-
-export type PlaceOrderData = Order;
-export type PlaceOrderResponse = Order;
-
 /**
  * @description Place a new order in the store
  * @summary Place an order for a pet
@@ -407,23 +262,23 @@ export type PlaceOrderResponse = Order;
  * @param [config] request config
  * @returns successful operation
  */
-export async function placeOrder(data:PlaceOrderData,config?:AxiosRequestConfig): Promise<AxiosResponse<PlaceOrderResponse>> {
-    return axios({
-        method: "POST",
-        url: `/store/order`,
+export async function placeOrder(data:Type.PlaceOrderData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.PlaceOrderResponse>> {
+zPlaceOrderData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zPlaceOrderResponse.parse(data),
+],
+};
+return axios({
+  method: "POST",
+url: `/store/order`,
 data: data,
 ...config
-    });
+})
 }
-
-export type GetOrderByIdPath = 
-/**
- * @format int64
- */
-number
-;
-export type GetOrderByIdResponse = Order;
-
 /**
  * @description For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
  * @summary Find purchase order by ID
@@ -432,21 +287,22 @@ export type GetOrderByIdResponse = Order;
  * @param [config] request config
  * @returns successful operation
  */
-export async function getOrderById(orderId:GetOrderByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<GetOrderByIdResponse>> {
-    return axios({
-        method: "GET",
-        url: `/store/order/${orderId}`,
+export async function getOrderById(orderId:Type.GetOrderByIdPath,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetOrderByIdResponse>> {
+zGetOrderByIdPath.parse(orderId)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zGetOrderByIdResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/store/order/${orderId}`,
 ...config
-    });
+})
 }
-
-export type DeleteOrderPath = 
-/**
- * @format int64
- */
-number
-;
-
 /**
  * @description For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
  * @summary Delete purchase order by ID
@@ -454,16 +310,22 @@ number
  * @param orderId ID of the order that needs to be deleted
  * @param [config] request config
  */
-export async function deleteOrder(orderId:DeleteOrderPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "DELETE",
-        url: `/store/order/${orderId}`,
+export async function deleteOrder(orderId:Type.DeleteOrderPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zDeleteOrderPath.parse(orderId)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "DELETE",
+url: `/store/order/${orderId}`,
 ...config
-    });
+})
 }
-
-export type CreateUserData = User;
-
 /**
  * @description This can only be done by the logged in user.
  * @summary Create user
@@ -471,18 +333,23 @@ export type CreateUserData = User;
  * @param data Created user object
  * @param [config] request config
  */
-export async function createUser(data:CreateUserData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "POST",
-        url: `/user`,
+export async function createUser(data:Type.CreateUserData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zCreateUserData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "POST",
+url: `/user`,
 data: data,
 ...config
-    });
+})
 }
-
-export type CreateUsersWithListInputData = Array<User>;
-export type CreateUsersWithListInputResponse = User;
-
 /**
  * @description Creates list of users with given input array
  * @summary Creates list of users with given input array
@@ -491,27 +358,23 @@ export type CreateUsersWithListInputResponse = User;
  * @param [config] request config
  * @returns Successful operation
  */
-export async function createUsersWithListInput(data:CreateUsersWithListInputData,config?:AxiosRequestConfig): Promise<AxiosResponse<CreateUsersWithListInputResponse>> {
-    return axios({
-        method: "POST",
-        url: `/user/createWithList`,
+export async function createUsersWithListInput(data:Type.CreateUsersWithListInputData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.CreateUsersWithListInputResponse>> {
+zCreateUsersWithListInputData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zCreateUsersWithListInputResponse.parse(data),
+],
+};
+return axios({
+  method: "POST",
+url: `/user/createWithList`,
 data: data,
 ...config
-    });
+})
 }
-
-export type LoginUserParams = {
-/**
- * @description The user name for login
- */
-"username"?:string;
-/**
- * @description The password for login in clear text
- */
-"password"?:string;
-};
-export type LoginUserResponse = string;
-
 /**
  * @description 
  * @summary Logs user into the system
@@ -520,15 +383,23 @@ export type LoginUserResponse = string;
  * @param [config] request config
  * @returns successful operation
  */
-export async function loginUser(params?:LoginUserParams,config?:AxiosRequestConfig): Promise<AxiosResponse<LoginUserResponse>> {
-    return axios({
-        method: "GET",
-        url: `/user/login`,
+export async function loginUser(params?:Type.LoginUserParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.LoginUserResponse>> {
+zLoginUserParams.parse(params)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zLoginUserResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/user/login`,
 params: params,
 ...config
-    });
+})
 }
-
 /**
  * @description 
  * @summary Logs out current logged in user session
@@ -536,16 +407,20 @@ params: params,
  * @param [config] request config
  */
 export async function logoutUser(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "GET",
-        url: `/user/logout`,
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "GET",
+url: `/user/logout`,
 ...config
-    });
+})
 }
-
-export type GetUserByNamePath = string;
-export type GetUserByNameResponse = User;
-
 /**
  * @description 
  * @summary Get user by user name
@@ -554,16 +429,22 @@ export type GetUserByNameResponse = User;
  * @param [config] request config
  * @returns successful operation
  */
-export async function getUserByName(username:GetUserByNamePath,config?:AxiosRequestConfig): Promise<AxiosResponse<GetUserByNameResponse>> {
-    return axios({
-        method: "GET",
-        url: `/user/${username}`,
+export async function getUserByName(username:Type.GetUserByNamePath,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetUserByNameResponse>> {
+zGetUserByNamePath.parse(username)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => zGetUserByNameResponse.parse(data),
+],
+};
+return axios({
+  method: "GET",
+url: `/user/${username}`,
 ...config
-    });
+})
 }
-
-export type DeleteUserPath = string;
-
 /**
  * @description This can only be done by the logged in user.
  * @summary Delete user
@@ -571,17 +452,22 @@ export type DeleteUserPath = string;
  * @param username The name that needs to be deleted
  * @param [config] request config
  */
-export async function deleteUser(username:DeleteUserPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "DELETE",
-        url: `/user/${username}`,
+export async function deleteUser(username:Type.DeleteUserPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zDeleteUserPath.parse(username)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "DELETE",
+url: `/user/${username}`,
 ...config
-    });
+})
 }
-
-export type UpdateUserPath = string;
-export type UpdateUserData = User;
-
 /**
  * @description This can only be done by the logged in user.
  * @summary Update user
@@ -590,11 +476,21 @@ export type UpdateUserData = User;
  * @param data Update an existent user in the store
  * @param [config] request config
  */
-export async function updateUser(username:UpdateUserPath,data:UpdateUserData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
-        method: "PUT",
-        url: `/user/${username}`,
+export async function updateUser(username:Type.UpdateUserPath,data:Type.UpdateUserData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
+zUpdateUserPath.parse(username)
+zUpdateUserData.parse(data)
+const transformResponse = config?.transformResponse;
+config = {
+...config,
+transformResponse: [
+...Array.isArray(transformResponse) ? transformResponse : (transformResponse ? [transformResponse] : []),
+data => data,
+],
+};
+return axios({
+  method: "PUT",
+url: `/user/${username}`,
 data: data,
 ...config
-    });
+})
 }
