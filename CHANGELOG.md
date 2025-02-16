@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.32.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.31.0...v0.32.0) (2025-02-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **printer:** 自定义 AxiosResponse 不需要使用 Promise 包装
+
+### Features
+
+* **generator:** 为 OpenAPIOptions 类型添加 fileName 属性 ([d65822b](https://github.com/FrontEndDev-org/openapi-axios/commit/d65822b78e7cc7312a4dfeb36077fd8e03221c83))
+* **generator:** 按类型分离产出文件 ([d8136fa](https://github.com/FrontEndDev-org/openapi-axios/commit/d8136fa4b71224ca153a413e563a6d04c1c321bd))
+* **generator:** 添加 OpenAPI schema 生成功能 ([d7660cb](https://github.com/FrontEndDev-org/openapi-axios/commit/d7660cb6aceeb86b4b25bf454fb2dcc6045fe424))
+* **printer:** 为 OpenAPI 模式生成 Zod 代码 ([550aa7c](https://github.com/FrontEndDev-org/openapi-axios/commit/550aa7c40191a13939872ab20e2880460bf20b6e))
+* **printer:** 为字符串类型添加格式约束评论 ([62ec3ca](https://github.com/FrontEndDev-org/openapi-axios/commit/62ec3caf12e76aef1150e4c760eab48da1d2c14a))
+* **printer:** 提前组件锚点类型 ([2aa376d](https://github.com/FrontEndDev-org/openapi-axios/commit/2aa376d0d44491035d1667a2b9b1fa3bc8901fe0))
+* 提取 operation 出入参类型 ([a37bf06](https://github.com/FrontEndDev-org/openapi-axios/commit/a37bf062d1b66a34190b65289b664716f6bcc310))
+
+
+### Bug Fixes
+
+* **migrations:** 修复 OpenAPI 2.0 迁移到 3.0 时 body 参数的处理 ([b8374e2](https://github.com/FrontEndDev-org/openapi-axios/commit/b8374e238e7c4d9cd94bceb1a0b88476e2236538))
+* **printer:** 为 axios 请求函数添加 Promise 类型 ([f47e13e](https://github.com/FrontEndDev-org/openapi-axios/commit/f47e13ef8bab9bd32fc6175d95d7ba9d7f46983d))
+
 ## [0.31.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.30.1...v0.31.0) (2025-01-26)
 
 
