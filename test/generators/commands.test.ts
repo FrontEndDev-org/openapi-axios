@@ -61,7 +61,7 @@ it('run', async () => {
     file,
     `module.exports = {
 
-modules: {
+documents: {
     "test": "test.openapi.json"
 }
 

@@ -1,9 +1,5 @@
 /**
- * 由 pkg-name-for-test@pkg-version-for-test 生成，参考下述文档链接，忽略此文件的格式校验
- *
- * - [ESLint](https://eslint.org/docs/latest/use/configure/ignore)
- * - [Prettier](https://prettier.io/docs/en/ignore.html)
- * - [Biome](https://biomejs.dev/guides/configure-biome/#ignore-files)
+ * 由 pkg-name-for-test@pkg-version-for-test 生成，建议忽略此文件的格式校验
  */
 
 /**
