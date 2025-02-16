@@ -11,3 +11,7 @@
 - [ ] 3.1 的完全支持 https://www.apimatic.io/blog/2021/09/migrating-to-and-from-openapi-3-1
 - [ ] 支持 query 多参格式 https://swagger.io/docs/specification/serialization/
 - [ ] 修正单根值类型提升
+- [ ] validate zod
+- [ ] mock zod-mock
+- [ ] 支持重命名类型
+- [ ] 支持过滤 path
