@@ -148,13 +148,24 @@ function migGeneralParameter(parameter: OpenAPIV2.GeneralParameterObject | OpenA
   };
 }
 
-function makeRequestBody(bodySchema: BodySchema[], medias: string[]): OpenAPIV3.RequestBodyObject {
+function makeRequestBody(bodySchemas: BodySchema[], medias: string[]): OpenAPIV3.RequestBodyObject {
   let requestBodySchema: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject | undefined;
+  const bodyRequest = bodySchemas.find(({ parameter }) => parameter.in === 'body');
+  const requestBodyRest = {};
 
-  if (bodySchema.length > 0) {
+  // @ref https://swagger.io/docs/specification/v2_0/describing-request-body/
+  // requestBodySchema.name 忽略，其本身作为 body
+  if (bodyRequest) {
+    requestBodySchema = bodyRequest.schema;
+    const { required, description } = bodyRequest.parameter;
+    Object.assign(requestBodyRest, { required, description });
+  }
+  // @ref https://swagger.io/docs/specification/v2_0/file-upload/
+  // 其余内容为 form-data
+  else if (bodySchemas.length > 0) {
     requestBodySchema = {
       type: 'object',
-      properties: bodySchema.reduce(
+      properties: bodySchemas.reduce(
         (properties, { parameter, schema }) => {
           const { required, default: default_, description } = parameter;
           properties[parameter.name] = {
@@ -171,6 +182,7 @@ function makeRequestBody(bodySchema: BodySchema[], medias: string[]): OpenAPIV3.
   }
 
   return {
+    ...requestBodyRest,
     content: requestBodySchema
       ? medias.reduce(
           (content, media) => {

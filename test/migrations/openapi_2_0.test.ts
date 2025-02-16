@@ -194,18 +194,13 @@ it('post parameter in=body', () => {
       '/test': {
         post: {
           requestBody: {
+            required: false,
+            description: 'botId',
             content: {
               '*': {
                 schema: {
-                  type: 'object',
-                  properties: {
-                    botId: {
-                      required: false,
-                      description: 'botId',
-                      type: 'integer',
-                      format: 'int64',
-                    },
-                  },
+                  type: 'integer',
+                  format: 'int64',
                 },
               },
             },
