@@ -44,13 +44,14 @@ it('upload root', () => {
      * @param data A file
      * @param [config] request config
      */
-    export async function upload(data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function upload(data:Type.UploadData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/upload\`,
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type UploadData = Blob;"`);
@@ -124,14 +125,15 @@ it('upload single', () => {
      * @param data request data
      * @param [config] request config
      */
-    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/upload\`,
     params: {"category": category},
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -227,14 +229,15 @@ it('upload multiple', () => {
      * @param data request data
      * @param [config] request config
      */
-    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/upload\`,
     params: {"category": category},
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`

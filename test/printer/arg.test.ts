@@ -76,15 +76,16 @@ it('1*path + 1*query + 1*header', () => {
      * @param [config] request config
      * @returns pet name
      */
-    export async function getPet(petId:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetPetResponse>> {
-    return axios({
+    export async function getPet(petId:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.GetPetResponse>>({
       method: "GET",
     url: \`/pets/\${petId}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
     params: {"category-id": categoryId},
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -174,15 +175,16 @@ it('n*path + 1*query + 1*header', () => {
      * @param [categoryId] request params "category-id"
      * @param [config] request config
      */
-    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
     params: {"category-id": categoryId},
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -283,15 +285,16 @@ it('n*path + n*query + 1*header', () => {
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
     params: params,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -405,15 +408,16 @@ it('n*path + n*query + n*header', () => {
      * @param [params] request params
      * @param [config] request config
      */
-    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,headers?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,headers?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: headers,
     params: params,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -486,12 +490,13 @@ it('path name unique', () => {
      * @param type request path "type"
      * @param [config] request config
      */
-    export async function getPet(type:Type.GetPetPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getPet(type:Type.GetPetPath,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/pets/\${type}\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type GetPetPath = string;"`);

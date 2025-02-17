@@ -64,13 +64,14 @@ it('ref request', () => {
      * @param data 用户列表
      * @param [config] request config
      */
-    export async function postTest(data:Type.PostTestData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function postTest(data:Type.PostTestData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/test\`,
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`

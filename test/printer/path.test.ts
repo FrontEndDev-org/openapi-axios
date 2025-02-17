@@ -25,12 +25,13 @@ it('1路径 + 1请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`""`);
@@ -62,12 +63,13 @@ it('1路径 + 1请求 * module', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`""`);
@@ -100,22 +102,24 @@ it('1路径 + 2请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     ...config
-    })
+    });
+    return resp;
     }
     /**
      * @param [config] request config
      */
-    export async function postApiAbc(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function postApiAbc(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/api/abc\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`""`);
@@ -165,13 +169,14 @@ it('1路径 + 1请求 + 1query', () => {
      * @param [var_2] description 1
      * @param [config] request config
      */
-    export async function getApiAbc(var_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(var_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     params: {"var": var_2},
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcParams = number;"`);
@@ -219,13 +224,14 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
      * @param [config_2] request params "config"
      * @param [config] request config
      */
-    export async function getApiAbc(config_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(config_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     params: {"config": config_2},
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcParams = string;"`);
@@ -274,12 +280,13 @@ it('1路径 + 1请求 + 1path', () => {
      * @param var_2 request path "var"
      * @param [config] request config
      */
-    export async function getApiAbc(var_2:Type.GetApiAbcPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(var_2:Type.GetApiAbcPath,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc/\${var_2}\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type GetApiAbcPath = string;"`);
@@ -335,12 +342,13 @@ it('1路径 + 1请求 + 2path', () => {
      * @param path request path
      * @param [config] request config
      */
-    export async function getApiAbcDef(path:Type.GetApiAbcDefPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbcDef(path:Type.GetApiAbcDefPath,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -412,13 +420,14 @@ it('1路径 + 1请求 + 2query', () => {
      * @param params request params
      * @param [config] request config
      */
-    export async function getApiAbc(params:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(params:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc\`,
     params: params,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -503,13 +512,14 @@ it('1路径 + 1请求 + 2query + 1path', () => {
      * @param params request params
      * @param [config] request config
      */
-    export async function getApiAbc(params:Type.GetApiAbcPath,params_2:Type.GetApiAbcParams,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(params:Type.GetApiAbcPath,params_2:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc/\${params}\`,
     params: params_2,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -607,14 +617,15 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
      * @param data aaa
      * @param [config] request config
      */
-    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc/\${c}\`,
     params: params,
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -717,14 +728,15 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
      * @param data request--data--description
      * @param [config] request config
      */
-    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/api/abc/\${c}\`,
     params: params,
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -841,14 +853,15 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
      * @param [config] request config
      * @returns success
      */
-    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetApiAbcResponse>> {
-    return axios({
+    export async function getApiAbc(c:Type.GetApiAbcPath,params:Type.GetApiAbcParams,data:Type.GetApiAbcData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.GetApiAbcResponse>>({
       method: "GET",
     url: \`/api/abc/\${c}\`,
     params: params,
     data: data,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -984,14 +997,15 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      * @param [config] request config
      * @returns success
      */
-    export async function getApiAbcDef(data:Type.GetApiAbcDefPath,params:Type.GetApiAbcDefParams,data_2:Type.GetApiAbcDefData,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetApiAbcDefResponse>> {
-    return axios({
+    export async function getApiAbcDef(data:Type.GetApiAbcDefPath,params:Type.GetApiAbcDefParams,data_2:Type.GetApiAbcDefData,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.GetApiAbcDefResponse>>({
       method: "GET",
     url: \`/api/abc/\${data}/def\`,
     params: params,
     data: data_2,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`

@@ -65,12 +65,13 @@ it('ref response', () => {
     "/**
      * @param [config] request config
      */
-    export async function postTest(config?:AxiosRequestConfig): Promise<AxiosResponse<Type.PostTestResponse>> {
-    return axios({
+    export async function postTest(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.PostTestResponse>>({
       method: "POST",
     url: \`/test\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`

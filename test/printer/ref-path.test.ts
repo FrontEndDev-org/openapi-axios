@@ -38,12 +38,13 @@ it('ref path', () => {
     "/**
      * @param [config] request config
      */
-    export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function getTest(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "GET",
     url: \`/test\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`""`);

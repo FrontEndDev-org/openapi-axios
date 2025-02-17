@@ -49,12 +49,13 @@ it('ref parameter', () => {
      * @param userId request path "userId"
      * @param [config] request config
      */
-    export async function postTest(userId:Type.PostTestPath,config?:AxiosRequestConfig): Promise<AxiosResponse<unknown>> {
-    return axios({
+    export async function postTest(userId:Type.PostTestPath,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<unknown>>({
       method: "POST",
     url: \`/test/\${userId}\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`"export type PostTestPath = number;"`);

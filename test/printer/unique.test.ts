@@ -51,12 +51,13 @@ it('unique vars', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetTestResponse>> {
-    return axios({
+    export async function getTest(config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.GetTestResponse>>({
       method: "GET",
     url: \`/test\`,
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -161,13 +162,14 @@ it('unique types', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(axios_2:Type.GetTestPath,unknownObject?:Type.GetTestParams,config?:AxiosRequestConfig): Promise<AxiosResponse<Type.GetTestResponse>> {
-    return axios({
+    export async function getTest(axios_2:Type.GetTestPath,unknownObject?:Type.GetTestParams,config?:AxiosRequestConfig) {
+    const resp = await axios<AxiosResponse<Type.GetTestResponse>>({
       method: "GET",
     url: \`/test/\${axios_2}\`,
     params: {"UnknownObject": unknownObject},
     ...config
-    })
+    });
+    return resp;
     }"
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
