@@ -12,15 +12,15 @@ import type { PrinterConfigs, PrinterOptions, PrintResults } from './types';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
-import { isString, isUndefined } from '../utils/type-is';
+import { isBoolean, isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
 import {
   AXIOS_IMPORT_FILE,
   AXIOS_IMPORT_NAME,
-  AXIOS_PARAM_CONFIG_NAME,
   AXIOS_PARAM_TRANSFORM_RESPONSE_NAME,
   AXIOS_REQUEST_TYPE_NAME,
+  AXIOS_RESPONSE_NAME,
   AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
   TYPE_FILE_EXPORT_NAME,
@@ -581,27 +581,26 @@ export class Printer {
 
     let responseType = responseArg?.typeName;
     responseType = responseType ? `${TYPE_FILE_EXPORT_NAME}.${responseType}` : 'unknown';
-    this.#mainContent.push('block', `export async function ${operationName}(${formalParams}): Promise<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>> {`);
+    this.#mainContent.push('block', `export async function ${operationName}(${formalParams}) {`);
 
+    // validate request
     if (runtimeValidate) {
-      // validate request
       this.#mainContent.push('block', validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`));
-
-      // validate response
-      this.#mainContent.push('block', `const ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} = ${AXIOS_PARAM_CONFIG_NAME}?.transformResponse;`);
-      this.#mainContent.push('block', `${AXIOS_PARAM_CONFIG_NAME} = {`);
-      this.#mainContent.push('block', `...${AXIOS_PARAM_CONFIG_NAME},`);
-      this.#mainContent.push('block', `transformResponse: [`);
-      this.#mainContent.push('block', `...Array.isArray(${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}) ? ${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} : (${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME} ? [${AXIOS_PARAM_TRANSFORM_RESPONSE_NAME}] : []),`);
-      this.#mainContent.push('block', `data => ${responseArg ? `${responseArg.zodName}.parse(data)` : 'data'},`);
-      this.#mainContent.push('block', `],`);
-      this.#mainContent.push('block', `};`);
     }
 
-    this.#mainContent.push('block', `return ${AXIOS_IMPORT_NAME}({`);
+    this.#mainContent.push('block', `const ${AXIOS_RESPONSE_NAME} = await ${AXIOS_IMPORT_NAME}<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>>({`);
     this.#mainContent.push('block', `  method: ${JSON.stringify(method.toUpperCase())},`);
     this.#mainContent.push('block', requestArgs.printActualParams());
-    this.#mainContent.push('block', '})');
+    this.#mainContent.push('block', '});');
+
+    // validate response
+    if (runtimeValidate && responseArg) {
+      const props = isBoolean(runtimeValidate) ? ['data'] : runtimeValidate.responseDataProps || ['data'];
+      const propString = props.map(prop => `[${JSON.stringify(prop)}]`).join('');
+      this.#mainContent.push('block', `${responseArg.zodName}.parse(${AXIOS_RESPONSE_NAME}${propString});`);
+    }
+
+    this.#mainContent.push('block', `return ${AXIOS_RESPONSE_NAME};`);
     this.#mainContent.push('block', '}');
 
     validateAbleRequestArgs.forEach((arg) => {

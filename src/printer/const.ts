@@ -73,6 +73,7 @@ export const ZOD_IMPORT_NAME = 'z';
 export const AXIOS_IMPORT_FILE = 'axios';
 export const ZOD_IMPORT_FILE = 'zod';
 export const AXIOS_PARAM_CONFIG_NAME = 'config';
+export const AXIOS_RESPONSE_NAME = 'resp';
 export const AXIOS_PARAM_TRANSFORM_RESPONSE_NAME = 'transformResponse';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
@@ -82,6 +83,7 @@ export const INTERNAL_VARS = [
   AXIOS_IMPORT_NAME,
   ZOD_IMPORT_NAME,
   AXIOS_PARAM_CONFIG_NAME,
+  AXIOS_RESPONSE_NAME,
 ];
 /**
  * 合并导出类型名称

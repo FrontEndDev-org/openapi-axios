@@ -43,6 +43,14 @@ export type RequestStatusCodeMatch = (statusCode: string, context: ResponsesCont
 export type ResponseContentTypeMatch = (contentType: string, context: ResponseContentContext) => boolean;
 export type OperationIdNormalize = (context: OperationContext) => string;
 
+export interface RuntimeValidate {
+  /**
+   * 响应数据属性
+   * @default ['data']
+   */
+  responseDataProps?: string[];
+}
+
 export interface PrinterOptions {
   /**
    * axios 导入名称，为空字符串时默认导入
@@ -131,7 +139,7 @@ export interface PrinterOptions {
   /**
    * 是否需要在运行时验证接口的出入参
    */
-  runtimeValidate?: boolean;
+  runtimeValidate?: boolean | RuntimeValidate ;
 
   /**
    * 是否生成 schema
