@@ -11,8 +11,8 @@ OpenAPI(2.0/3.0/3.1) Schema → Type-safe Axios
 将 OpenAPI 规范声明文件转换为类型安全的基于 Axios 的函数。
 
 - 😆 同时支持 [openAPI](https://www.openapis.org/) 2.0、3.0、3.1 规范
-- 😎 与最流行的 HTTP 客户端 [axios](https://axios-http.com/) 进行适配，可轻松与本地 Axios 实例集成
-- 😉 生成的每个 API 都是一个类型安全的函数，用于在构建时轻松进行 tree shaking
+- 😎 与最流行的 HTTP 客户端 [axios](https://axios-http.com/) 进行适配
+- 😉 类型安全的请求函数，轻松进行 tree shaking
 - 🤔 基于 [zod](https://zod.dev/) 支持了接口出入参的校验（可选）
 - 😋 支持生成原 Schema 文件以及中间处理的 Schema 文件（可选）
 - 🤗 支持接口 Mock（待完成）
