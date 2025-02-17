@@ -175,8 +175,9 @@ export interface PrinterConfigs {
 }
 
 export interface PrintResult {
-  errors: string[];
+  lang: 'ts' | 'json';
   code: string;
+  errors: string[];
 }
 
 export interface PrintResults {

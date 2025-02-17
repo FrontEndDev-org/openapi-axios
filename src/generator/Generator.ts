@@ -17,6 +17,7 @@ import { Emitter } from 'strict-event-emitter';
 import { normalizeError } from 'try-flatten';
 import { Printer } from '../printer';
 import { OpenAPIVersion } from '../types/openapi';
+import { formatTsCode } from '../utils/string';
 import { isString } from '../utils/type-is';
 import { Reader } from './Reader';
 
@@ -100,37 +101,40 @@ export class Generator extends Emitter<GeneratorEmits> {
     this.emit('process', makePayload('writing'));
     fs.mkdirSync(path.dirname(mainFile), { recursive: true });
 
-    this.#writePrintResult('main', mainFile, main);
-    this.#writePrintResult('type', typeFile, type);
+    await this.#writePrintResult('main', mainFile, main);
+    await this.#writePrintResult('type', typeFile, type);
 
     if (printerOptions.runtimeValidate) {
-      this.#writePrintResult('zod', zodFile, zod);
+      await this.#writePrintResult('zod', zodFile, zod);
     }
 
     if (printerOptions.writeSchema) {
-      migrated.forEach(({ version, document, errors }) => {
-        this.#writePrintResult(`schema@${version}`, schemaFiles[version], {
+      for (const { version, document, errors } of migrated) {
+        await this.#writePrintResult(`schema@${version}`, schemaFiles[version], {
+          lang: 'json',
           code: JSON.stringify(document, null, 2),
           errors,
         });
-      });
+      }
     }
 
     this.emit('process', makePayload('generated'));
   }
 
-  #writePrintResult(type: string, file: string, printResult: PrintResult) {
+  async #writePrintResult(ns: string, file: string, printResult: PrintResult) {
     if (!printResult.code)
       return;
 
     const { cwd } = this.options;
+    const { lang, code, errors } = printResult;
+    const code2 = lang === 'ts' ? await formatTsCode(code) : code;
 
-    fs.writeFileSync(file, printResult.code, 'utf8');
+    fs.writeFileSync(file, code2, 'utf8');
 
-    if (printResult.errors.length) {
+    if (errors.length) {
       const p = path.relative(cwd, file);
-      console.warn(`[${type}] 发现了 ${printResult.errors.length} 处错误，请检查文件 ${p}，可能会出现非预期错误`);
-      printResult.errors.forEach((error) => {
+      console.warn(`[${ns}] 发现了 ${errors.length} 处错误，请检查文件 ${p}，可能会出现非预期错误`);
+      errors.forEach((error) => {
         console.warn(error);
       });
     }

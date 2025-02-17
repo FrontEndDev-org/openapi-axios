@@ -296,16 +296,19 @@ export class Printer {
 
     return {
       main: {
-        errors: [],
+        lang: 'ts',
         code: this.#mainContent.print(),
+        errors: [],
       },
       type: {
-        errors: [],
+        lang: 'ts',
         code: this.#typeContent.print(),
+        errors: [],
       },
       zod: {
-        errors: [],
+        lang: 'ts',
         code: this.#zodContent.print(),
+        errors: [],
       },
     };
   }
