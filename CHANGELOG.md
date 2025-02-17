@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.32.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.32.0...v0.32.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* **utils:** 优化 toRelative函数的路径判断逻辑 ([03b9096](https://github.com/FrontEndDev-org/openapi-axios/commit/03b909631b776f1ff310ad96bf89f930f8a944ad))
+
 ## [0.32.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.31.0...v0.32.0) (2025-02-16)
 
 
