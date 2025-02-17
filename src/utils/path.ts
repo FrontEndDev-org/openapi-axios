@@ -12,7 +12,7 @@ export function toRelative(toFile: string, fromFile?: string) {
     return toFile;
 
   const relative = path.relative(path.dirname(fromFile), toFile);
-  return relative.startsWith('.') ? relative : `./${relative}`;
+  return /^\.{1,2}\//.test(relative) ? relative : `./${relative}`;
 }
 
 export function toImportPath(toFile: string, cwd: string, fromFile?: string) {
