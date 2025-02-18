@@ -5,6 +5,7 @@ import type { PrinterOptions } from './types';
 import { AXIOS_PARAM_CONFIG_NAME } from './const';
 import { isRefParameter, requiredKeyStringify, toZodName } from './helpers';
 import { Parser } from './Parser';
+import { VarPath } from './VarPath';
 
 export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
 
@@ -72,15 +73,7 @@ export class Arg {
     this.zodName = docNamed.prepareVarName(toZodName(this.typeName));
   }
 
-  url: string = '';
-  urlParams: string[] = [];
-  setUrl(url: string) {
-    this.url = url;
-    url.replace(/\{(.*?)\}/g, (_, name) => {
-      this.urlParams.push(name);
-      return _;
-    });
-  }
+  varPath = new VarPath('');
 
   defaultType = '';
   setDefaultType(type: string) {
@@ -89,10 +82,6 @@ export class Arg {
 
   add(parameter?: OpenApiLatest_Parameter) {
     if (!parameter)
-      return;
-
-    // 忽略 url 无参数的情况
-    if (this.kind === 'path' && this.urlParams.length === 0)
       return;
 
     this.parameters.push(parameter);

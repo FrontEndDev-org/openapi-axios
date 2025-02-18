@@ -41,6 +41,7 @@ import {
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Parser } from './Parser';
+import { VarPath } from './VarPath';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const parameterTypes = ['query', 'header', 'path', 'cookie'];
@@ -75,6 +76,7 @@ export class Printer {
   #mainContent = new Content();
   #typeContent = new Content();
   #zodContent = new Content();
+  #mockContent = new Content();
 
   private configs: PrinterConfigs = {};
 
@@ -491,7 +493,7 @@ export class Printer {
     const config = new Arg('config', operationName, this.named, argNamed, options, true);
     const resp = new Arg('response', operationName, this.named, argNamed, options, true);
 
-    path.setUrl(url); // 设置 url，用于解析 path 参数
+    path.varPath = new VarPath(url); // 设置 url，用于解析 path 参数
     config.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
 
     if (parameters) {

@@ -48,29 +48,19 @@ export class Args {
   printActualParams() {
     return this.fixedArgs
       .map((fixedArg) => {
-        const { originName, argName: varName, propName, kind, props, url, isSingle } = fixedArg;
+        const { originName, argName: varName, propName, kind, props, varPath, isSingle } = fixedArg;
 
         switch (kind) {
           case 'config':
             return `...${varName}`;
 
           case 'path': {
-            const pathNameInProps = props.reduce((acc, cur) => {
-              acc[cur.name] = true;
+            const singleProp = varPath.props.length === 1;
+            const resolvedURL = varPath.toString(props.reduce((acc, cur) => {
+              acc[cur.name] = singleProp ? varName : `${varName}[${JSON.stringify(cur.name)}]`;
               return acc;
-            }, {} as Record<string, boolean>);
-            const resolvedURL = url.replace(/\{(.*?)\}/g, (_, originName) => {
-              if (!pathNameInProps[originName]) {
-                throw new Error(`路径参数 ${originName} 未定义`);
-              }
-
-              // 只有一个路径参数时，路径值直接传入
-              if (props.length === 1)
-                return `\${${varName}}`;
-
-              return `\${${varName}[${JSON.stringify(originName)}]}`;
-            });
-            return `url: \`${resolvedURL}\``;
+            }, {} as Record<string, string>));
+            return `url: ${resolvedURL}`;
           }
 
           default: {
