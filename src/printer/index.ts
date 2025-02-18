@@ -94,7 +94,6 @@ export class Printer {
   }
 
   schemas: Record<string /** nodeId */, SchemaInfo> = {};
-  // anchorSchemas: Record<string /** nodeId */, WithId<{ schema: OpenApiLatest_Schema; typeName: string }>> = {};
   requestBodies: Record<string /** nodeId */, RequestBodyInfo> = {};
   parameters: Record<string /** nodeId */, ParameterInfo> = {};
   responses: Record<string /** nodeId */, ResponseInfo> = {};
