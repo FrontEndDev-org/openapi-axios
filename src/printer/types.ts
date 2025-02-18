@@ -99,12 +99,6 @@ export interface PrinterOptions {
   axiosRequestConfigTypeName?: string;
 
   /**
-   * 响应类型名称
-   * @default AxiosResponse
-   */
-  axiosResponseTypeName?: string;
-
-  /**
    * 请求内容类型判断
    */
   requestContentType?: string | RequestContentTypeMatch;

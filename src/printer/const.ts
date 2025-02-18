@@ -77,7 +77,6 @@ export const AXIOS_RESPONSE_NAME = 'resp';
 export const AXIOS_PARAM_TRANSFORM_RESPONSE_NAME = 'transformResponse';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
-export const AXIOS_RESPONSE_TYPE_NAME = 'AxiosResponse';
 export const INTERNAL_VARS = [
   // config
   AXIOS_IMPORT_NAME,
@@ -110,7 +109,6 @@ export const INTERNAL_TYPES = [
   'Record',
   // axios
   AXIOS_REQUEST_TYPE_NAME,
-  AXIOS_RESPONSE_TYPE_NAME,
   // type
   TYPE_FILE_EXPORT_NAME,
 ];

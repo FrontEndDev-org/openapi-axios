@@ -21,7 +21,6 @@ import {
   AXIOS_PARAM_TRANSFORM_RESPONSE_NAME,
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_NAME,
-  AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
   TYPE_FILE_EXPORT_NAME,
   ZOD_IMPORT_FILE,
@@ -359,7 +358,6 @@ export class Printer {
       axiosImportFile,
       axiosTypeImportFile,
       axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
-      axiosResponseTypeName = AXIOS_RESPONSE_TYPE_NAME,
       zodImportName = ZOD_IMPORT_NAME,
       zodImportFile = ZOD_IMPORT_FILE,
       runtimeValidate,
@@ -375,7 +373,6 @@ export class Printer {
     this.#mainContent.push('import', [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
       toImportString(AXIOS_REQUEST_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
-      toImportString(AXIOS_RESPONSE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
       `import type * as ${TYPE_FILE_EXPORT_NAME} from "${toRelative(typeFile, mainFile)}";`,
     ]);
 
@@ -591,7 +588,7 @@ export class Printer {
       this.#mainContent.push('block', validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`));
     }
 
-    this.#mainContent.push('block', `const ${AXIOS_RESPONSE_NAME} = await ${AXIOS_IMPORT_NAME}<${AXIOS_RESPONSE_TYPE_NAME}<${responseType}>>({`);
+    this.#mainContent.push('block', `const ${AXIOS_RESPONSE_NAME} = await ${AXIOS_IMPORT_NAME}<${responseType}>({`);
     this.#mainContent.push('block', `  method: ${JSON.stringify(method.toUpperCase())},`);
     this.#mainContent.push('block', requestArgs.printActualParams());
     this.#mainContent.push('block', '});');
