@@ -54,7 +54,7 @@ it('unique vars', () => {
     export async function getTest(config?:AxiosRequestConfig) {
     const resp = await axios<Type.GetTestResponse>({
       method: "GET",
-    url: \`/test\`,
+    url: "/test",
     ...config
     });
     return resp;

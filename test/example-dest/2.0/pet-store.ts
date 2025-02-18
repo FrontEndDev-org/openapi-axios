@@ -25,7 +25,7 @@ export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig) {
 zAddPetData.parse(data)
 const resp = await axios<unknown>({
   method: "POST",
-url: `/pet`,
+url: "/pet",
 data: data,
 ...config
 });
@@ -42,7 +42,7 @@ export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConf
 zUpdatePetData.parse(data)
 const resp = await axios<unknown>({
   method: "PUT",
-url: `/pet`,
+url: "/pet",
 data: data,
 ...config
 });
@@ -60,7 +60,7 @@ export async function findPetsByStatus(status:Type.FindPetsByStatusParams,config
 zFindPetsByStatusParams.parse(status)
 const resp = await axios<Type.FindPetsByStatusResponse>({
   method: "GET",
-url: `/pet/findByStatus`,
+url: "/pet/findByStatus",
 params: {"status": status},
 ...config
 });
@@ -80,7 +80,7 @@ export async function findPetsByTags(tags:Type.FindPetsByTagsParams,config?:Axio
 zFindPetsByTagsParams.parse(tags)
 const resp = await axios<Type.FindPetsByTagsResponse>({
   method: "GET",
-url: `/pet/findByTags`,
+url: "/pet/findByTags",
 params: {"tags": tags},
 ...config
 });
@@ -174,7 +174,7 @@ return resp;
 export async function getInventory(config?:AxiosRequestConfig) {
 const resp = await axios<Type.GetInventoryResponse>({
   method: "GET",
-url: `/store/inventory`,
+url: "/store/inventory",
 ...config
 });
 zGetInventoryResponse.parse(resp["data"]);
@@ -192,7 +192,7 @@ export async function placeOrder(data:Type.PlaceOrderData,config?:AxiosRequestCo
 zPlaceOrderData.parse(data)
 const resp = await axios<Type.PlaceOrderResponse>({
   method: "POST",
-url: `/store/order`,
+url: "/store/order",
 data: data,
 ...config
 });
@@ -244,7 +244,7 @@ export async function createUser(data:Type.CreateUserData,config?:AxiosRequestCo
 zCreateUserData.parse(data)
 const resp = await axios<unknown>({
   method: "POST",
-url: `/user`,
+url: "/user",
 data: data,
 ...config
 });
@@ -261,7 +261,7 @@ export async function createUsersWithArrayInput(data:Type.CreateUsersWithArrayIn
 zCreateUsersWithArrayInputData.parse(data)
 const resp = await axios<unknown>({
   method: "POST",
-url: `/user/createWithArray`,
+url: "/user/createWithArray",
 data: data,
 ...config
 });
@@ -278,7 +278,7 @@ export async function createUsersWithListInput(data:Type.CreateUsersWithListInpu
 zCreateUsersWithListInputData.parse(data)
 const resp = await axios<unknown>({
   method: "POST",
-url: `/user/createWithList`,
+url: "/user/createWithList",
 data: data,
 ...config
 });
@@ -296,7 +296,7 @@ export async function loginUser(params:Type.LoginUserParams,config?:AxiosRequest
 zLoginUserParams.parse(params)
 const resp = await axios<Type.LoginUserResponse>({
   method: "GET",
-url: `/user/login`,
+url: "/user/login",
 params: params,
 ...config
 });
@@ -312,7 +312,7 @@ return resp;
 export async function logoutUser(config?:AxiosRequestConfig) {
 const resp = await axios<unknown>({
   method: "GET",
-url: `/user/logout`,
+url: "/user/logout",
 ...config
 });
 return resp;

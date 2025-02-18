@@ -29,7 +29,7 @@ it('axios 模块导入名称默认', () => {
     export async function get(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/\`,
+    url: "/",
     ...config
     });
     return resp;
@@ -69,7 +69,7 @@ it('axios 模块导入名称指定', () => {
     export async function get(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/\`,
+    url: "/",
     ...config
     });
     return resp;
@@ -109,7 +109,7 @@ it('axios 默认导入名称为空', () => {
     export async function get(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/\`,
+    url: "/",
     ...config
     });
     return resp;
@@ -135,7 +135,6 @@ it('axios 模块和类型指定文件', () => {
     axiosImportName: 'axios2',
     axiosImportFile: '/a/b/request.ts',
     axiosRequestConfigTypeName: 'AxiosRequestConfig2',
-    axiosResponseTypeName: 'AxiosResponse2',
     axiosTypeImportFile: '/a/c/request-types.ts',
   });
   const result = printer.print({
@@ -153,7 +152,7 @@ it('axios 模块和类型指定文件', () => {
     export async function get(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/\`,
+    url: "/",
     ...config
     });
     return resp;

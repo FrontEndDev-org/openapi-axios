@@ -41,7 +41,7 @@ it('ref path', () => {
     export async function getTest(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/test\`,
+    url: "/test",
     ...config
     });
     return resp;

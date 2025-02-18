@@ -47,7 +47,7 @@ it('upload root', () => {
     export async function upload(data:Type.UploadData,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "POST",
-    url: \`/upload\`,
+    url: "/upload",
     data: data,
     ...config
     });
@@ -128,7 +128,7 @@ it('upload single', () => {
     export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "POST",
-    url: \`/upload\`,
+    url: "/upload",
     params: {"category": category},
     data: data,
     ...config
@@ -232,7 +232,7 @@ it('upload multiple', () => {
     export async function upload(category:Type.UploadParams,data:Type.UploadData,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "POST",
-    url: \`/upload\`,
+    url: "/upload",
     params: {"category": category},
     data: data,
     ...config

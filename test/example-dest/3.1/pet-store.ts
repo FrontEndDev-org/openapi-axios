@@ -30,7 +30,7 @@ export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConf
 zUpdatePetData.parse(data)
 const resp = await axios<Type.UpdatePetResponse>({
   method: "PUT",
-url: `/pet`,
+url: "/pet",
 data: data,
 ...config
 });
@@ -49,7 +49,7 @@ export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig) {
 zAddPetData.parse(data)
 const resp = await axios<Type.AddPetResponse>({
   method: "POST",
-url: `/pet`,
+url: "/pet",
 data: data,
 ...config
 });

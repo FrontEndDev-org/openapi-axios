@@ -67,7 +67,7 @@ it('ref request', () => {
     export async function postTest(data:Type.PostTestData,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "POST",
-    url: \`/test\`,
+    url: "/test",
     data: data,
     ...config
     });

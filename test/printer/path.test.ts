@@ -28,7 +28,7 @@ it('1路径 + 1请求', () => {
     export async function getApiAbc(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     ...config
     });
     return resp;
@@ -66,7 +66,7 @@ it('1路径 + 1请求 * module', () => {
     export async function getApiAbc(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     ...config
     });
     return resp;
@@ -105,7 +105,7 @@ it('1路径 + 2请求', () => {
     export async function getApiAbc(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     ...config
     });
     return resp;
@@ -116,7 +116,7 @@ it('1路径 + 2请求', () => {
     export async function postApiAbc(config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "POST",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     ...config
     });
     return resp;
@@ -172,7 +172,7 @@ it('1路径 + 1请求 + 1query', () => {
     export async function getApiAbc(var_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     params: {"var": var_2},
     ...config
     });
@@ -227,7 +227,7 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
     export async function getApiAbc(config_2?:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     params: {"config": config_2},
     ...config
     });
@@ -423,7 +423,7 @@ it('1路径 + 1请求 + 2query', () => {
     export async function getApiAbc(params:Type.GetApiAbcParams,config?:AxiosRequestConfig) {
     const resp = await axios<unknown>({
       method: "GET",
-    url: \`/api/abc\`,
+    url: "/api/abc",
     params: params,
     ...config
     });
