@@ -77,7 +77,7 @@ it('1*path + 1*query + 1*header', () => {
      * @returns pet name
      */
     export async function getPet(petId:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<Type.GetPetResponse>>({
+    const resp = await axios<Type.GetPetResponse>({
       method: "GET",
     url: \`/pets/\${petId}\`,
     data: data,
@@ -176,7 +176,7 @@ it('n*path + 1*query + 1*header', () => {
      * @param [config] request config
      */
     export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<unknown>>({
+    const resp = await axios<unknown>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
@@ -286,7 +286,7 @@ it('n*path + n*query + 1*header', () => {
      * @param [config] request config
      */
     export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,xAuthKey?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<unknown>>({
+    const resp = await axios<unknown>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
@@ -409,7 +409,7 @@ it('n*path + n*query + n*header', () => {
      * @param [config] request config
      */
     export async function getPet(path:Type.GetPetPath,data:Type.GetPetData,headers?:Type.GetPetHeaders,params?:Type.GetPetParams,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<unknown>>({
+    const resp = await axios<unknown>({
       method: "GET",
     url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
@@ -491,7 +491,7 @@ it('path name unique', () => {
      * @param [config] request config
      */
     export async function getPet(type:Type.GetPetPath,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<unknown>>({
+    const resp = await axios<unknown>({
       method: "GET",
     url: \`/pets/\${type}\`,
     ...config

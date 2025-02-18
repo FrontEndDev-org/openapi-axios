@@ -15,7 +15,6 @@
 
 import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-import {type AxiosResponse as AxiosResponse} from "axios";
 import type * as Type from "./pet-store.type.ts";
 import {zUpdatePetData,zUpdatePetResponse,zAddPetData,zAddPetResponse,zGetPetByIdPath} from "./pet-store.zod.ts";
 
@@ -29,7 +28,7 @@ import {zUpdatePetData,zUpdatePetResponse,zAddPetData,zAddPetResponse,zGetPetByI
  */
 export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConfig) {
 zUpdatePetData.parse(data)
-const resp = await axios<AxiosResponse<Type.UpdatePetResponse>>({
+const resp = await axios<Type.UpdatePetResponse>({
   method: "PUT",
 url: `/pet`,
 data: data,
@@ -48,7 +47,7 @@ return resp;
  */
 export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig) {
 zAddPetData.parse(data)
-const resp = await axios<AxiosResponse<Type.AddPetResponse>>({
+const resp = await axios<Type.AddPetResponse>({
   method: "POST",
 url: `/pet`,
 data: data,
@@ -65,7 +64,7 @@ return resp;
  */
 export async function getPetById(petId:Type.GetPetByIdPath,config?:AxiosRequestConfig) {
 zGetPetByIdPath.parse(petId)
-const resp = await axios<AxiosResponse<unknown>>({
+const resp = await axios<unknown>({
   method: "GET",
 url: `/pet/${petId}`,
 ...config

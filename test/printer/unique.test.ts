@@ -52,7 +52,7 @@ it('unique vars', () => {
      * @returns success
      */
     export async function getTest(config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<Type.GetTestResponse>>({
+    const resp = await axios<Type.GetTestResponse>({
       method: "GET",
     url: \`/test\`,
     ...config
@@ -163,7 +163,7 @@ it('unique types', () => {
      * @returns success
      */
     export async function getTest(axios_2:Type.GetTestPath,unknownObject?:Type.GetTestParams,config?:AxiosRequestConfig) {
-    const resp = await axios<AxiosResponse<Type.GetTestResponse>>({
+    const resp = await axios<Type.GetTestResponse>({
       method: "GET",
     url: \`/test/\${axios_2}\`,
     params: {"UnknownObject": unknownObject},
@@ -176,7 +176,7 @@ it('unique types', () => {
     "/**
      * @name AxiosResponse
      */
-    export type AxiosResponse_2 = {
+    export type AxiosResponse = {
     "name"?:string;
     };
     /**
@@ -188,12 +188,12 @@ it('unique types', () => {
     export type GetTestPath = string;
     export type GetTestParams = UnknownObject;
     export type GetTestResponse = {
-    "AxiosResponse"?:AxiosResponse_2;
+    "AxiosResponse"?:AxiosResponse;
     "UnknownObject"?:UnknownObject;
     };"
   `);
   expect(result.zod.code).toMatchInlineSnapshot(`
-    "export const zAxiosResponse2 = z.object({
+    "export const zAxiosResponse = z.object({
     "name": z.optional(z.string()),
     });
     export const zUnknownObject = z.object({
@@ -202,7 +202,7 @@ it('unique types', () => {
     export const zGetTestPath = z.string();
     export const zGetTestParams = zUnknownObject;
     export const zGetTestResponse = z.object({
-    "AxiosResponse": z.optional(zAxiosResponse2),
+    "AxiosResponse": z.optional(zAxiosResponse),
     "UnknownObject": z.optional(zUnknownObject),
     });"
   `);
