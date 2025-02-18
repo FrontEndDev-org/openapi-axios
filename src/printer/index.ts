@@ -584,7 +584,10 @@ export class Printer {
 
     // validate request
     if (runtimeValidate) {
-      this.#mainContent.push('block', validateAbleRequestArgs.map(arg => `${arg.zodName}.parse(${arg.argName})`));
+      this.#mainContent.push('block', validateAbleRequestArgs.map((arg) => {
+        const optionalIf = arg.required ? '' : `(${arg.argName} !== undefined) && `;
+        return `${optionalIf}${arg.zodName}.parse(${arg.argName})`;
+      }));
     }
 
     this.#mainContent.push('block', `const ${AXIOS_RESPONSE_NAME} = await ${AXIOS_IMPORT_NAME}<${responseType}>({`);

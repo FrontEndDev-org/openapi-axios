@@ -68,7 +68,7 @@ return resp;
  * @returns successful operation
  */
 export async function findPetsByStatus(status?:Type.FindPetsByStatusParams,config?:AxiosRequestConfig) {
-zFindPetsByStatusParams.parse(status)
+(status !== undefined) && zFindPetsByStatusParams.parse(status)
 const resp = await axios<Type.FindPetsByStatusResponse>({
   method: "GET",
 url: `/pet/findByStatus`,
@@ -87,7 +87,7 @@ return resp;
  * @returns successful operation
  */
 export async function findPetsByTags(tags?:Type.FindPetsByTagsParams,config?:AxiosRequestConfig) {
-zFindPetsByTagsParams.parse(tags)
+(tags !== undefined) && zFindPetsByTagsParams.parse(tags)
 const resp = await axios<Type.FindPetsByTagsResponse>({
   method: "GET",
 url: `/pet/findByTags`,
@@ -125,7 +125,7 @@ return resp;
  */
 export async function updatePetWithForm(petId:Type.UpdatePetWithFormPath,params?:Type.UpdatePetWithFormParams,config?:AxiosRequestConfig) {
 zUpdatePetWithFormPath.parse(petId)
-zUpdatePetWithFormParams.parse(params)
+(params !== undefined) && zUpdatePetWithFormParams.parse(params)
 const resp = await axios<unknown>({
   method: "POST",
 url: `/pet/${petId}`,
@@ -144,7 +144,7 @@ return resp;
  */
 export async function deletePet(petId:Type.DeletePetPath,apiKey?:Type.DeletePetHeaders,config?:AxiosRequestConfig) {
 zDeletePetPath.parse(petId)
-zDeletePetHeaders.parse(apiKey)
+(apiKey !== undefined) && zDeletePetHeaders.parse(apiKey)
 const resp = await axios<unknown>({
   method: "DELETE",
 url: `/pet/${petId}`,
@@ -166,7 +166,7 @@ return resp;
 export async function uploadFile(petId:Type.UploadFilePath,data:Type.UploadFileData,additionalMetadata?:Type.UploadFileParams,config?:AxiosRequestConfig) {
 zUploadFilePath.parse(petId)
 zUploadFileData.parse(data)
-zUploadFileParams.parse(additionalMetadata)
+(additionalMetadata !== undefined) && zUploadFileParams.parse(additionalMetadata)
 const resp = await axios<Type.UploadFileResponse>({
   method: "POST",
 url: `/pet/${petId}/uploadImage`,
@@ -291,7 +291,7 @@ return resp;
  * @returns successful operation
  */
 export async function loginUser(params?:Type.LoginUserParams,config?:AxiosRequestConfig) {
-zLoginUserParams.parse(params)
+(params !== undefined) && zLoginUserParams.parse(params)
 const resp = await axios<Type.LoginUserResponse>({
   method: "GET",
 url: `/user/login`,

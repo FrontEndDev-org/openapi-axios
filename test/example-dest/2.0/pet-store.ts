@@ -134,7 +134,7 @@ return resp;
  */
 export async function deletePet(petId:Type.DeletePetPath,apiKey?:Type.DeletePetHeaders,config?:AxiosRequestConfig) {
 zDeletePetPath.parse(petId)
-zDeletePetHeaders.parse(apiKey)
+(apiKey !== undefined) && zDeletePetHeaders.parse(apiKey)
 const resp = await axios<unknown>({
   method: "DELETE",
 url: `/pet/${petId}`,
