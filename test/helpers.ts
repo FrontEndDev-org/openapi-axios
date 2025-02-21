@@ -38,15 +38,18 @@ export function exampleTest(version: string, name: string, test: (document: Open
   const mainFile = path.join(dir, `${name}.ts`);
   const typeFile = path.join(dir, `${name}.type.ts`);
   const zodFile = path.join(dir, `${name}.zod.ts`);
+  const mockFile = path.join(dir, `${name}.mock.ts`);
 
-  const { main, type, zod } = test(JSON.parse(document), {
+  const { main, type, zod, mock } = test(JSON.parse(document), {
     mainFile,
     typeFile,
     zodFile,
+    mockFile,
   });
 
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(mainFile, main.code);
   fs.writeFileSync(typeFile, type.code);
   fs.writeFileSync(zodFile, zod.code);
+  fs.writeFileSync(mockFile, mock.code);
 }

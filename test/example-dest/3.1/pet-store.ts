@@ -17,7 +17,11 @@ import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import type * as Type from "./pet-store.type.ts";
 import {zUpdatePetData,zUpdatePetResponse,zAddPetData,zAddPetResponse,zGetPetByIdPath} from "./pet-store.zod.ts";
+import enableMock from "./pet-store.mock.ts";
 
+if (process.env.NODE_ENV !== "production") {
+enableMock();
+}
 /**
  * @description Update an existing pet by Id
  * @summary Update an existing pet

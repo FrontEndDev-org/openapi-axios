@@ -13,7 +13,11 @@ import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import type * as Type from "./pet-store.type.ts";
 import {zAddPetData,zUpdatePetData,zFindPetsByStatusParams,zFindPetsByStatusResponse,zFindPetsByTagsParams,zFindPetsByTagsResponse,zGetPetByIdPath,zGetPetByIdResponse,zUpdatePetWithFormPath,zUpdatePetWithFormData,zDeletePetPath,zDeletePetHeaders,zUploadFilePath,zUploadFileData,zUploadFileResponse,zGetInventoryResponse,zPlaceOrderData,zPlaceOrderResponse,zGetOrderByIdPath,zGetOrderByIdResponse,zDeleteOrderPath,zCreateUserData,zCreateUsersWithArrayInputData,zCreateUsersWithListInputData,zLoginUserParams,zLoginUserResponse,zGetUserByNamePath,zGetUserByNameResponse,zDeleteUserPath,zUpdateUserPath,zUpdateUserData} from "./pet-store.zod.ts";
+import enableMock from "./pet-store.mock.ts";
 
+if (process.env.NODE_ENV !== "production") {
+enableMock();
+}
 /**
  * @description 
  * @summary Add a new pet to the store

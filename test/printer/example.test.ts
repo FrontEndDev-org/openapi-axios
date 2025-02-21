@@ -7,21 +7,21 @@ import { exampleTest } from '../helpers';
 
 it('pet-store2.0', () => {
   exampleTest('2.0', 'pet-store', (document, configs) => {
-    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true });
+    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true, runtimeMock: true });
     return printer.print(configs);
   });
 });
 
 it('pet-store3.0', () => {
   exampleTest('3.0', 'pet-store', (document, configs) => {
-    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true });
+    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true, runtimeMock: true });
     return printer.print(configs);
   });
 });
 
 it('pet-store3.1', () => {
   exampleTest('3.1', 'pet-store', (document, configs) => {
-    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true });
+    const printer = new Printer(migrate(document).at(-1)!.document! as OpenAPILatest.Document, { runtimeValidate: true, runtimeMock: true });
     return printer.print(configs);
   });
 });
