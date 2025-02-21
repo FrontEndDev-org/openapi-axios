@@ -22,7 +22,6 @@ import {
   AXIOS_PARAM_TRANSFORM_RESPONSE_NAME,
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_NAME,
-  AXIOS_TYPE_IMPORT_FILE,
   DEFAULT_ENABLE_CONDITION,
   DEFAULT_RESPONSE_DATA_PROPS,
   ENABLE_MOCK_NAME,
@@ -372,7 +371,6 @@ export class Printer {
       axiosImportName = '',
       axiosImportFile,
       axiosTypeImportFile,
-      axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
       zodImportName = ZOD_IMPORT_NAME,
       zodImportFile = ZOD_IMPORT_FILE,
       fakerImportName = FAKER_IMPORT_NAME,
@@ -383,14 +381,11 @@ export class Printer {
     const { cwd = '/', mainFile, typeFile = '.', zodFile = '.', mockFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
     const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
-    const axiosTypeImportFile2 = axiosTypeImportFile || axiosImportFile || AXIOS_TYPE_IMPORT_FILE;
-    const importTypePath = toImportPath(axiosTypeImportFile2, cwd, mainFile);
     const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
     const fakerImportPath = toImportPath(fakerImportFile, cwd, mockFile);
 
     this.#mainContent.push('import', [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
-      toImportString(AXIOS_REQUEST_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
       `import type * as ${TYPE_FILE_EXPORT_NAME} from "${toRelative(typeFile, mainFile)}";`,
     ]);
 
@@ -478,6 +473,8 @@ export class Printer {
       ]);
     }
 
+    this.#mainContent.push('block', ['', `type ${AXIOS_REQUEST_TYPE_NAME} = Parameters<typeof axios.request>[0];`, '']);
+
     Object.entries(this.document.paths || {})
       .forEach(([url, pathItem]) => {
         this.#printPathItem(url, pathItem);
@@ -543,7 +540,6 @@ export class Printer {
     const respArg = new Arg('response', operationName, this.named, argNamed, options, true);
 
     pathArg.varPath = new VarPath(url); // 设置 url，用于解析 path 参数
-    configArg.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
 
     if (parameters) {
       for (const parameter of parameters) {

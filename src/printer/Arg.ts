@@ -2,7 +2,7 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Parameter } from './helpers';
 import type { Named } from './Named';
 import type { PrinterOptions } from './types';
-import { AXIOS_PARAM_CONFIG_NAME } from './const';
+import { AXIOS_PARAM_CONFIG_NAME, AXIOS_REQUEST_TYPE_NAME } from './const';
 import { isRefParameter, requiredKeyStringify, toZodName } from './helpers';
 import { Parser } from './Parser';
 import { VarPath } from './VarPath';
@@ -75,11 +75,6 @@ export class Arg {
 
   varPath = new VarPath('');
 
-  defaultType = '';
-  setDefaultType(type: string) {
-    this.defaultType = type;
-  }
-
   add(parameter?: OpenApiLatest_Parameter) {
     if (!parameter)
       return;
@@ -115,12 +110,12 @@ export class Arg {
         switch (this.kind) {
           case 'path':
             this.required = true;
-            this.typeValue = this.defaultType;
+            this.typeValue = '';
             this.argName = this.argNamed.nextVarName(this.docName);
             return this;
 
           case 'config':
-            this.typeValue = this.defaultType;
+            this.typeValue = AXIOS_REQUEST_TYPE_NAME;
             this.argName = AXIOS_PARAM_CONFIG_NAME;
             this.comments = {
               [`param [${this.argName}]`]: `request ${this.propName}`,

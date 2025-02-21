@@ -121,12 +121,6 @@ export interface PrinterOptions {
   axiosTypeImportFile?: string;
 
   /**
-   * 请求配置类型名称
-   * @default AxiosRequestConfig
-   */
-  axiosRequestConfigTypeName?: string;
-
-  /**
    * 请求内容类型判断
    */
   requestContentType?: string | RequestContentTypeMatch;

@@ -78,7 +78,6 @@ export const AXIOS_PARAM_CONFIG_NAME = 'config';
 export const AXIOS_RESPONSE_NAME = 'resp';
 export const ENABLE_MOCK_NAME = 'enableMock';
 export const AXIOS_PARAM_TRANSFORM_RESPONSE_NAME = 'transformResponse';
-export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
 export const INTERNAL_VARS = [
   AXIOS_IMPORT_NAME,
@@ -111,10 +110,9 @@ export const INTERNAL_TYPES = [
   'symbol',
   'bigint',
   'Record',
-  // axios
-  AXIOS_REQUEST_TYPE_NAME,
   // type
   TYPE_FILE_EXPORT_NAME,
+  AXIOS_REQUEST_TYPE_NAME,
 ];
 
 export const DEFAULT_ENABLE_CONDITION = 'process.env.NODE_ENV !== "production"';
