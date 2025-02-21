@@ -63,6 +63,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     const mainFile = path.join(cwd, dest, fileName);
     const typeFile = mainFile.replace(/\.ts$/, '.type.ts');
     const zodFile = mainFile.replace(/\.ts$/, '.zod.ts');
+    const mockFile = mainFile.replace(/\.ts$/, '.mock.ts');
     const schemaFiles: Record<OpenAPIVersion, string> = {
       [OpenAPIVersion.V2_0]: mainFile.replace(/\.ts$/, '.v2_0.json'),
       [OpenAPIVersion.V3_0]: mainFile.replace(/\.ts$/, '.v3_0.json'),
@@ -95,7 +96,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     // 3. 输出
     this.emit('process', makePayload('printing'));
     const printer = new Printer(migrated.at(-1)!.document! as OpenAPILatest.Document, printerOptions);
-    const { type, main, zod } = printer.print({ document: name, cwd, mainFile, typeFile, zodFile });
+    const { type, main, zod, mock } = printer.print({ document: name, cwd, mainFile, typeFile, zodFile, mockFile });
 
     // 4. 写入
     this.emit('process', makePayload('writing'));
@@ -104,8 +105,12 @@ export class Generator extends Emitter<GeneratorEmits> {
     await this.#writePrintResult('main', mainFile, main);
     await this.#writePrintResult('type', typeFile, type);
 
-    if (printerOptions.runtimeValidate) {
+    if (printerOptions.runtimeValidate || printerOptions.runtimeMock) {
       await this.#writePrintResult('zod', zodFile, zod);
+    }
+
+    if (printerOptions.runtimeMock) {
+      await this.#writePrintResult('mock', mockFile, mock);
     }
 
     if (printerOptions.writeSchema) {
