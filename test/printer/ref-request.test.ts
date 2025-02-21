@@ -60,7 +60,10 @@ it('ref request', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param data 用户列表
      * @param [config] request config
      */

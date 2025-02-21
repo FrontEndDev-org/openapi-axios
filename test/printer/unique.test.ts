@@ -47,7 +47,10 @@ it('unique vars', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      * @returns success
      */
@@ -156,7 +159,10 @@ it('unique types', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param axios_2 request path "axios"
      * @param [unknownObject] request params "UnknownObject"
      * @param [config] request config

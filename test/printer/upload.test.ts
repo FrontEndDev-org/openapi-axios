@@ -38,7 +38,10 @@ it('upload root', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @description upload
      * @summary upload
      * @param data A file
@@ -118,7 +121,10 @@ it('upload single', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @description upload
      * @summary upload
      * @param category request param
@@ -222,7 +228,10 @@ it('upload multiple', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @description upload
      * @summary upload
      * @param category request param

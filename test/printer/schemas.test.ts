@@ -27,7 +27,7 @@ it('number', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -69,7 +69,7 @@ it('number enum', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -111,7 +111,7 @@ it('[number, null] enum', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -154,7 +154,7 @@ it('type[]', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -216,7 +216,7 @@ it('allOf primitive', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -271,7 +271,7 @@ it('explicit array', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -315,7 +315,7 @@ it('generic array', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -369,7 +369,7 @@ it('explicit object', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -435,7 +435,7 @@ it('generic object', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -483,7 +483,7 @@ it('additionalProperties true', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -521,7 +521,7 @@ it('additionalProperties false', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -570,7 +570,7 @@ it('additionalProperties schema type', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`
@@ -631,7 +631,7 @@ it('additionalProperties schema ref', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "
-    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
     "
   `);
   expect(result.type.code).toMatchInlineSnapshot(`

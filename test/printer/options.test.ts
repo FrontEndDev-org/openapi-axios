@@ -23,7 +23,10 @@ it('axios 模块导入名称默认', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig) {
@@ -63,7 +66,10 @@ it('axios 模块导入名称指定', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig) {
@@ -103,7 +109,10 @@ it('axios 默认导入名称为空', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig) {
@@ -146,7 +155,10 @@ it('axios 模块和类型指定文件', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function get(config?:AxiosRequestConfig) {

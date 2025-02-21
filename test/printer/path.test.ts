@@ -22,7 +22,10 @@ it('1路径 + 1请求', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig) {
@@ -60,7 +63,10 @@ it('1路径 + 1请求 * module', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig) {
@@ -99,7 +105,10 @@ it('1路径 + 2请求', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function getApiAbc(config?:AxiosRequestConfig) {
@@ -165,7 +174,10 @@ it('1路径 + 1请求 + 1query', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [var_2] description 1
      * @param [config] request config
      */
@@ -220,7 +232,10 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config_2] request params "config"
      * @param [config] request config
      */
@@ -276,7 +291,10 @@ it('1路径 + 1请求 + 1path', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param var_2 request path "var"
      * @param [config] request config
      */
@@ -338,7 +356,10 @@ it('1路径 + 1请求 + 2path', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param path request path
      * @param [config] request config
      */
@@ -416,7 +437,10 @@ it('1路径 + 1请求 + 2query', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param params request params
      * @param [config] request config
      */
@@ -508,7 +532,10 @@ it('1路径 + 1请求 + 2query + 1path', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param params request params
      * @param [config] request config
      */
@@ -611,7 +638,10 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param c xxx
      * @param params request params
      * @param data aaa
@@ -722,7 +752,10 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param c xxx
      * @param params request params
      * @param data request--data--description
@@ -846,7 +879,10 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param c xxx
      * @param params request params
      * @param data request data
@@ -990,7 +1026,10 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param data xxx
      * @param params request params
      * @param data_2 request data

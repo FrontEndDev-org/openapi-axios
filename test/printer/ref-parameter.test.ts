@@ -45,7 +45,10 @@ it('ref parameter', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param userId request path "userId"
      * @param [config] request config
      */

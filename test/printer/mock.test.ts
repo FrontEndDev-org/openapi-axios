@@ -89,13 +89,15 @@ it('runtimeMock = true', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "import axios from "axios";
-    import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
     import type * as Type from ".";
     import enableMock from ".";
 
     if (process.env.NODE_ENV !== "production") {
     enableMock();
     }
+
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
     /**
      * @param petId request path "pet-id"
      * @param [categoryId] request params "category-id"
@@ -158,13 +160,15 @@ it('runtimeMock = {enableCondition}', () => {
 
   expect(result.main.code).toMatchInlineSnapshot(`
     "import axios from "axios";
-    import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
     import type * as Type from ".";
     import enableMock from ".";
 
     if (import.meta.env.PROD) {
     enableMock();
     }
+
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
     /**
      * @param petId request path "pet-id"
      * @param [categoryId] request params "category-id"

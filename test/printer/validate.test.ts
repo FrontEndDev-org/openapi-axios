@@ -98,7 +98,10 @@ describe('runtimeValidate = true', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config
@@ -130,7 +133,10 @@ describe('runtimeValidate = true', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config
@@ -168,7 +174,10 @@ describe('runtimeValidate = {responseDataProps: []}', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config
@@ -202,7 +211,10 @@ describe('runtimeValidate = {responseDataProps: []}', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config
@@ -240,7 +252,10 @@ describe('runtimeValidate = {responseDataProps: [a, b-c]}', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config
@@ -274,7 +289,10 @@ describe('runtimeValidate = {responseDataProps: [a, b-c]}', () => {
     });
 
     expect(result.main.code).toMatchInlineSnapshot(`
-      "/**
+      "
+      type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+      /**
        * @param petId request path "pet-id"
        * @param [categoryId] request params "category-id"
        * @param [config] request config

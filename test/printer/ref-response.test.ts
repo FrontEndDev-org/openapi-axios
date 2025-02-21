@@ -62,7 +62,10 @@ it('ref response', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param [config] request config
      */
     export async function postTest(config?:AxiosRequestConfig) {

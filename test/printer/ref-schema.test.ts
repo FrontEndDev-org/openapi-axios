@@ -44,7 +44,11 @@ it('ref $id', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name AxiosRequestConfig
@@ -136,7 +140,11 @@ it('ref $anchor', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name T0
