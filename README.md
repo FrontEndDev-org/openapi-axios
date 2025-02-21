@@ -15,7 +15,7 @@ OpenAPI(2.0/3.0/3.1) Schema → Type-safe Axios
 - 😉 类型安全的请求函数，轻松进行 tree shaking
 - 🤔 基于 [zod](https://zod.dev/) 支持了接口出入参的校验（可选）
 - 😋 支持生成原 Schema 文件以及中间处理的 Schema 文件（可选）
-- 🤗 支持接口 Mock（待完成）
+- 🤗 支持接口 Mock（可选）
 
 # 安装
 
@@ -72,9 +72,10 @@ npx openapi-axios
  * - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
  */
 
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type * as Type from './pet-store.type.ts';
 import axios from 'axios';
+
+type AxiosRequestConfig = Parameters<typeof axios.request>[0];
 
 /**
  * @description Add a new pet to the store
