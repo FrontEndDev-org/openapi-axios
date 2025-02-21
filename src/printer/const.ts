@@ -70,19 +70,23 @@ export const KEYWORD_VARS = [
 
 export const AXIOS_IMPORT_NAME = 'axios';
 export const ZOD_IMPORT_NAME = 'z';
+export const FAKER_IMPORT_NAME = 'faker';
 export const AXIOS_IMPORT_FILE = 'axios';
 export const ZOD_IMPORT_FILE = 'zod';
+export const FAKER_IMPORT_FILE = '@faker-js/faker';
 export const AXIOS_PARAM_CONFIG_NAME = 'config';
 export const AXIOS_RESPONSE_NAME = 'resp';
+export const ENABLE_MOCK_NAME = 'enableMock';
 export const AXIOS_PARAM_TRANSFORM_RESPONSE_NAME = 'transformResponse';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
 export const INTERNAL_VARS = [
-  // config
   AXIOS_IMPORT_NAME,
   ZOD_IMPORT_NAME,
+  FAKER_IMPORT_NAME,
   AXIOS_PARAM_CONFIG_NAME,
   AXIOS_RESPONSE_NAME,
+  ENABLE_MOCK_NAME,
 ];
 /**
  * 合并导出类型名称
@@ -112,3 +116,6 @@ export const INTERNAL_TYPES = [
   // type
   TYPE_FILE_EXPORT_NAME,
 ];
+
+export const DEFAULT_ENABLE_CONDITION = 'process.env.NODE_ENV !== "production"';
+export const DEFAULT_RESPONSE_DATA_PROPS = ['data'];

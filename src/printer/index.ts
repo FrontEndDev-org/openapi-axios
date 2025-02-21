@@ -12,6 +12,7 @@ import type { PrinterConfigs, PrinterOptions, PrintResults } from './types';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
+import { fixVarName } from '../utils/string';
 import { isBoolean, isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -22,6 +23,11 @@ import {
   AXIOS_REQUEST_TYPE_NAME,
   AXIOS_RESPONSE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
+  DEFAULT_ENABLE_CONDITION,
+  DEFAULT_RESPONSE_DATA_PROPS,
+  ENABLE_MOCK_NAME,
+  FAKER_IMPORT_FILE,
+  FAKER_IMPORT_NAME,
   TYPE_FILE_EXPORT_NAME,
   ZOD_IMPORT_FILE,
   ZOD_IMPORT_NAME,
@@ -101,7 +107,8 @@ export class Printer {
   responses: Record<string /** nodeId */, ResponseInfo> = {};
   pathItems: Record<string /** nodeId */, PathItemInfo> = {};
 
-  argumentZodNames = new Set<string>();
+  #pathZodNames = new Set<string>();
+  #respZodNames = new Set<string>();
 
   #parseRefComponent<T>(
     {
@@ -310,6 +317,11 @@ export class Printer {
         code: this.#zodContent.print(),
         errors: [],
       },
+      mock: {
+        lang: 'ts',
+        code: this.#mockContent.print(),
+        errors: [],
+      },
     };
   }
 
@@ -323,6 +335,7 @@ export class Printer {
     this.#mainContent.push('alert', alert);
     this.#typeContent.push('alert', alert);
     this.#zodContent.push('alert', alert);
+    this.#mockContent.push('alert', alert);
   }
 
   #printInfo() {
@@ -351,6 +364,7 @@ export class Printer {
     this.#mainContent.push('info', code);
     this.#typeContent.push('info', code);
     this.#zodContent.push('info', code);
+    this.#mockContent.push('info', code);
   }
 
   #printImports() {
@@ -361,15 +375,18 @@ export class Printer {
       axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
       zodImportName = ZOD_IMPORT_NAME,
       zodImportFile = ZOD_IMPORT_FILE,
+      fakerImportName = FAKER_IMPORT_NAME,
+      fakerImportFile = FAKER_IMPORT_FILE,
       runtimeValidate,
+      runtimeMock,
     } = this.options || {};
-    const { cwd = '/', mainFile, typeFile = '.', zodFile = '.' } = this.configs;
+    const { cwd = '/', mainFile, typeFile = '.', zodFile = '.', mockFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
     const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
     const axiosTypeImportFile2 = axiosTypeImportFile || axiosImportFile || AXIOS_TYPE_IMPORT_FILE;
     const importTypePath = toImportPath(axiosTypeImportFile2, cwd, mainFile);
     const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
-    const zodNames = [...this.argumentZodNames.values()].join(',');
+    const fakerImportPath = toImportPath(fakerImportFile, cwd, mockFile);
 
     this.#mainContent.push('import', [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
@@ -378,7 +395,22 @@ export class Printer {
     ]);
 
     if (runtimeValidate) {
+      const zodNames = [...this.#pathZodNames.values()].join(',');
       this.#mainContent.push('import', [
+        `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
+      ]);
+    }
+
+    if (runtimeMock) {
+      const zodNames = [...this.#respZodNames.values()].join(',');
+      this.#mainContent.push('import', [
+        `import ${ENABLE_MOCK_NAME} from "${toRelative(mockFile, mainFile)}";`,
+      ]);
+      this.#mockContent.push('import', [
+        `import { generateMock } from "@anatine/zod-mock";`,
+        `import AxiosMockAdapter from "axios-mock-adapter";`,
+        toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
+        toImportString(FAKER_IMPORT_NAME, fakerImportName, fakerImportPath),
         `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
       ]);
     }
@@ -431,10 +463,27 @@ export class Printer {
   }
 
   #printPaths() {
+    const { runtimeMock } = this.options || {};
+
+    if (runtimeMock) {
+      const enableCondition = isBoolean(runtimeMock) ? DEFAULT_ENABLE_CONDITION : runtimeMock.enableCondition || DEFAULT_ENABLE_CONDITION;
+      this.#mainContent.push('block', [
+        `if (${enableCondition}) {`,
+        `${ENABLE_MOCK_NAME}();`,
+        '}',
+      ]);
+      this.#mockContent.push('block', [
+        `export default function ${ENABLE_MOCK_NAME}() {`,
+        `const mock = new AxiosMockAdapter(axios);`,
+      ]);
+    }
+
     Object.entries(this.document.paths || {})
       .forEach(([url, pathItem]) => {
         this.#printPathItem(url, pathItem);
       });
+
+    this.#mockContent.push('block', `}`);
   }
 
   #printPathItem(
@@ -474,7 +523,7 @@ export class Printer {
       return;
 
     const options = this.options || {};
-    const { responseStatusCode, responseContentType, requestContentType, runtimeValidate } = options;
+    const { responseStatusCode, responseContentType, requestContentType, runtimeValidate, runtimeMock } = options;
     const { parameters, requestBody, responses, operationId } = operation;
 
     const argNamed = new Named({
@@ -485,30 +534,30 @@ export class Printer {
     argNamed.internalVarName(AXIOS_PARAM_TRANSFORM_RESPONSE_NAME);
     const operationName = this.named.nextOperationId(method, url, operationId);
 
-    const header = new Arg('headers', operationName, this.named, argNamed, options);
+    const headerArg = new Arg('headers', operationName, this.named, argNamed, options);
     const cookie = new Arg('cookies', operationName, this.named, argNamed, options);
-    const query = new Arg('params', operationName, this.named, argNamed, options);
-    const path = new Arg('path', operationName, this.named, argNamed, options);
-    const data = new Arg('data', operationName, this.named, argNamed, options, true);
-    const config = new Arg('config', operationName, this.named, argNamed, options, true);
-    const resp = new Arg('response', operationName, this.named, argNamed, options, true);
+    const queryArg = new Arg('params', operationName, this.named, argNamed, options);
+    const pathArg = new Arg('path', operationName, this.named, argNamed, options);
+    const dataArg = new Arg('data', operationName, this.named, argNamed, options, true);
+    const configArg = new Arg('config', operationName, this.named, argNamed, options, true);
+    const respArg = new Arg('response', operationName, this.named, argNamed, options, true);
 
-    path.varPath = new VarPath(url); // 设置 url，用于解析 path 参数
-    config.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
+    pathArg.varPath = new VarPath(url); // 设置 url，用于解析 path 参数
+    configArg.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
 
     if (parameters) {
       for (const parameter of parameters) {
         this.#parseParameter(parameter, {
-          header,
+          header: headerArg,
           cookie,
-          path,
-          query,
+          path: pathArg,
+          query: queryArg,
         });
       }
     }
 
     if (requestBody) {
-      this.#parseRequestBody(data, requestBody, (contentType, content) => {
+      this.#parseRequestBody(dataArg, requestBody, (contentType, content) => {
         if (isString(requestContentType))
           return requestContentType === contentType;
         if (!requestContentType)
@@ -525,7 +574,7 @@ export class Printer {
 
     if (responses) {
       this.#parseResponses(
-        resp,
+        respArg,
         responses,
         (statusCode, response) => {
           if (isString(responseStatusCode))
@@ -559,8 +608,8 @@ export class Printer {
       );
     }
 
-    const requestArgs = new Args([header.parse(), path.parse(), query.parse(), data.parse(), config.parse()]);
-    const responseArgs = new Args([resp.parse()]);
+    const requestArgs = new Args([headerArg.parse(), pathArg.parse(), queryArg.parse(), dataArg.parse(), configArg.parse()]);
+    const responseArgs = new Args([respArg.parse()]);
 
     const formalParams = requestArgs.printFormalParams();
     const responseArg = responseArgs.fixedArgs.at(0);
@@ -599,7 +648,7 @@ export class Printer {
 
     // validate response
     if (runtimeValidate && responseArg) {
-      const props = isBoolean(runtimeValidate) ? ['data'] : runtimeValidate.responseDataProps || ['data'];
+      const props = isBoolean(runtimeValidate) ? DEFAULT_RESPONSE_DATA_PROPS : runtimeValidate.responseDataProps || DEFAULT_RESPONSE_DATA_PROPS;
       const propString = props.map(prop => `[${JSON.stringify(prop)}]`).join('');
       this.#mainContent.push('block', `${responseArg.zodName}.parse(${AXIOS_RESPONSE_NAME}${propString});`);
     }
@@ -608,17 +657,27 @@ export class Printer {
     this.#mainContent.push('block', '}');
 
     validateAbleRequestArgs.forEach((arg) => {
-      this.argumentZodNames.add(arg.zodName);
+      this.#pathZodNames.add(arg.zodName);
       this.#zodContent.push('block', `export const ${arg.zodName} = ${arg.zodValue};`);
     });
 
     if (responseArg) {
-      this.argumentZodNames.add(responseArg.zodName);
+      this.#pathZodNames.add(responseArg.zodName);
+      this.#respZodNames.add(responseArg.zodName);
       this.#zodContent.push('block', `export const ${responseArg.zodName} = ${responseArg.zodValue};`);
     }
 
     this.#typeContent.push('block', requestArgs.printSchemaTypes());
     this.#typeContent.push('block', responseArgs.printSchemaTypes());
+
+    if (runtimeMock) {
+      const fnName = fixVarName(`on-${method}`);
+      this.#mockContent.push('block', [
+        `mock.${fnName}(${pathArg.varPath.toPattern()}).reply(() => {`,
+        responseArg ? `return [200, generateMock(${responseArg.zodName}, {faker: ${FAKER_IMPORT_NAME}})];` : 'return [200];',
+        `});`,
+      ]);
+    }
   }
 
   #parseContents(
