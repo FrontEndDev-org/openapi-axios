@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.33.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.32.1...v0.33.0) (2025-02-21)
+
+
+### Features
+
+* **generator:** 添加运行时 mock 功能 ([dc81e4f](https://github.com/FrontEndDev-org/openapi-axios/commit/dc81e4fe845819f7d10695b2e825e66e01f66bd8))
+* **printer:** 添加接口模拟功能 ([923618e](https://github.com/FrontEndDev-org/openapi-axios/commit/923618e8ca9d66bca93aa3110c73c3139e0c08b1))
+
+
+### Bug Fixes
+
+* **printer:** 优化请求验证逻辑 ([322a5d9](https://github.com/FrontEndDev-org/openapi-axios/commit/322a5d9aeeee2e03546ef2a99c313d2dcc63585e))
+
 ## [0.32.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.32.0...v0.32.1) (2025-02-17)
 
 
