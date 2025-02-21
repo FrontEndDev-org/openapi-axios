@@ -25,7 +25,11 @@ it('number', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name OrderId
@@ -63,7 +67,11 @@ it('number enum', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name OrderId
@@ -101,7 +109,11 @@ it('[number, null] enum', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name OrderId
@@ -140,7 +152,11 @@ it('type[]', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Order
@@ -198,7 +214,11 @@ it('allOf primitive', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name User
@@ -249,7 +269,11 @@ it('explicit array', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Order
@@ -289,7 +313,11 @@ it('generic array', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Order
@@ -339,7 +367,11 @@ it('explicit object', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Order
@@ -401,7 +433,11 @@ it('generic object', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Pet
@@ -445,7 +481,11 @@ it('additionalProperties true', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Pet
@@ -479,7 +519,11 @@ it('additionalProperties false', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name Pet
@@ -524,7 +568,11 @@ it('additionalProperties schema type', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name PetA
@@ -581,7 +629,11 @@ it('additionalProperties schema ref', () => {
     hideAlert: true,
   });
 
-  expect(result.main.code).toMatchInlineSnapshot(`""`);
+  expect(result.main.code).toMatchInlineSnapshot(`
+    "
+    type AxiosRequestConfig = Parameters<typeof axios>[0];
+    "
+  `);
   expect(result.type.code).toMatchInlineSnapshot(`
     "/**
      * @name PetA

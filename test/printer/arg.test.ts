@@ -68,7 +68,10 @@ it('1*path + 1*query + 1*header', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param petId request path "pet-id"
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
@@ -168,7 +171,10 @@ it('n*path + 1*query + 1*header', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param path request path
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
@@ -278,7 +284,10 @@ it('n*path + n*query + 1*header', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param path request path
      * @param data request data
      * @param [xAuthKey] request headers "x-auth-key"
@@ -401,7 +410,10 @@ it('n*path + n*query + n*header', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param path request path
      * @param data request data
      * @param [headers] request headers
@@ -486,7 +498,10 @@ it('path name unique', () => {
   });
 
   expect(result.main.code).toMatchInlineSnapshot(`
-    "/**
+    "
+    type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
+    /**
      * @param type request path "type"
      * @param [config] request config
      */

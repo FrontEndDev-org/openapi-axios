@@ -17,7 +17,6 @@
  */
 
 import axios from "axios";
-import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import type * as Type from "./pet-store.type.ts";
 import {zAddPetData,zAddPetResponse,zUpdatePetData,zUpdatePetResponse,zFindPetsByStatusParams,zFindPetsByStatusResponse,zFindPetsByTagsParams,zFindPetsByTagsResponse,zGetPetByIdPath,zGetPetByIdResponse,zUpdatePetWithFormPath,zUpdatePetWithFormParams,zDeletePetPath,zDeletePetHeaders,zUploadFilePath,zUploadFileData,zUploadFileParams,zUploadFileResponse,zGetInventoryResponse,zPlaceOrderData,zPlaceOrderResponse,zGetOrderByIdPath,zGetOrderByIdResponse,zDeleteOrderPath,zCreateUserData,zCreateUsersWithListInputData,zCreateUsersWithListInputResponse,zLoginUserParams,zLoginUserResponse,zGetUserByNamePath,zGetUserByNameResponse,zDeleteUserPath,zUpdateUserPath,zUpdateUserData} from "./pet-store.zod.ts";
 import enableMock from "./pet-store.mock.ts";
@@ -25,6 +24,9 @@ import enableMock from "./pet-store.mock.ts";
 if (process.env.NODE_ENV !== "production") {
 enableMock();
 }
+
+type AxiosRequestConfig = Parameters<typeof axios.request>[0];
+
 /**
  * @description Add a new pet to the store
  * @summary Add a new pet to the store
