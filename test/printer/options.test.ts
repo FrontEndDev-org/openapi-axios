@@ -143,7 +143,6 @@ it('axios 模块和类型指定文件', () => {
   }, {
     axiosImportName: 'axios2',
     axiosImportFile: '/a/b/request.ts',
-    axiosTypeImportFile: '/a/c/request-types.ts',
   });
   const result = printer.print({
     hideImports: true,

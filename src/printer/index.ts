@@ -371,7 +371,6 @@ export class Printer {
     const {
       axiosImportName = '',
       axiosImportFile,
-      axiosTypeImportFile,
       zodImportName = ZOD_IMPORT_NAME,
       zodImportFile = ZOD_IMPORT_FILE,
       fakerImportName = FAKER_IMPORT_NAME,

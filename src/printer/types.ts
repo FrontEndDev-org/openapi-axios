@@ -115,12 +115,6 @@ export interface PrinterOptions {
   fakerImportFile?: string;
 
   /**
-   * axios 相关类型的导入文件
-   * @default axios
-   */
-  axiosTypeImportFile?: string;
-
-  /**
    * 请求内容类型判断
    */
   requestContentType?: string | RequestContentTypeMatch;
