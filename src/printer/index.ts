@@ -9,6 +9,7 @@ import type {
   OpenApiLatest_Schema,
 } from './helpers';
 import type { PrinterConfigs, PrinterOptions, PrintResults } from './types';
+import { isPackageExists } from 'local-pkg';
 import { pkgName, pkgVersion } from '../const';
 import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath, toRelative } from '../utils/path';
@@ -304,22 +305,22 @@ export class Printer {
       main: {
         lang: 'ts',
         code: this.#mainContent.print(),
-        errors: [],
+        errors: this.#mainContent.errors,
       },
       type: {
         lang: 'ts',
         code: this.#typeContent.print(),
-        errors: [],
+        errors: this.#typeContent.errors,
       },
       zod: {
         lang: 'ts',
         code: this.#zodContent.print(),
-        errors: [],
+        errors: this.#zodContent.errors,
       },
       mock: {
         lang: 'ts',
         code: this.#mockContent.print(),
-        errors: [],
+        errors: this.#mockContent.errors,
       },
     };
   }
@@ -389,6 +390,20 @@ export class Printer {
       `import type * as ${TYPE_FILE_EXPORT_NAME} from "${toRelative(typeFile, mainFile)}";`,
     ]);
 
+    // 依赖 axios
+    if (!axiosImportFile || axiosImportFile === AXIOS_IMPORT_FILE) {
+      if (!isPackageExists(AXIOS_IMPORT_FILE)) {
+        this.#mockContent.pushError(`需要安装 ${AXIOS_IMPORT_FILE}`);
+      }
+    }
+
+    // 依赖 zod
+    if ((runtimeValidate || runtimeMock) && (!zodImportFile || zodImportFile === ZOD_IMPORT_FILE)) {
+      if (!isPackageExists(ZOD_IMPORT_FILE)) {
+        this.#zodContent.errors.push(`需要安装 ${ZOD_IMPORT_FILE}`);
+      }
+    }
+
     if (runtimeValidate) {
       const zodNames = [...this.#pathZodNames.values()].join(',');
       this.#mainContent.push('import', [
@@ -408,6 +423,20 @@ export class Printer {
         toImportString(FAKER_IMPORT_NAME, fakerImportName, fakerImportPath),
         `import {${zodNames}} from "${toRelative(zodFile, mainFile)}";`,
       ]);
+
+      if (!fakerImportFile || fakerImportFile === FAKER_IMPORT_FILE) {
+        if (!isPackageExists(FAKER_IMPORT_FILE)) {
+          this.#mockContent.pushError(`需要安装 ${FAKER_IMPORT_FILE}`);
+        }
+      }
+
+      if (!isPackageExists('@anatine/zod-mock')) {
+        this.#mockContent.pushError(`需要安装 @anatine/zod-mock`);
+      }
+
+      if (!isPackageExists('axios-mock-adapter')) {
+        this.#mockContent.pushError(`需要安装 axios-mock-adapter`);
+      }
     }
 
     this.#zodContent.push('import', toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath));

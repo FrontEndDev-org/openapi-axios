@@ -41,4 +41,9 @@ export class Content {
     const parts = [...contentTypes].map(t => this.parts.get(t)).filter(Boolean) as string[][];
     return parts.map(p => p.join('\n')).join('\n\n');
   }
+
+  errors: string[] = [];
+  pushError(message: string) {
+    this.errors.push(message);
+  }
 }
