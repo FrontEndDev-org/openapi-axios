@@ -660,7 +660,7 @@ export class Printer {
     if (runtimeValidate) {
       this.#mainContent.push('block', validateAbleRequestArgs.map((arg) => {
         const optionalIf = arg.required ? '' : `(${arg.argName} !== undefined) && `;
-        return `${optionalIf}${arg.zodName}.parse(${arg.argName})`;
+        return `${optionalIf}${arg.zodName}.parse(${arg.argName});`;
       }));
     }
 
