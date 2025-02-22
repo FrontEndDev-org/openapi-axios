@@ -16,7 +16,7 @@
  * - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
  */
 
-import {z as z} from "zod";
+import { z } from "zod";
 
 export const zOrder = z.object({
 "id": z.optional(z.number()),

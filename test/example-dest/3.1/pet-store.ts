@@ -33,7 +33,7 @@ type AxiosRequestConfig = Parameters<typeof axios.request>[0];
  * @returns Successful operation
  */
 export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConfig) {
-zUpdatePetData.parse(data)
+zUpdatePetData.parse(data);
 const resp = await axios<Type.UpdatePetResponse>({
   method: "PUT",
 url: "/pet",
@@ -52,7 +52,7 @@ return resp;
  * @returns Successful operation
  */
 export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig) {
-zAddPetData.parse(data)
+zAddPetData.parse(data);
 const resp = await axios<Type.AddPetResponse>({
   method: "POST",
 url: "/pet",
@@ -69,7 +69,7 @@ return resp;
  * @param [config] request config
  */
 export async function getPetById(petId:Type.GetPetByIdPath,config?:AxiosRequestConfig) {
-zGetPetByIdPath.parse(petId)
+zGetPetByIdPath.parse(petId);
 const resp = await axios<unknown>({
   method: "GET",
 url: `/pet/${petId}`,

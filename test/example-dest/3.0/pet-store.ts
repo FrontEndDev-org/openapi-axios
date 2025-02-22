@@ -36,7 +36,7 @@ type AxiosRequestConfig = Parameters<typeof axios.request>[0];
  * @returns Successful operation
  */
 export async function addPet(data:Type.AddPetData,config?:AxiosRequestConfig) {
-zAddPetData.parse(data)
+zAddPetData.parse(data);
 const resp = await axios<Type.AddPetResponse>({
   method: "POST",
 url: "/pet",
@@ -55,7 +55,7 @@ return resp;
  * @returns Successful operation
  */
 export async function updatePet(data:Type.UpdatePetData,config?:AxiosRequestConfig) {
-zUpdatePetData.parse(data)
+zUpdatePetData.parse(data);
 const resp = await axios<Type.UpdatePetResponse>({
   method: "PUT",
 url: "/pet",
@@ -74,7 +74,7 @@ return resp;
  * @returns successful operation
  */
 export async function findPetsByStatus(status?:Type.FindPetsByStatusParams,config?:AxiosRequestConfig) {
-(status !== undefined) && zFindPetsByStatusParams.parse(status)
+(status !== undefined) && zFindPetsByStatusParams.parse(status);
 const resp = await axios<Type.FindPetsByStatusResponse>({
   method: "GET",
 url: "/pet/findByStatus",
@@ -93,7 +93,7 @@ return resp;
  * @returns successful operation
  */
 export async function findPetsByTags(tags?:Type.FindPetsByTagsParams,config?:AxiosRequestConfig) {
-(tags !== undefined) && zFindPetsByTagsParams.parse(tags)
+(tags !== undefined) && zFindPetsByTagsParams.parse(tags);
 const resp = await axios<Type.FindPetsByTagsResponse>({
   method: "GET",
 url: "/pet/findByTags",
@@ -112,7 +112,7 @@ return resp;
  * @returns successful operation
  */
 export async function getPetById(petId:Type.GetPetByIdPath,config?:AxiosRequestConfig) {
-zGetPetByIdPath.parse(petId)
+zGetPetByIdPath.parse(petId);
 const resp = await axios<Type.GetPetByIdResponse>({
   method: "GET",
 url: `/pet/${petId}`,
@@ -130,8 +130,8 @@ return resp;
  * @param [config] request config
  */
 export async function updatePetWithForm(petId:Type.UpdatePetWithFormPath,params?:Type.UpdatePetWithFormParams,config?:AxiosRequestConfig) {
-zUpdatePetWithFormPath.parse(petId)
-(params !== undefined) && zUpdatePetWithFormParams.parse(params)
+zUpdatePetWithFormPath.parse(petId);
+(params !== undefined) && zUpdatePetWithFormParams.parse(params);
 const resp = await axios<unknown>({
   method: "POST",
 url: `/pet/${petId}`,
@@ -149,8 +149,8 @@ return resp;
  * @param [config] request config
  */
 export async function deletePet(petId:Type.DeletePetPath,apiKey?:Type.DeletePetHeaders,config?:AxiosRequestConfig) {
-zDeletePetPath.parse(petId)
-(apiKey !== undefined) && zDeletePetHeaders.parse(apiKey)
+zDeletePetPath.parse(petId);
+(apiKey !== undefined) && zDeletePetHeaders.parse(apiKey);
 const resp = await axios<unknown>({
   method: "DELETE",
 url: `/pet/${petId}`,
@@ -170,9 +170,9 @@ return resp;
  * @returns successful operation
  */
 export async function uploadFile(petId:Type.UploadFilePath,data:Type.UploadFileData,additionalMetadata?:Type.UploadFileParams,config?:AxiosRequestConfig) {
-zUploadFilePath.parse(petId)
-zUploadFileData.parse(data)
-(additionalMetadata !== undefined) && zUploadFileParams.parse(additionalMetadata)
+zUploadFilePath.parse(petId);
+zUploadFileData.parse(data);
+(additionalMetadata !== undefined) && zUploadFileParams.parse(additionalMetadata);
 const resp = await axios<Type.UploadFileResponse>({
   method: "POST",
 url: `/pet/${petId}/uploadImage`,
@@ -208,7 +208,7 @@ return resp;
  * @returns successful operation
  */
 export async function placeOrder(data:Type.PlaceOrderData,config?:AxiosRequestConfig) {
-zPlaceOrderData.parse(data)
+zPlaceOrderData.parse(data);
 const resp = await axios<Type.PlaceOrderResponse>({
   method: "POST",
 url: "/store/order",
@@ -227,7 +227,7 @@ return resp;
  * @returns successful operation
  */
 export async function getOrderById(orderId:Type.GetOrderByIdPath,config?:AxiosRequestConfig) {
-zGetOrderByIdPath.parse(orderId)
+zGetOrderByIdPath.parse(orderId);
 const resp = await axios<Type.GetOrderByIdResponse>({
   method: "GET",
 url: `/store/order/${orderId}`,
@@ -244,7 +244,7 @@ return resp;
  * @param [config] request config
  */
 export async function deleteOrder(orderId:Type.DeleteOrderPath,config?:AxiosRequestConfig) {
-zDeleteOrderPath.parse(orderId)
+zDeleteOrderPath.parse(orderId);
 const resp = await axios<unknown>({
   method: "DELETE",
 url: `/store/order/${orderId}`,
@@ -260,7 +260,7 @@ return resp;
  * @param [config] request config
  */
 export async function createUser(data:Type.CreateUserData,config?:AxiosRequestConfig) {
-zCreateUserData.parse(data)
+zCreateUserData.parse(data);
 const resp = await axios<unknown>({
   method: "POST",
 url: "/user",
@@ -278,7 +278,7 @@ return resp;
  * @returns Successful operation
  */
 export async function createUsersWithListInput(data:Type.CreateUsersWithListInputData,config?:AxiosRequestConfig) {
-zCreateUsersWithListInputData.parse(data)
+zCreateUsersWithListInputData.parse(data);
 const resp = await axios<Type.CreateUsersWithListInputResponse>({
   method: "POST",
 url: "/user/createWithList",
@@ -297,7 +297,7 @@ return resp;
  * @returns successful operation
  */
 export async function loginUser(params?:Type.LoginUserParams,config?:AxiosRequestConfig) {
-(params !== undefined) && zLoginUserParams.parse(params)
+(params !== undefined) && zLoginUserParams.parse(params);
 const resp = await axios<Type.LoginUserResponse>({
   method: "GET",
 url: "/user/login",
@@ -330,7 +330,7 @@ return resp;
  * @returns successful operation
  */
 export async function getUserByName(username:Type.GetUserByNamePath,config?:AxiosRequestConfig) {
-zGetUserByNamePath.parse(username)
+zGetUserByNamePath.parse(username);
 const resp = await axios<Type.GetUserByNameResponse>({
   method: "GET",
 url: `/user/${username}`,
@@ -347,7 +347,7 @@ return resp;
  * @param [config] request config
  */
 export async function deleteUser(username:Type.DeleteUserPath,config?:AxiosRequestConfig) {
-zDeleteUserPath.parse(username)
+zDeleteUserPath.parse(username);
 const resp = await axios<unknown>({
   method: "DELETE",
 url: `/user/${username}`,
@@ -364,8 +364,8 @@ return resp;
  * @param [config] request config
  */
 export async function updateUser(username:Type.UpdateUserPath,data:Type.UpdateUserData,config?:AxiosRequestConfig) {
-zUpdateUserPath.parse(username)
-zUpdateUserData.parse(data)
+zUpdateUserPath.parse(username);
+zUpdateUserData.parse(data);
 const resp = await axios<unknown>({
   method: "PUT",
 url: `/user/${username}`,

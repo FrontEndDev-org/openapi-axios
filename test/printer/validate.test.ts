@@ -107,8 +107,8 @@ describe('runtimeValidate = true', () => {
        * @param [config] request config
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<unknown>({
         method: "GET",
       url: \`/pets/\${petId}\`,
@@ -143,8 +143,8 @@ describe('runtimeValidate = true', () => {
        * @returns pet name
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<Type.GetPetResponse>({
         method: "GET",
       url: \`/pets/\${petId}\`,
@@ -183,8 +183,8 @@ describe('runtimeValidate = {responseDataProps: []}', () => {
        * @param [config] request config
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<unknown>({
         method: "GET",
       url: \`/pets/\${petId}\`,
@@ -221,8 +221,8 @@ describe('runtimeValidate = {responseDataProps: []}', () => {
        * @returns pet name
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<Type.GetPetResponse>({
         method: "GET",
       url: \`/pets/\${petId}\`,
@@ -261,8 +261,8 @@ describe('runtimeValidate = {responseDataProps: [a, b-c]}', () => {
        * @param [config] request config
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<unknown>({
         method: "GET",
       url: \`/pets/\${petId}\`,
@@ -299,8 +299,8 @@ describe('runtimeValidate = {responseDataProps: [a, b-c]}', () => {
        * @returns pet name
        */
       export async function getPet(petId:Type.GetPetPath,categoryId?:Type.GetPetParams,config?:AxiosRequestConfig) {
-      zGetPetPath.parse(petId)
-      (categoryId !== undefined) && zGetPetParams.parse(categoryId)
+      zGetPetPath.parse(petId);
+      (categoryId !== undefined) && zGetPetParams.parse(categoryId);
       const resp = await axios<Type.GetPetResponse>({
         method: "GET",
       url: \`/pets/\${petId}\`,

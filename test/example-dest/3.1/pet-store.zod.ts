@@ -13,7 +13,7 @@
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
-import {z as z} from "zod";
+import { z } from "zod";
 
 export const zCategory = z.object({
 "id": z.optional(z.number()),
