@@ -72,7 +72,6 @@ export const AXIOS_IMPORT_NAME = 'axios';
 export const ZOD_IMPORT_NAME = 'z';
 export const FAKER_IMPORT_NAME = 'faker';
 export const AXIOS_IMPORT_FILE = 'axios';
-export const ZOD_IMPORT_FILE = 'zod';
 export const FAKER_IMPORT_FILE = '@faker-js/faker';
 export const AXIOS_PARAM_CONFIG_NAME = 'config';
 export const AXIOS_RESPONSE_NAME = 'resp';

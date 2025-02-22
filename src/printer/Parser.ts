@@ -2,6 +2,7 @@ import type { OpenAPILatest } from '../types/openapi';
 import type { OpenApiLatest_Schema } from './helpers';
 import type { Named } from './Named';
 import { isArray, isBoolean, isNever, isNumber, isString, isUndefined } from '../utils/type-is';
+import { ZOD_IMPORT_NAME } from './const';
 import { isRefSchema, requiredTypeStringify, toZodName, withGroup } from './helpers';
 import { JsDoc } from './JsDoc';
 
@@ -53,7 +54,7 @@ export class Parser {
 
     if (isRefSchema(schema)) {
       const typeName = this.named.getRefType(schema.$ref);
-      const zodName = typeName ? this.#prepareVarName(schema.$ref) : 'z.unknown()';
+      const zodName = typeName ? this.#prepareVarName(schema.$ref) : `${ZOD_IMPORT_NAME}.unknown()`;
 
       if (!typeName) {
         throw new Error(`未找到 refId: ${schema.$ref} 的类型`);
@@ -86,7 +87,7 @@ export class Parser {
           group.map(g => g.zod),
           {
             sep: ',',
-            wrap: ['z.intersection(', ')'],
+            wrap: [`${ZOD_IMPORT_NAME}.intersection(`, ')'],
           },
         ),
       };
@@ -108,7 +109,7 @@ export class Parser {
         zod: withGroup(
           group.map(g => g.zod),
           {
-            wrap: ['z.union([', '])'],
+            wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
           },
         ),
       };
@@ -128,7 +129,7 @@ export class Parser {
           group.map(g => g.zod),
           {
             sep: ',',
-            wrap: ['z.union([', '])'],
+            wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
           },
         ),
       };
@@ -165,7 +166,7 @@ export class Parser {
         zod: withGroup(
           group.map(g => g.zod),
           {
-            wrap: ['z.union([', '])'],
+            wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
           },
         ),
       };
@@ -201,15 +202,15 @@ export class Parser {
           zod: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isString(e))
-                  ? `z.literal(${JSON.stringify(e)})`
+                  ? `${ZOD_IMPORT_NAME}.literal(${JSON.stringify(e)})`
                   : this.#prepareVarName(e.$ref)),
                 {
-                  wrap: ['z.union([', '])'],
+                  wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
                 },
               )
             : isBlob
-              ? 'z.instanceof(Blob)'
-              : 'z.string()',
+              ? `${ZOD_IMPORT_NAME}.instanceof(Blob)`
+              : `${ZOD_IMPORT_NAME}.string()`,
         };
       }
 
@@ -242,13 +243,13 @@ export class Parser {
           zod: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isNumber(e)
-                  ? `z.literal(${e})`
+                  ? `${ZOD_IMPORT_NAME}.literal(${e})`
                   : this.#prepareVarName(e.$ref))),
                 {
-                  wrap: ['z.union([', '])'],
+                  wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
                 },
               )
-            : 'z.number()',
+            : `${ZOD_IMPORT_NAME}.number()`,
         };
       }
 
@@ -273,14 +274,14 @@ export class Parser {
           zod: enumValues.length > 0
             ? withGroup(
                 enumValues.map(e => (isBoolean(e)
-                  ? `z.literal(${e})`
+                  ? `${ZOD_IMPORT_NAME}.literal(${e})`
                   : this.#prepareVarName(e.$ref))),
                 {
                   sep: ',',
-                  wrap: ['z.union([', '])'],
+                  wrap: [`${ZOD_IMPORT_NAME}.union([`, '])'],
                 },
               )
-            : 'z.boolean()',
+            : `${ZOD_IMPORT_NAME}.boolean()`,
         };
       }
 
@@ -292,7 +293,7 @@ export class Parser {
           required,
           deps: this.#depNames,
           type,
-          zod: 'z.null()',
+          zod: `${ZOD_IMPORT_NAME}.null()`,
         };
       }
 
@@ -342,7 +343,7 @@ export class Parser {
       required,
       deps: [],
       type: spec?.type || 'unknown',
-      zod: spec?.zod || 'z.unknown()',
+      zod: spec?.zod || `${ZOD_IMPORT_NAME}.unknown()`,
     };
   }
 
@@ -360,7 +361,7 @@ export class Parser {
       required: false,
       deps: result.deps,
       type: `Array<${result.type}>`,
-      zod: `z.array(${result.zod})`,
+      zod: `${ZOD_IMPORT_NAME}.array(${result.zod})`,
     };
   }
 
@@ -400,7 +401,7 @@ export class Parser {
       }));
       zodList.push(withGroup(propZodList, {
         sep: '\n',
-        wrap: ['z.object({\n', '\n})'],
+        wrap: [`${ZOD_IMPORT_NAME}.object({\n`, '\n})'],
         always: true,
       }));
     }
@@ -410,14 +411,14 @@ export class Parser {
       const { type, zod } = Parser.#parseInner(parser, genericProps as OpenApiLatest_Schema);
 
       typeList.push(`Record<string, ${type}>`);
-      zodList.push(`z.record(z.string(), ${zod})`);
+      zodList.push(`${ZOD_IMPORT_NAME}.record(${ZOD_IMPORT_NAME}.string(), ${zod})`);
     }
 
     // 无显式属性 && 无泛型属性
     if (typeList.length === 0) {
       return Parser.#parseAsUnknown(schema, required, {
         type: 'Record<string, unknown>',
-        zod: 'z.record(z.string(), z.unknown())',
+        zod: `${ZOD_IMPORT_NAME}.record(${ZOD_IMPORT_NAME}.string(), ${ZOD_IMPORT_NAME}.unknown())`,
       });
     }
 
@@ -431,7 +432,7 @@ export class Parser {
         sep: '&',
       }),
       zod: withGroup(zodList, {
-        wrap: ['z.intersection(', ')'],
+        wrap: [`${ZOD_IMPORT_NAME}.intersection(`, ')'],
       }),
     };
   }
@@ -444,7 +445,7 @@ export class Parser {
 
     return {
       type: [jsDoc.print(), `${JSON.stringify(propName)}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n'),
-      zod: `${JSON.stringify(propName)}: ${required ? zod : `z.optional(${zod})`},`,
+      zod: `${JSON.stringify(propName)}: ${required ? zod : `${ZOD_IMPORT_NAME}.optional(${zod})`},`,
     };
   }
 
@@ -454,7 +455,7 @@ export class Parser {
       deps: [],
       required: true,
       type: bool ? 'any' : 'never',
-      zod: bool ? 'z.any()' : 'z.never()',
+      zod: bool ? `${ZOD_IMPORT_NAME}.any()` : `${ZOD_IMPORT_NAME}.never()`,
     };
   }
 }

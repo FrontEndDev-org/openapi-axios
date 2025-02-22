@@ -29,7 +29,6 @@ import {
   FAKER_IMPORT_FILE,
   FAKER_IMPORT_NAME,
   TYPE_FILE_EXPORT_NAME,
-  ZOD_IMPORT_FILE,
   ZOD_IMPORT_NAME,
 } from './const';
 import { Content } from './Content';
@@ -371,8 +370,6 @@ export class Printer {
     const {
       axiosImportName = '',
       axiosImportFile,
-      zodImportName = ZOD_IMPORT_NAME,
-      zodImportFile = ZOD_IMPORT_FILE,
       fakerImportName = FAKER_IMPORT_NAME,
       fakerImportFile = FAKER_IMPORT_FILE,
       runtimeValidate,
@@ -381,7 +378,6 @@ export class Printer {
     const { cwd = '/', mainFile, typeFile = '.', zodFile = '.', mockFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
     const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
-    const zodImportPath = toImportPath(zodImportFile, cwd, mainFile);
     const fakerImportPath = toImportPath(fakerImportFile, cwd, mockFile);
 
     this.#mainContent.push('import', [
@@ -397,9 +393,9 @@ export class Printer {
     }
 
     // 依赖 zod
-    if ((runtimeValidate || runtimeMock) && (!zodImportFile || zodImportFile === ZOD_IMPORT_FILE)) {
-      if (!isPackageExists(ZOD_IMPORT_FILE)) {
-        this.#zodContent.errors.push(`需要安装 ${ZOD_IMPORT_FILE}`);
+    if ((runtimeValidate || runtimeMock)) {
+      if (!isPackageExists('zod')) {
+        this.#zodContent.errors.push(`需要安装 zod`);
       }
     }
 
@@ -438,7 +434,7 @@ export class Printer {
       }
     }
 
-    this.#zodContent.push('import', toImportString(ZOD_IMPORT_NAME, zodImportName, zodImportPath));
+    this.#zodContent.push('import', `import { ${ZOD_IMPORT_NAME} } from "zod";`);
   }
 
   #printHeader() {

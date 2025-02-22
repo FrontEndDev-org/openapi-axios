@@ -73,18 +73,6 @@ export interface PrinterOptions {
   axiosImportName?: string;
 
   /**
-   * zod 导入名称，为空字符串时默认导入
-   * zod 部分兼容 https://www.npmjs.com/package/zod
-   * @default "z"
-   * @example
-   * // 具名导入 zodImportName=z
-   * import { z } from 'path/to/zod';
-   * // 默认导入（非具名导入）
-   * import z from 'path/to/zod';
-   */
-  zodImportName?: string;
-
-  /**
    * faker 导入名称，为空字符串时默认导入
    * faker 部分兼容 https://www.npmjs.com/package/@faker-js/faker
    * @default "faker"
@@ -101,12 +89,6 @@ export interface PrinterOptions {
    * @default axios
    */
   axiosImportFile?: string;
-
-  /**
-   * zod 模块的导入文件
-   * @default zod
-   */
-  zodImportFile?: string;
 
   /**
    * faker 模块的导入文件
