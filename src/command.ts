@@ -56,8 +56,10 @@ export async function generate(cwd = process.cwd()) {
   if (err)
     return logger.pipeConfigError(err);
 
-  config.cwd = config.cwd || cwd;
-  const generator = new Generator(config);
+  const generator = new Generator({
+    ...config,
+    cwd: config.cwd || cwd,
+  });
 
   generator.on('start', logger.pipeStartEvent);
   generator.on('end', logger.pipeEndEvent);
