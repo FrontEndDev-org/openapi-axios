@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.34.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.33.0...v0.34.0) (2025-02-22)
+
+
+### Features
+
+* **printer:** 添加错误处理和依赖检查 ([f3bee6b](https://github.com/FrontEndDev-org/openapi-axios/commit/f3bee6b7d9229ef174d6b2d44e18101d26bca1b6))
+
+
+### Bug Fixes
+
+* **printer:** 避免因为缺少分号造成的运行时错误 ([1fff860](https://github.com/FrontEndDev-org/openapi-axios/commit/1fff860b8e82db725694b3afccf6f68d424ffe92))
+
 ## [0.33.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.32.1...v0.33.0) (2025-02-21)
 
 
