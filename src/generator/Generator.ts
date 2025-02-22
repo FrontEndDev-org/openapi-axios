@@ -86,6 +86,7 @@ export class Generator extends Emitter<GeneratorEmits> {
       options,
       file: mainFile,
     });
+    const { runtimeValidate, runtimeMock, writeSchema } = printerOptions;
 
     // 2. 读取
     this.emit('process', makePayload('reading'));
@@ -105,15 +106,15 @@ export class Generator extends Emitter<GeneratorEmits> {
     await this.#writePrintResult('main', mainFile, main);
     await this.#writePrintResult('type', typeFile, type);
 
-    if (printerOptions.runtimeValidate || printerOptions.runtimeMock) {
+    if (runtimeValidate || runtimeMock) {
       await this.#writePrintResult('zod', zodFile, zod);
     }
 
-    if (printerOptions.runtimeMock) {
+    if (runtimeMock) {
       await this.#writePrintResult('mock', mockFile, mock);
     }
 
-    if (printerOptions.writeSchema) {
+    if (writeSchema) {
       for (const { version, document, errors } of migrated) {
         await this.#writePrintResult(`schema@${version}`, schemaFiles[version], {
           lang: 'json',
