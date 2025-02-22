@@ -370,15 +370,12 @@ export class Printer {
     const {
       axiosImportName = '',
       axiosImportFile,
-      fakerImportName = FAKER_IMPORT_NAME,
-      fakerImportFile = FAKER_IMPORT_FILE,
       runtimeValidate,
       runtimeMock,
     } = this.options || {};
     const { cwd = '/', mainFile, typeFile = '.', zodFile = '.', mockFile = '.' } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
     const importPath = toImportPath(axiosImportFile2, cwd, mainFile);
-    const fakerImportPath = toImportPath(fakerImportFile, cwd, mockFile);
 
     this.#mainContent.push('import', [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
@@ -407,6 +404,12 @@ export class Printer {
     }
 
     if (runtimeMock) {
+      const {
+        fakerImportName = FAKER_IMPORT_NAME,
+        fakerImportFile = FAKER_IMPORT_FILE,
+      } = isBoolean(runtimeMock) ? {} : runtimeMock;
+
+      const fakerImportPath = toImportPath(fakerImportFile, cwd, mockFile);
       const zodNames = [...this.#respZodNames.values()].join(',');
       this.#mainContent.push('import', [
         `import ${ENABLE_MOCK_NAME} from "${toRelative(mockFile, mainFile)}";`,

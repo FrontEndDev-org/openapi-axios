@@ -57,7 +57,25 @@ export interface RuntimeMock {
    * @default process.env.NODE_ENV !== 'production'
    */
   enableCondition?: string;
-};
+
+  /**
+   * faker 导入名称，为空字符串时默认导入
+   * faker 部分兼容 https://www.npmjs.com/package/@faker-js/faker
+   * @default "faker"
+   * @example
+   * // 具名导入 fakerImportName=faker
+   * import { faker } from 'path/to/faker';
+   * // 默认导入（非具名导入）
+   * import faker from 'path/to/faker';
+   */
+  fakerImportName?: string;
+
+  /**
+   * faker 模块的导入文件
+   * @default @faker-js/faker
+   */
+  fakerImportFile?: string;
+}
 
 export interface PrinterOptions {
   /**
@@ -73,28 +91,10 @@ export interface PrinterOptions {
   axiosImportName?: string;
 
   /**
-   * faker 导入名称，为空字符串时默认导入
-   * faker 部分兼容 https://www.npmjs.com/package/@faker-js/faker
-   * @default "faker"
-   * @example
-   * // 具名导入 fakerImportName=faker
-   * import { faker } from 'path/to/faker';
-   * // 默认导入（非具名导入）
-   * import faker from 'path/to/faker';
-   */
-  fakerImportName?: string;
-
-  /**
    * axios 模块的导入文件
    * @default axios
    */
   axiosImportFile?: string;
-
-  /**
-   * faker 模块的导入文件
-   * @default @faker-js/faker
-   */
-  fakerImportFile?: string;
 
   /**
    * 请求内容类型判断
