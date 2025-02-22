@@ -52,7 +52,6 @@
     "阿森 <zhenxs2018@foxmail.com>"
   ],
   "dependencies": {
-    "@anatine/zod-mock": "^3.13.5",
     "@redocly/openapi-core": "^1.30.0",
     "chalk": "^4.1.2",
     "commander": "^13.1.0",
